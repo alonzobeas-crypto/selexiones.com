@@ -219,6 +219,12 @@ body:hover #cursor { opacity:1; }
   transition:filter .3s; opacity:0; }
 .s1-logo:hover { filter:drop-shadow(0 0 22px rgba(255,150,225,.85)) drop-shadow(0 0 54px rgba(240,80,184,.62)) drop-shadow(0 0 104px rgba(224,64,160,.42)); }
 .s1-tagline { font-size:12px; letter-spacing:6px; color:var(--pink); margin-top:12px; opacity:0; }
+@media (max-width: 560px){
+  .s1-inner { padding:0 18px; }
+  .s1-logo { font-size:clamp(34px,12.5vw,72px); letter-spacing:clamp(2px,1vw,8px); }
+  .s1-tagline { letter-spacing:4px; }
+  .s1-eyebrow { letter-spacing:4px; }
+}
 .s1-divider { width:320px; height:1px;
   background:linear-gradient(90deg,transparent,var(--pink),transparent); margin:16px 0; opacity:0; }
 .live-badge { display:flex; align-items:center; gap:14px; border:1px solid var(--purple-dim);
@@ -444,6 +450,28 @@ body:hover #cursor { opacity:1; }
   background-size:200px 200px;
   animation: glyphDrift 30s linear infinite, glyphFlick 8s steps(1,end) infinite; }
 @media (prefers-reduced-motion: reduce){ .hiero-fill{ animation:none !important; } }
+
+/* ── MOBILE: release 100vh locks so all content is reachable ── */
+@media (max-width: 768px){
+  html { scroll-snap-type: none; }
+  .scene { height:auto; min-height:100vh; overflow:visible;
+    scroll-snap-align:none; scroll-snap-stop:normal; justify-content:flex-start;
+    padding-top:96px; padding-bottom:64px; }
+  #s1 { padding-top:0; justify-content:center; }
+  .channels-layout, .show-layout, .contact-layout, .stream-layout {
+    grid-template-columns:1fr; height:auto; gap:1px; }
+  .stream-layout { gap:36px; }
+  .channel { height:auto; min-height:auto; overflow:visible; padding:40px 0; }
+  .channel-uno { border-right:none; border-bottom:1px solid rgba(255,113,206,.15); }
+  .show-left, .show-right, .contact-block { height:auto; }
+  .archive-list { max-height:none; }
+  .ch-grid, .show-left::after, .mixcloud-placeholder::before { display:none; }
+  .topbar { height:52px; }
+  .tb-links, .tb-right .tb-status { display:none; }
+  .tb-brand { font-size:17px; letter-spacing:3px; padding:0 16px; border-right:none; flex:1; }
+  .tb-right { margin-left:auto; padding:0 12px; border-left:none; }
+  .tb-donate { margin-left:0; padding:7px 14px; font-size:12px; letter-spacing:2px; }
+}
 </style>
 </head>
 <body>
