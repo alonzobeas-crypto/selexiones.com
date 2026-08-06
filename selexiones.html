@@ -171,7 +171,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .tb-lang { display:flex; align-items:center; gap:2px; margin-left:14px; font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:2px; }
 .tb-lang button { background:none; border:none; cursor:pointer; padding:5px 7px; font:inherit; letter-spacing:inherit; color:rgba(255,244,251,.45); transition:color .2s; }
 .tb-lang button:hover { color:rgba(255,244,251,.9); }
-.tb-lang button.active { color:rgba(255,244,251,.45); }
+.tb-lang button.active { color:var(--pink-bright); text-shadow:0 0 10px var(--pink-glow); }
 .tb-lang span { color:rgba(255,244,251,.22); }
 
 /* ── PROGRESS ── */
@@ -1069,30 +1069,38 @@ applyI18n();
   }
 })();
 
-/* ── GSAP ENTRANCE ── */
-gsap.registerPlugin(ScrollTrigger);
-gsap.to('.s1-eyebrow',{opacity:1,duration:.6,delay:.3});
-gsap.to('.s1-logo',{opacity:1,duration:.8,delay:.1});
-gsap.to('.s1-tagline',{opacity:1,duration:.6,delay:.6});
-gsap.to('.s1-divider',{opacity:1,duration:.5,delay:.8});
-gsap.to('.live-badge',{opacity:1,duration:.6,delay:1});
-gsap.to('.s1-player',{opacity:1,duration:.6,delay:1.1});
-gsap.to('.s1-stream-links',{opacity:1,duration:.6,delay:1.2});
-gsap.to('.s1-scroll',{opacity:1,duration:.5,delay:1.6});
+/* ── GSAP ENTRANCE ── falls back to plain CSS reveal if the CDN script failed to load,
+   so the page is never stuck at opacity:0 waiting on a library that never arrived ── */
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to('.s1-eyebrow',{opacity:1,duration:.6,delay:.3});
+  gsap.to('.s1-logo',{opacity:1,duration:.8,delay:.1});
+  gsap.to('.s1-tagline',{opacity:1,duration:.6,delay:.6});
+  gsap.to('.s1-divider',{opacity:1,duration:.5,delay:.8});
+  gsap.to('.live-badge',{opacity:1,duration:.6,delay:1});
+  gsap.to('.s1-player',{opacity:1,duration:.6,delay:1.1});
+  gsap.to('.s1-stream-links',{opacity:1,duration:.6,delay:1.2});
+  gsap.to('.s1-scroll',{opacity:1,duration:.5,delay:1.6});
 
-ScrollTrigger.create({trigger:'#s3',start:'top 80%',onEnter:()=>{
-  gsap.to('#s3 .sec-eye',{opacity:1,duration:.4});
-  gsap.to('#s3 .sec-title',{opacity:1,duration:.5,delay:.1});
-  gsap.to('.show-row',{opacity:1,x:0,duration:.5,stagger:.1,delay:.2});
-  gsap.to('.host-row',{opacity:1,x:0,duration:.5,stagger:.15,delay:.3});
-}});
-ScrollTrigger.create({trigger:'#s4',start:'top 80%',onEnter:()=>{
-  gsap.to('.stream-embed',{opacity:1,duration:.6,delay:.2});
-  gsap.to('.archive-item',{opacity:1,y:0,duration:.5,stagger:.1,delay:.3});
-}});
-ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
-  gsap.to('.contact-block',{opacity:1,y:0,duration:.7,stagger:.2,delay:.1});
-}});
+  ScrollTrigger.create({trigger:'#s3',start:'top 80%',onEnter:()=>{
+    gsap.to('#s3 .sec-eye',{opacity:1,duration:.4});
+    gsap.to('#s3 .sec-title',{opacity:1,duration:.5,delay:.1});
+    gsap.to('.show-row',{opacity:1,x:0,duration:.5,stagger:.1,delay:.2});
+    gsap.to('.host-row',{opacity:1,x:0,duration:.5,stagger:.15,delay:.3});
+  }});
+  ScrollTrigger.create({trigger:'#s5',start:'top 80%',onEnter:()=>{
+    gsap.to('.stream-embed',{opacity:1,duration:.6,delay:.2});
+    gsap.to('.archive-item',{opacity:1,y:0,duration:.5,stagger:.1,delay:.3});
+  }});
+  ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
+    gsap.to('.contact-block',{opacity:1,y:0,duration:.7,stagger:.2,delay:.1});
+  }});
+} else {
+  document.querySelectorAll(
+    '.s1-eyebrow,.s1-logo,.s1-tagline,.s1-divider,.live-badge,.s1-player,.s1-stream-links,.s1-scroll,'+
+    '.sec-eye,.sec-title,.show-row,.host-row,.stream-embed,.archive-item,.contact-block'
+  ).forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+}
 </script>
 
 <script>
@@ -1213,7 +1221,6 @@ ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
     }
     }
     particles.forEach(p=>{ p.update(); p.draw(); });
-    requestAnimationFrame(draw);
   }
   draw();
 })();
