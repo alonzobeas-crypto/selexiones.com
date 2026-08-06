@@ -292,13 +292,25 @@ const audios = {};
   a.preload = 'none';
   a.volume = cardState[ch].vol;
   a.addEventListener('playing', () => { reflect(ch, true); });
-  a.addEventListener('pause',   () => reflect(ch, false));
+  a.addEventListener('pause',   () => { reflect(ch, false); resumeIfWanted(ch); });
   a.addEventListener('error',   () => { reflect(ch, false); setLoading(ch, false); scheduleReconnect(ch, 2000); });
   a.addEventListener('ended',   () => { if(cardState[ch].wantPlay) scheduleReconnect(ch, 500); });
   audios[ch] = a;
   document.getElementById(ch+'-c-vol').style.width = (cardState[ch].vol*100)+'%';
 });
 const stallTimers = {};
+/* ── RESUME AFTER PHONE-CALL / OS INTERRUPTION ──
+   A call, another app grabbing audio focus, etc. pauses the <audio> element
+   without going through toggleCard(), so wantPlay stays true. Retry right away
+   (harmless no-op if the interruption is still active) and again once the page
+   is back in the foreground, which is the reliable signal that a call ended. */
+function resumeIfWanted(ch){
+  const a = audios[ch];
+  if(a && cardState[ch].wantPlay && a.paused) a.play().catch(()=>{});
+}
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') Object.keys(cardState).forEach(resumeIfWanted); });
+window.addEventListener('pageshow', () => Object.keys(cardState).forEach(resumeIfWanted));
+window.addEventListener('focus', () => Object.keys(cardState).forEach(resumeIfWanted));
 function clearStallTimer(ch){ if(stallTimers[ch]){ clearTimeout(stallTimers[ch]); stallTimers[ch] = null; } }
 function scheduleReconnect(ch, delay){
   if(!cardState[ch].wantPlay) return;
