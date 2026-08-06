@@ -171,7 +171,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .tb-lang { display:flex; align-items:center; gap:2px; margin-left:14px; font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:2px; }
 .tb-lang button { background:none; border:none; cursor:pointer; padding:5px 7px; font:inherit; letter-spacing:inherit; color:rgba(255,244,251,.45); transition:color .2s; }
 .tb-lang button:hover { color:rgba(255,244,251,.9); }
-.tb-lang button.active { color:rgba(255,244,251,.45); }
+.tb-lang button.active { color:var(--pink-bright); text-shadow:0 0 10px var(--pink-glow); }
 .tb-lang span { color:rgba(255,244,251,.22); }
 
 /* ── PROGRESS ── */
@@ -207,12 +207,12 @@ html.lite .hero-glyphs .gp { animation:none; }
 .hero-glyphs .gp { position:absolute; top:-6%; height:112%;
   background-repeat:no-repeat; background-size:cover; mix-blend-mode:screen; will-change:transform; }
 .hero-glyphs .gp.left { left:0; width:44%;
-  background-image:url("assets/glyph-sheet-grid.jpg"); background-position:left center; opacity:.55;
+  background-position:left center; opacity:.55;
   -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
           mask-image:linear-gradient(90deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
   animation: gpDriftL 52s ease-in-out infinite alternate; }
 .hero-glyphs .gp.right { right:0; width:44%;
-  background-image:url("assets/glyph-sheet-float.jpg"); background-position:right center; opacity:.55;
+  background-position:right center; opacity:.55;
   -webkit-mask-image:linear-gradient(270deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
           mask-image:linear-gradient(270deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
   animation: gpDriftR 60s ease-in-out infinite alternate; }
@@ -835,15 +835,21 @@ function setLang(l){
 const scenes = document.querySelectorAll('.scene');
 const pgs = document.querySelectorAll('.pg');
 function goTo(i){ scenes[i].scrollIntoView({behavior:'smooth'}); }
-const obs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      const i=Array.from(scenes).indexOf(e.target);
-      pgs.forEach((p,j)=>p.classList.toggle('active',j===i));
-    }
-  });
-},{threshold:.5});
-scenes.forEach(s=>obs.observe(s));
+/* Some TV/embedded browsers don't have IntersectionObserver. Without this guard,
+   the ReferenceError below would abort the rest of this script block — killing
+   the channel players, i18n, and entrance animations that follow it — so the
+   whole page would look stuck/blank instead of just losing the progress dots. */
+if ('IntersectionObserver' in window) {
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const i=Array.from(scenes).indexOf(e.target);
+        pgs.forEach((p,j)=>p.classList.toggle('active',j===i));
+      }
+    });
+  },{threshold:.5});
+  scenes.forEach(s=>obs.observe(s));
+}
 
 /* ── CHANNEL PLAYER ENGINE ── */
 const channels = {
@@ -863,12 +869,24 @@ const audios = {};
   a.preload = 'none';
   a.volume = channels[ch].vol;
   a.addEventListener('playing', ()=> { reflectState(ch, true); });
-  a.addEventListener('pause',   ()=> reflectState(ch, false));
+  a.addEventListener('pause',   ()=> { reflectState(ch, false); resumeIfWanted(ch); });
   a.addEventListener('error',   ()=> { reflectState(ch, false); scheduleReconnect(ch, 2000); });
   a.addEventListener('ended',   ()=> { if(channels[ch].wantPlay) scheduleReconnect(ch, 500); });
   audios[ch] = a;
 });
 const stallTimers = {};
+/* ── RESUME AFTER PHONE-CALL / OS INTERRUPTION ──
+   A call, another app grabbing audio focus, etc. pauses the <audio> element
+   without going through togglePlay(), so wantPlay stays true. Retry right away
+   (harmless no-op if the interruption is still active) and again once the page
+   is back in the foreground, which is the reliable signal that a call ended. */
+function resumeIfWanted(ch){
+  const a = audios[ch];
+  if(a && channels[ch].wantPlay && a.paused) a.play().catch(()=>{});
+}
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') Object.keys(channels).forEach(resumeIfWanted); });
+window.addEventListener('pageshow', () => Object.keys(channels).forEach(resumeIfWanted));
+window.addEventListener('focus', () => Object.keys(channels).forEach(resumeIfWanted));
 function clearStallTimer(ch){ if(stallTimers[ch]){ clearTimeout(stallTimers[ch]); stallTimers[ch] = null; } }
 function scheduleReconnect(ch, delay){
   if(!channels[ch].wantPlay) return;
@@ -1069,30 +1087,38 @@ applyI18n();
   }
 })();
 
-/* ── GSAP ENTRANCE ── */
-gsap.registerPlugin(ScrollTrigger);
-gsap.to('.s1-eyebrow',{opacity:1,duration:.6,delay:.3});
-gsap.to('.s1-logo',{opacity:1,duration:.8,delay:.1});
-gsap.to('.s1-tagline',{opacity:1,duration:.6,delay:.6});
-gsap.to('.s1-divider',{opacity:1,duration:.5,delay:.8});
-gsap.to('.live-badge',{opacity:1,duration:.6,delay:1});
-gsap.to('.s1-player',{opacity:1,duration:.6,delay:1.1});
-gsap.to('.s1-stream-links',{opacity:1,duration:.6,delay:1.2});
-gsap.to('.s1-scroll',{opacity:1,duration:.5,delay:1.6});
+/* ── GSAP ENTRANCE ── falls back to plain CSS reveal if the CDN script failed to load,
+   so the page is never stuck at opacity:0 waiting on a library that never arrived ── */
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to('.s1-eyebrow',{opacity:1,duration:.6,delay:.3});
+  gsap.to('.s1-logo',{opacity:1,duration:.8,delay:.1});
+  gsap.to('.s1-tagline',{opacity:1,duration:.6,delay:.6});
+  gsap.to('.s1-divider',{opacity:1,duration:.5,delay:.8});
+  gsap.to('.live-badge',{opacity:1,duration:.6,delay:1});
+  gsap.to('.s1-player',{opacity:1,duration:.6,delay:1.1});
+  gsap.to('.s1-stream-links',{opacity:1,duration:.6,delay:1.2});
+  gsap.to('.s1-scroll',{opacity:1,duration:.5,delay:1.6});
 
-ScrollTrigger.create({trigger:'#s3',start:'top 80%',onEnter:()=>{
-  gsap.to('#s3 .sec-eye',{opacity:1,duration:.4});
-  gsap.to('#s3 .sec-title',{opacity:1,duration:.5,delay:.1});
-  gsap.to('.show-row',{opacity:1,x:0,duration:.5,stagger:.1,delay:.2});
-  gsap.to('.host-row',{opacity:1,x:0,duration:.5,stagger:.15,delay:.3});
-}});
-ScrollTrigger.create({trigger:'#s4',start:'top 80%',onEnter:()=>{
-  gsap.to('.stream-embed',{opacity:1,duration:.6,delay:.2});
-  gsap.to('.archive-item',{opacity:1,y:0,duration:.5,stagger:.1,delay:.3});
-}});
-ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
-  gsap.to('.contact-block',{opacity:1,y:0,duration:.7,stagger:.2,delay:.1});
-}});
+  ScrollTrigger.create({trigger:'#s3',start:'top 80%',onEnter:()=>{
+    gsap.to('#s3 .sec-eye',{opacity:1,duration:.4});
+    gsap.to('#s3 .sec-title',{opacity:1,duration:.5,delay:.1});
+    gsap.to('.show-row',{opacity:1,x:0,duration:.5,stagger:.1,delay:.2});
+    gsap.to('.host-row',{opacity:1,x:0,duration:.5,stagger:.15,delay:.3});
+  }});
+  ScrollTrigger.create({trigger:'#s5',start:'top 80%',onEnter:()=>{
+    gsap.to('.stream-embed',{opacity:1,duration:.6,delay:.2});
+    gsap.to('.archive-item',{opacity:1,y:0,duration:.5,stagger:.1,delay:.3});
+  }});
+  ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
+    gsap.to('.contact-block',{opacity:1,y:0,duration:.7,stagger:.2,delay:.1});
+  }});
+} else {
+  document.querySelectorAll(
+    '.s1-eyebrow,.s1-logo,.s1-tagline,.s1-divider,.live-badge,.s1-player,.s1-stream-links,.s1-scroll,'+
+    '.sec-eye,.sec-title,.show-row,.host-row,.stream-embed,.archive-item,.contact-block'
+  ).forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+}
 </script>
 
 <script>
@@ -1122,7 +1148,9 @@ ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
     });
   }
   bindHover(document);
-  new MutationObserver(()=>bindHover(document)).observe(document.body,{childList:true,subtree:true});
+  if ('MutationObserver' in window) {
+    new MutationObserver(()=>bindHover(document)).observe(document.body,{childList:true,subtree:true});
+  }
 
   const canvas = document.getElementById('bg');
   const ctx = canvas.getContext('2d');
@@ -1213,12 +1241,10 @@ ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
     }
     }
     particles.forEach(p=>{ p.update(); p.draw(); });
-    requestAnimationFrame(draw);
   }
   draw();
 })();
 </script>
-<script src="glyph-field.js"></script>
 <script>
 /* ── LIVE STATUS ── Saturday 7pm → Sunday 2am = ON AIR NOW, else revert ── */
 var updateStatus;

@@ -28,10 +28,10 @@ canvas#bg { position:fixed; inset:0; width:100%; height:100%; z-index:0; }
 
 .glyph-photos { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
 .gp { position:absolute; top:-8%; height:116%; background-repeat:no-repeat; background-size:cover; background-position:center; mix-blend-mode:screen; will-change:transform; }
-.gp.left { left:0; width:46%; background-image:url("assets/glyph-sheet-grid.jpg"); background-position:left center; opacity:.62;
+.gp.left { left:0; width:46%; background-position:left center; opacity:.62;
   -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.78) 48%, transparent 94%); mask-image:linear-gradient(90deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.78) 48%, transparent 94%);
   animation: gpDriftL 48s ease-in-out infinite alternate; }
-.gp.right { right:0; width:46%; background-image:url("assets/glyph-sheet-float.jpg"); background-position:right center; opacity:.62;
+.gp.right { right:0; width:46%; background-position:right center; opacity:.62;
   -webkit-mask-image:linear-gradient(270deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.78) 48%, transparent 94%); mask-image:linear-gradient(270deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.78) 48%, transparent 94%);
   animation: gpDriftR 56s ease-in-out infinite alternate; }
 @keyframes gpDriftL { from{transform:translate3d(0,-2%,0) scale(1.02);} to{transform:translate3d(-3%,3%,0) scale(1.06);} }
@@ -292,13 +292,25 @@ const audios = {};
   a.preload = 'none';
   a.volume = cardState[ch].vol;
   a.addEventListener('playing', () => { reflect(ch, true); });
-  a.addEventListener('pause',   () => reflect(ch, false));
+  a.addEventListener('pause',   () => { reflect(ch, false); resumeIfWanted(ch); });
   a.addEventListener('error',   () => { reflect(ch, false); setLoading(ch, false); scheduleReconnect(ch, 2000); });
   a.addEventListener('ended',   () => { if(cardState[ch].wantPlay) scheduleReconnect(ch, 500); });
   audios[ch] = a;
   document.getElementById(ch+'-c-vol').style.width = (cardState[ch].vol*100)+'%';
 });
 const stallTimers = {};
+/* ── RESUME AFTER PHONE-CALL / OS INTERRUPTION ──
+   A call, another app grabbing audio focus, etc. pauses the <audio> element
+   without going through toggleCard(), so wantPlay stays true. Retry right away
+   (harmless no-op if the interruption is still active) and again once the page
+   is back in the foreground, which is the reliable signal that a call ended. */
+function resumeIfWanted(ch){
+  const a = audios[ch];
+  if(a && cardState[ch].wantPlay && a.paused) a.play().catch(()=>{});
+}
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') Object.keys(cardState).forEach(resumeIfWanted); });
+window.addEventListener('pageshow', () => Object.keys(cardState).forEach(resumeIfWanted));
+window.addEventListener('focus', () => Object.keys(cardState).forEach(resumeIfWanted));
 function clearStallTimer(ch){ if(stallTimers[ch]){ clearTimeout(stallTimers[ch]); stallTimers[ch] = null; } }
 function scheduleReconnect(ch, delay){
   if(!cardState[ch].wantPlay) return;
@@ -567,6 +579,5 @@ let updateStatus;
 
 applyLang();
 </script>
-<script src="glyph-field.js"></script>
 </body>
 </html>
