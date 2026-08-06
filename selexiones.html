@@ -835,15 +835,21 @@ function setLang(l){
 const scenes = document.querySelectorAll('.scene');
 const pgs = document.querySelectorAll('.pg');
 function goTo(i){ scenes[i].scrollIntoView({behavior:'smooth'}); }
-const obs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      const i=Array.from(scenes).indexOf(e.target);
-      pgs.forEach((p,j)=>p.classList.toggle('active',j===i));
-    }
-  });
-},{threshold:.5});
-scenes.forEach(s=>obs.observe(s));
+/* Some TV/embedded browsers don't have IntersectionObserver. Without this guard,
+   the ReferenceError below would abort the rest of this script block — killing
+   the channel players, i18n, and entrance animations that follow it — so the
+   whole page would look stuck/blank instead of just losing the progress dots. */
+if ('IntersectionObserver' in window) {
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const i=Array.from(scenes).indexOf(e.target);
+        pgs.forEach((p,j)=>p.classList.toggle('active',j===i));
+      }
+    });
+  },{threshold:.5});
+  scenes.forEach(s=>obs.observe(s));
+}
 
 /* ── CHANNEL PLAYER ENGINE ── */
 const channels = {
@@ -1142,7 +1148,9 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     });
   }
   bindHover(document);
-  new MutationObserver(()=>bindHover(document)).observe(document.body,{childList:true,subtree:true});
+  if ('MutationObserver' in window) {
+    new MutationObserver(()=>bindHover(document)).observe(document.body,{childList:true,subtree:true});
+  }
 
   const canvas = document.getElementById('bg');
   const ctx = canvas.getContext('2d');
