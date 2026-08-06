@@ -207,12 +207,12 @@ html.lite .hero-glyphs .gp { animation:none; }
 .hero-glyphs .gp { position:absolute; top:-6%; height:112%;
   background-repeat:no-repeat; background-size:cover; mix-blend-mode:screen; will-change:transform; }
 .hero-glyphs .gp.left { left:0; width:44%;
-  background-image:url("assets/glyph-sheet-grid.jpg"); background-position:left center; opacity:.55;
+  background-position:left center; opacity:.55;
   -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
           mask-image:linear-gradient(90deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
   animation: gpDriftL 52s ease-in-out infinite alternate; }
 .hero-glyphs .gp.right { right:0; width:44%;
-  background-image:url("assets/glyph-sheet-float.jpg"); background-position:right center; opacity:.55;
+  background-position:right center; opacity:.55;
   -webkit-mask-image:linear-gradient(270deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
           mask-image:linear-gradient(270deg, rgba(0,0,0,.98) 0%, rgba(0,0,0,.7) 46%, transparent 92%);
   animation: gpDriftR 60s ease-in-out infinite alternate; }
@@ -1225,7 +1225,6 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
   draw();
 })();
 </script>
-<script src="glyph-field.js"></script>
 <script>
 /* ── LIVE STATUS ── Saturday 7pm → Sunday 2am = ON AIR NOW, else revert ── */
 var updateStatus;
