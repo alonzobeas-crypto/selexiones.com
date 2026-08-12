@@ -444,12 +444,12 @@ html.lite .hero-glyphs .gp { animation:none; }
 
 /* ── S6 CONTACT ── */
 #s6 { padding:0; }
-.contact-layout { display:grid; grid-template-columns:1fr 1fr; height:100%; gap:1px; background:var(--dimmer); }
-.contact-block { background:rgba(7,4,12,.5); padding:clamp(36px,6vw,72px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(20px); }
-.cb-label { font-size:15px; letter-spacing:5px; color:var(--pink); margin-bottom:16px; }
+.community-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+.contact-block { background:rgba(7,4,12,.5); padding:clamp(28px,4vw,48px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(20px); }
+.cb-label { font-size:14px; letter-spacing:5px; color:var(--pink); margin-bottom:16px; }
 .mail-wrap { border:1px solid rgba(160,111,186,.35); display:flex; transition:border-color .2s; width:100%; }
 .mail-wrap:focus-within { border-color:rgba(224,64,160,.5); }
-.mail-in { flex:1; background:none; border:none; padding:20px 24px; font-family:'Share Tech Mono',monospace; font-size:18px; color:var(--fg); letter-spacing:1px; outline:none; text-align:center; }
+.mail-in { flex:1; background:none; border:none; padding:16px 20px; font-family:'Share Tech Mono',monospace; font-size:16px; color:var(--fg); letter-spacing:1px; outline:none; text-align:center; }
 .mail-in::placeholder { color:rgba(160,111,186,.7); }
 .mail-sub { background:none; border:none; border-left:1px solid rgba(160,111,186,.35); padding:16px 20px; font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:3px; color:var(--dim); cursor:pointer; transition:all .15s; }
 .mail-sub:hover { color:var(--pink-bright); background:rgba(224,64,160,.08); }
@@ -460,7 +460,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .sla { opacity:0; transition:opacity .15s; color:var(--pink-bright); }
 .sl:hover .sla { opacity:1; }
 .ghost-logo { font-family:'Cinzel',serif; font-size:clamp(28px,5vw,56px); color:var(--pink); opacity:.06; line-height:.85; margin-bottom:12px; letter-spacing:6px; }
-.submit-btn { width:100%; border:1px solid var(--pink-deep); color:var(--pink-bright); padding:20px; background:rgba(224,64,160,.08); font-family:'Share Tech Mono',monospace; font-size:14px; letter-spacing:4px; cursor:pointer; transition:all .15s; margin-top:1px; }
+.submit-btn { width:100%; border:1px solid var(--pink-deep); color:var(--pink-bright); padding:16px; background:rgba(224,64,160,.08); font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:4px; cursor:pointer; transition:all .15s; margin-top:1px; }
 .submit-btn:hover { background:rgba(224,64,160,.18); }
 
 /* ── FOOTER ── */
@@ -501,8 +501,9 @@ html.lite .hero-glyphs .gp { animation:none; }
     scroll-snap-align:none; scroll-snap-stop:normal; justify-content:flex-start;
     padding-top:96px; padding-bottom:64px; }
   #s1 { padding-top:0; justify-content:center; }
-  .channels-layout, .show-layout, .contact-layout, .stream-layout {
+  .channels-layout, .show-layout, .stream-layout {
     grid-template-columns:1fr; height:auto; gap:1px; }
+  .community-grid { grid-template-columns:1fr; gap:36px; }
   .stream-layout { gap:36px; }
   .channel { height:auto; min-height:auto; overflow:visible; padding:40px 0; }
   .channel-uno { border-right:none; border-bottom:1px solid rgba(255,113,206,.15); }
@@ -514,6 +515,10 @@ html.lite .hero-glyphs .gp { animation:none; }
   .tb-brand { font-size:17px; letter-spacing:3px; padding:0 16px; border-right:none; flex:1; }
   .tb-right { margin-left:auto; padding:0 12px; border-left:none; }
   .tb-donate { margin-left:0; padding:7px 14px; font-size:12px; letter-spacing:2px; }
+  .tb-subscribe { display:flex; margin-left:6px; gap:3px; }
+  .tb-subscribe-in { width:44px; padding:5px 5px; font-size:8px; }
+  .tb-subscribe-btn { padding:5px 7px; font-size:0; letter-spacing:0; }
+  .tb-subscribe-btn::after { content:'→'; font-size:12px; }
   .footer-bar { padding:0 14px; justify-content:center; }
   .fb-l { display:none; }
   .fb-r { font-size:12px; letter-spacing:2px; }
@@ -576,7 +581,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     </div>
   </div>
   <div class="s1-scroll" data-en="SCROLL" data-es="DESLIZA">SCROLL</div>
-  <div class="scene-counter">01 / 07</div>
+  <div class="scene-counter">01 / 06</div>
 </section>
 
 <!-- S2 CHANNELS -->
@@ -658,7 +663,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     </div>
 
   </div>
-  <div class="scene-counter">02 / 07</div>
+  <div class="scene-counter">02 / 06</div>
 </section>
 
 <!-- S3 LIVE SHOW -->
@@ -683,7 +688,7 @@ html.lite .hero-glyphs .gp { animation:none; }
       </div>
     </div>
   </div>
-  <div class="scene-counter">03 / 07</div>
+  <div class="scene-counter">03 / 06</div>
 </section>
 
 <!-- S4 BIO -->
@@ -697,7 +702,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     <div style="font-family:'Cinzel',serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px" data-en-html="Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing." data-es-html="Tu apoyo mantiene la señal encendida — cubriendo infraestructura de streaming, licencias, y dando a los DJs una plataforma real para ser escuchados. Cada contribución se reinvierte directamente en mantener a SELEXIONES independiente y en crecimiento.">Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing.</div>
     <a href="https://ko-fi.com/selexiones" target="_blank" class="s-btn primary" style="display:inline-flex;margin-top:32px" data-en="DONATE / SUPPORT →" data-es="DONAR / APOYAR →">DONATE / SUPPORT →</a>
   </div>
-  <div class="scene-counter">04 / 07</div>
+  <div class="scene-counter">04 / 06</div>
 </section>
 
 <!-- S5 ARCHIVE -->
@@ -762,7 +767,7 @@ html.lite .hero-glyphs .gp { animation:none; }
       </div>
     </div>
   </div>
-  <div class="scene-counter">05 / 07</div>
+  <div class="scene-counter">05 / 06</div>
 </section>
 
 <!-- S6 COMMUNITY -->
@@ -770,37 +775,34 @@ html.lite .hero-glyphs .gp { animation:none; }
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
   <div style="padding:0 60px;width:100%">
-    <div class="sec-eye" style="opacity:1" data-en="FIND US EVERYWHERE" data-es="ENCUÉNTRANOS EN TODAS PARTES">FIND US EVERYWHERE</div>
-    <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(32px,5vw,60px)" data-en="COMMUNITY" data-es="COMUNIDAD">COMMUNITY</div>
-    <div class="social-links" style="max-width:640px">
-      <a href="https://www.mixcloud.com/SELEXIONES/" target="_blank" class="sl">MIXCLOUD <span class="sla">→</span></a>
-      <a href="https://www.instagram.com/selexionesradio/" target="_blank" class="sl">INSTAGRAM <span class="sla">→</span></a>
-      <a href="https://3eascortex.com" target="_blank" class="sl">3EASCORTEX.COM <span class="sla">→</span></a>
-      <a href="https://onnoticemusic.com" target="_blank" class="sl">ONNOTICEMUSIC.COM <span class="sla">→</span></a>
-      <a href="https://sacredlessons.com" target="_blank" class="sl">SACREDLESSONS.COM <span class="sla">→</span></a>
-      <a href="https://worldofmusicshop.com" target="_blank" class="sl">WORLDOFMUSICSHOP.COM <span class="sla">→</span></a>
-      <a href="https://ko-fi.com/selexiones" target="_blank" class="sl" style="color:var(--pink-bright)" data-en="DONATE / SUPPORT" data-es="DONAR / APOYAR">DONATE / SUPPORT <span class="sla">→</span></a>
-    </div>
-    <div style="margin-top:32px;font-size:10px;letter-spacing:3px;color:var(--dimmer)" data-en="© 2026 SELEXIONES · NORTH EAST LOS ANGELES" data-es="© 2026 SELEXIONES · NORESTE DE LOS ÁNGELES">© 2026 SELEXIONES · NORTH EAST LOS ANGELES</div>
-  </div>
-  <div class="scene-counter">06 / 07</div>
-</section>
-
-<!-- S7 CONTACT -->
-<section class="scene" id="s7" data-screen-label="07 Contact" style="height:auto;min-height:100vh;overflow:visible">
-  <div class="contact-layout" style="grid-template-columns:1fr;max-width:820px;margin:0 auto">
-    <div class="contact-block has-hiero" style="background:rgba(5,3,8,.46)">
-      <div class="hiero-fill"></div>
-      <div class="cb-label" data-en="STAY IN THE LOOP" data-es="MANTENTE AL TANTO">STAY IN THE LOOP</div>
-      <div style="font-family:'Cinzel',serif;font-size:clamp(34px,6vw,64px);color:var(--cream);letter-spacing:4px;line-height:.9;margin-bottom:28px" data-en-html="JOIN THE<br><span style=&quot;color:var(--pink-bright)&quot;>NEWSLETTER</span>" data-es-html="ÚNETE AL<br><span style=&quot;color:var(--pink-bright)&quot;>BOLETÍN</span>">JOIN THE<br><span style="color:var(--pink-bright)">NEWSLETTER</span></div>
-      <form action="https://buttondown.com/api/emails/embed-subscribe/selexiones" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/selexiones','popupwindow')" class="embeddable-buttondown-form" style="width:100%">
-        <div class="mail-wrap"><input type="email" name="email" class="mail-in" placeholder="YOUR EMAIL" required data-en-ph="YOUR EMAIL" data-es-ph="TU CORREO"></div>
-        <input type="hidden" value="1" name="embed">
-        <button type="submit" class="submit-btn" data-en="SUBSCRIBE →" data-es="SUSCRIBIRSE →">SUBSCRIBE →</button>
-      </form>
+    <div class="community-grid">
+      <div>
+        <div class="sec-eye" style="opacity:1" data-en="FIND US EVERYWHERE" data-es="ENCUÉNTRANOS EN TODAS PARTES">FIND US EVERYWHERE</div>
+        <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(32px,5vw,60px)" data-en="COMMUNITY" data-es="COMUNIDAD">COMMUNITY</div>
+        <div class="social-links" style="max-width:640px">
+          <a href="https://www.mixcloud.com/SELEXIONES/" target="_blank" class="sl">MIXCLOUD <span class="sla">→</span></a>
+          <a href="https://www.instagram.com/selexionesradio/" target="_blank" class="sl">INSTAGRAM <span class="sla">→</span></a>
+          <a href="https://3eascortex.com" target="_blank" class="sl">3EASCORTEX.COM <span class="sla">→</span></a>
+          <a href="https://onnoticemusic.com" target="_blank" class="sl">ONNOTICEMUSIC.COM <span class="sla">→</span></a>
+          <a href="https://sacredlessons.com" target="_blank" class="sl">SACREDLESSONS.COM <span class="sla">→</span></a>
+          <a href="https://worldofmusicshop.com" target="_blank" class="sl">WORLDOFMUSICSHOP.COM <span class="sla">→</span></a>
+          <a href="https://ko-fi.com/selexiones" target="_blank" class="sl" style="color:var(--pink-bright)" data-en="DONATE / SUPPORT" data-es="DONAR / APOYAR">DONATE / SUPPORT <span class="sla">→</span></a>
+        </div>
+        <div style="margin-top:32px;font-size:10px;letter-spacing:3px;color:var(--dimmer)" data-en="© 2026 SELEXIONES · NORTH EAST LOS ANGELES" data-es="© 2026 SELEXIONES · NORESTE DE LOS ÁNGELES">© 2026 SELEXIONES · NORTH EAST LOS ANGELES</div>
+      </div>
+      <div class="contact-block has-hiero" style="background:rgba(5,3,8,.46)">
+        <div class="hiero-fill"></div>
+        <div class="cb-label" data-en="STAY IN THE LOOP" data-es="MANTENTE AL TANTO">STAY IN THE LOOP</div>
+        <div style="font-family:'Cinzel',serif;font-size:clamp(26px,4vw,42px);color:var(--cream);letter-spacing:4px;line-height:.9;margin-bottom:22px" data-en-html="JOIN THE<br><span style=&quot;color:var(--pink-bright)&quot;>NEWSLETTER</span>" data-es-html="ÚNETE AL<br><span style=&quot;color:var(--pink-bright)&quot;>BOLETÍN</span>">JOIN THE<br><span style="color:var(--pink-bright)">NEWSLETTER</span></div>
+        <form action="https://buttondown.com/api/emails/embed-subscribe/selexiones" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/selexiones','popupwindow')" class="embeddable-buttondown-form" style="width:100%">
+          <div class="mail-wrap"><input type="email" name="email" class="mail-in" placeholder="YOUR EMAIL" required data-en-ph="YOUR EMAIL" data-es-ph="TU CORREO"></div>
+          <input type="hidden" value="1" name="embed">
+          <button type="submit" class="submit-btn" data-en="SUBSCRIBE →" data-es="SUSCRIBIRSE →">SUBSCRIBE →</button>
+        </form>
+      </div>
     </div>
   </div>
-  <div class="scene-counter">07 / 07</div>
+  <div class="scene-counter">06 / 06</div>
 </section>
 
 
