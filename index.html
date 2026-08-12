@@ -264,7 +264,7 @@ const I18N = {
     subscribe: 'SUSCRIBIRSE'
   }
 };
-let LANG = (localStorage.getItem('sx-lang') === 'es') ? 'es' : 'en';
+let LANG = 'en'; // landing page always opens in English, regardless of a previously saved language choice
 function tr(key){ return (I18N[LANG] && I18N[LANG][key]) || I18N.en[key]; }
 function setLang(l){
   LANG = (l === 'es') ? 'es' : 'en';
