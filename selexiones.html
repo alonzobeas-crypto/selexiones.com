@@ -445,11 +445,11 @@ html.lite .hero-glyphs .gp { animation:none; }
 /* ── S6 CONTACT ── */
 #s6 { padding:0; }
 .community-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
-.contact-block { background:rgba(7,4,12,.5); padding:clamp(28px,4vw,48px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(20px); }
-.cb-label { font-size:14px; letter-spacing:5px; color:var(--pink); margin-bottom:16px; }
+.contact-block { background:rgba(7,4,12,.5); padding:clamp(18px,4vw,48px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(20px); }
+.cb-label { font-size:clamp(10px,1.8vw,14px); letter-spacing:3px; color:var(--pink); margin-bottom:16px; }
 .mail-wrap { border:1px solid rgba(160,111,186,.35); display:flex; transition:border-color .2s; width:100%; }
 .mail-wrap:focus-within { border-color:rgba(224,64,160,.5); }
-.mail-in { flex:1; background:none; border:none; padding:16px 20px; font-family:'Share Tech Mono',monospace; font-size:16px; color:var(--fg); letter-spacing:1px; outline:none; text-align:center; }
+.mail-in { flex:1; min-width:0; background:none; border:none; padding:clamp(10px,2vw,16px) clamp(8px,2vw,20px); font-family:'Share Tech Mono',monospace; font-size:clamp(11px,2.2vw,16px); color:var(--fg); letter-spacing:1px; outline:none; text-align:center; }
 .mail-in::placeholder { color:rgba(160,111,186,.7); }
 .mail-sub { background:none; border:none; border-left:1px solid rgba(160,111,186,.35); padding:16px 20px; font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:3px; color:var(--dim); cursor:pointer; transition:all .15s; }
 .mail-sub:hover { color:var(--pink-bright); background:rgba(224,64,160,.08); }
@@ -460,7 +460,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .sla { opacity:0; transition:opacity .15s; color:var(--pink-bright); }
 .sl:hover .sla { opacity:1; }
 .ghost-logo { font-family:'Cinzel',serif; font-size:clamp(28px,5vw,56px); color:var(--pink); opacity:.06; line-height:.85; margin-bottom:12px; letter-spacing:6px; }
-.submit-btn { width:100%; border:1px solid var(--pink-deep); color:var(--pink-bright); padding:16px; background:rgba(224,64,160,.08); font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:4px; cursor:pointer; transition:all .15s; margin-top:1px; }
+.submit-btn { width:100%; border:1px solid var(--pink-deep); color:var(--pink-bright); padding:clamp(10px,2vw,16px); background:rgba(224,64,160,.08); font-family:'Share Tech Mono',monospace; font-size:clamp(10px,1.8vw,13px); letter-spacing:2px; cursor:pointer; transition:all .15s; margin-top:1px; }
 .submit-btn:hover { background:rgba(224,64,160,.18); }
 
 /* ── FOOTER ── */
@@ -503,7 +503,7 @@ html.lite .hero-glyphs .gp { animation:none; }
   #s1 { padding-top:0; justify-content:center; }
   .channels-layout, .show-layout, .stream-layout {
     grid-template-columns:1fr; height:auto; gap:1px; }
-  .community-grid { grid-template-columns:1fr; gap:36px; }
+  .community-grid { gap:28px; }
   .stream-layout { gap:36px; }
   .channel { height:auto; min-height:auto; overflow:visible; padding:40px 0; }
   .channel-uno { border-right:none; border-bottom:1px solid rgba(255,113,206,.15); }
@@ -522,6 +522,10 @@ html.lite .hero-glyphs .gp { animation:none; }
   .footer-bar { padding:0 14px; justify-content:center; }
   .fb-l { display:none; }
   .fb-r { font-size:12px; letter-spacing:2px; }
+}
+
+@media (max-width: 560px){
+  .community-grid { grid-template-columns:1fr; gap:36px; }
 }
 </style>
 </head>
@@ -790,10 +794,10 @@ html.lite .hero-glyphs .gp { animation:none; }
         </div>
         <div style="margin-top:32px;font-size:10px;letter-spacing:3px;color:var(--dimmer)" data-en="© 2026 SELEXIONES · NORTH EAST LOS ANGELES" data-es="© 2026 SELEXIONES · NORESTE DE LOS ÁNGELES">© 2026 SELEXIONES · NORTH EAST LOS ANGELES</div>
       </div>
-      <div class="contact-block has-hiero" style="background:rgba(5,3,8,.46)">
+      <div class="contact-block has-hiero" style="background:rgba(5,3,8,.46);min-width:0">
         <div class="hiero-fill"></div>
         <div class="cb-label" data-en="STAY IN THE LOOP" data-es="MANTENTE AL TANTO">STAY IN THE LOOP</div>
-        <div style="font-family:'Cinzel',serif;font-size:clamp(26px,4vw,42px);color:var(--cream);letter-spacing:4px;line-height:.9;margin-bottom:22px" data-en-html="JOIN THE<br><span style=&quot;color:var(--pink-bright)&quot;>NEWSLETTER</span>" data-es-html="ÚNETE AL<br><span style=&quot;color:var(--pink-bright)&quot;>BOLETÍN</span>">JOIN THE<br><span style="color:var(--pink-bright)">NEWSLETTER</span></div>
+        <div style="font-family:'Cinzel',serif;font-size:clamp(15px,3.2vw,38px);color:var(--cream);letter-spacing:2px;line-height:1.15;margin-bottom:22px;overflow-wrap:break-word;max-width:100%" data-en-html="JOIN THE<br><span style=&quot;color:var(--pink-bright)&quot;>NEWSLETTER</span>" data-es-html="ÚNETE AL<br><span style=&quot;color:var(--pink-bright)&quot;>BOLETÍN</span>">JOIN THE<br><span style="color:var(--pink-bright)">NEWSLETTER</span></div>
         <form action="https://buttondown.com/api/emails/embed-subscribe/selexiones" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/selexiones','popupwindow')" class="embeddable-buttondown-form" style="width:100%">
           <div class="mail-wrap"><input type="email" name="email" class="mail-in" placeholder="YOUR EMAIL" required data-en-ph="YOUR EMAIL" data-es-ph="TU CORREO"></div>
           <input type="hidden" value="1" name="embed">
