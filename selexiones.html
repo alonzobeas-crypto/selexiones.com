@@ -434,6 +434,8 @@ html.lite .hero-glyphs .gp { animation:none; }
 .si-label { color:var(--pink); }
 .archive-wrap { padding:0 60px; width:100%; }
 .archive-list { column-count:2; column-gap:14px; }
+.bio-wrap { padding:0 60px; width:100%; max-width:900px; margin:0 auto; }
+.community-wrap { padding:0 60px; width:100%; }
 .archive-item { break-inside:avoid; margin-bottom:1px; }
 .archive-item { background:rgba(7,4,12,.78); padding:7px 14px; position:relative; overflow:hidden; transition:background .2s; opacity:0; transform:translateY(12px); display:flex; align-items:center; gap:18px; }
 .archive-item:hover { background:rgba(224,64,160,.06); }
@@ -514,6 +516,9 @@ html.lite .hero-glyphs .gp { animation:none; }
   .show-left, .show-right, .contact-block { height:auto; }
   .archive-wrap { padding:0 14px; }
   .archive-list { max-height:none; column-count:1; }
+  .bio-wrap { padding:0 14px; }
+  .bio-duo { font-size:18px; }
+  .community-wrap { padding:0 14px; }
   .ch-grid, .show-left::after, .mixcloud-placeholder::before { display:none; }
   .topbar { height:52px; }
   .tb-links, .tb-right .tb-status { display:none; }
@@ -700,10 +705,10 @@ html.lite .hero-glyphs .gp { animation:none; }
 <section class="scene has-hiero" id="s4" data-screen-label="04 Bio" style="height:auto;min-height:100vh;overflow:visible;padding-top:90px;padding-bottom:60px">
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
-  <div style="padding:0 60px;width:100%;max-width:900px;margin:0 auto">
+  <div class="bio-wrap">
     <div class="sec-eye" style="opacity:1" data-en="OUR STORY" data-es="NUESTRA HISTORIA">OUR STORY</div>
     <div class="sec-title" style="opacity:1;margin-bottom:28px;font-size:clamp(32px,5vw,60px)" data-en="BIO" data-es="BIOGRAFÍA">BIO</div>
-    <div style="font-family:'Cinzel',serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px;margin-bottom:24px" data-en-html="SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and 3EAS, two brothers rooted in the Los Angeles Chicano Underground." data-es-html="SELEXIONES es una estación de radio clandestina de Los Ángeles, transmitiendo desde Lincoln Heights. Dos canales, una sola señal — UNO para lo que nunca se ha escuchado y DOS para lo que nunca falla. Creado por Jesus German y 3EAS, dos hermanos arraigados en el Underground chicano de Los Ángeles.">SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and 3EAS, two brothers rooted in the Los Angeles Chicano Underground.</div>
+    <div class="bio-duo" style="font-family:'Cinzel',serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px;margin-bottom:24px" data-en-html="SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and 3EAS, two brothers rooted in the Los Angeles Chicano Underground." data-es-html="SELEXIONES es una estación de radio clandestina de Los Ángeles, transmitiendo desde Lincoln Heights. Dos canales, una sola señal — UNO para lo que nunca se ha escuchado y DOS para lo que nunca falla. Creado por Jesus German y 3EAS, dos hermanos arraigados en el Underground chicano de Los Ángeles.">SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and 3EAS, two brothers rooted in the Los Angeles Chicano Underground.</div>
     <div style="font-family:'Cinzel',serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px" data-en-html="Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing." data-es-html="Tu apoyo mantiene la señal encendida — cubriendo infraestructura de streaming, licencias, y dando a los DJs una plataforma real para ser escuchados. Cada contribución se reinvierte directamente en mantener a SELEXIONES independiente y en crecimiento.">Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing.</div>
     <a href="https://ko-fi.com/selexiones" target="_blank" class="s-btn primary" style="display:inline-flex;margin-top:32px" data-en="DONATE / SUPPORT →" data-es="DONAR / APOYAR →">DONATE / SUPPORT →</a>
   </div>
@@ -779,7 +784,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 <section class="scene has-hiero" id="s6" data-screen-label="06 Community" style="height:auto;min-height:100vh;overflow:visible;padding-top:90px;padding-bottom:60px">
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
-  <div style="padding:0 60px;width:100%">
+  <div class="community-wrap">
     <div class="community-grid">
       <div>
         <div class="sec-eye" style="opacity:1" data-en="FIND US EVERYWHERE" data-es="ENCUÉNTRANOS EN TODAS PARTES">FIND US EVERYWHERE</div>
