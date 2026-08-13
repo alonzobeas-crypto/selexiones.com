@@ -432,6 +432,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .si-row { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; border:1px solid var(--dimmer); font-size:12px; letter-spacing:1.5px; color:var(--dim); transition:background .2s; }
 .si-row:hover { background:rgba(224,64,160,.07); color:var(--pink-bright); }
 .si-label { color:var(--pink); }
+.archive-wrap { padding:0 60px; width:100%; }
 .archive-list { column-count:2; column-gap:14px; }
 .archive-item { break-inside:avoid; margin-bottom:1px; }
 .archive-item { background:rgba(7,4,12,.78); padding:7px 14px; position:relative; overflow:hidden; transition:background .2s; opacity:0; transform:translateY(12px); display:flex; align-items:center; gap:18px; }
@@ -439,7 +440,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .archive-item::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--pink); transform:scaleY(0); transform-origin:bottom; transition:transform .3s; }
 .archive-item:hover::before { transform:scaleY(1); }
 .ai-date { font-size:12px; letter-spacing:1.5px; color:var(--pink); flex-shrink:0; width:98px; white-space:nowrap; }
-.ai-title { font-size:14px; letter-spacing:1.5px; color:var(--fg); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ai-title { font-size:14px; letter-spacing:1.5px; color:var(--fg); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .ai-meta { font-size:16px; letter-spacing:2px; color:var(--dim); opacity:.7; flex-shrink:0; white-space:nowrap; }
 
 /* ── S6 CONTACT ── */
@@ -502,7 +503,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     padding-top:96px; padding-bottom:64px; }
   #s1 { padding-top:0; justify-content:center; }
   .channels-layout, .show-layout, .stream-layout {
-    grid-template-columns:1fr; height:auto; gap:1px; }
+    grid-template-columns:minmax(0,1fr); height:auto; gap:1px; }
   .community-grid { gap:28px; }
   .stream-layout { gap:36px; }
   .channel { height:auto; min-height:auto; overflow:visible; padding:40px 0; }
@@ -511,7 +512,8 @@ html.lite .hero-glyphs .gp { animation:none; }
   .track-title { max-width:100%; }
   .track-artist { justify-content:flex-start; }
   .show-left, .show-right, .contact-block { height:auto; }
-  .archive-list { max-height:none; }
+  .archive-wrap { padding:0 14px; }
+  .archive-list { max-height:none; column-count:1; }
   .ch-grid, .show-left::after, .mixcloud-placeholder::before { display:none; }
   .topbar { height:52px; }
   .tb-links, .tb-right .tb-status { display:none; }
@@ -712,7 +714,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 <section class="scene has-hiero" id="s5" data-screen-label="05 Archive" style="height:auto;min-height:100vh;overflow:visible;padding-top:90px;padding-bottom:60px">
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
-  <div style="padding:0 60px;width:100%">
+  <div class="archive-wrap">
     <div class="sec-eye" style="opacity:1" data-en="PAST BROADCASTS" data-es="TRANSMISIONES PASADAS">PAST BROADCASTS</div>
     <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(32px,5vw,60px)" data-en="ARCHIVE" data-es="ARCHIVO">ARCHIVE</div>
     <div class="stream-layout">
