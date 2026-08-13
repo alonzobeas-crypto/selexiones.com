@@ -432,6 +432,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .si-row { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; border:1px solid var(--dimmer); font-size:12px; letter-spacing:1.5px; color:var(--dim); transition:background .2s; }
 .si-row:hover { background:rgba(224,64,160,.07); color:var(--pink-bright); }
 .si-label { color:var(--pink); }
+.scene-fullmin { min-height:100vh; }
 .archive-wrap { padding:0 60px; width:100%; }
 .archive-list { column-count:2; column-gap:14px; }
 .bio-wrap { padding:0 60px; width:100%; max-width:900px; margin:0 auto; }
@@ -500,10 +501,10 @@ html.lite .hero-glyphs .gp { animation:none; }
 
 @media (max-width: 768px){
   html { scroll-snap-type: none; }
-  .scene { height:auto; min-height:100vh; overflow:visible;
+  .scene { height:auto; min-height:0; overflow:visible;
     scroll-snap-align:none; scroll-snap-stop:normal; justify-content:flex-start;
     padding-top:96px; padding-bottom:64px; }
-  #s1 { padding-top:0; justify-content:center; }
+  #s1 { padding-top:0; justify-content:center; min-height:100vh; }
   .channels-layout, .show-layout, .stream-layout {
     grid-template-columns:minmax(0,1fr); height:auto; gap:1px; }
   .community-grid { gap:28px; }
@@ -702,7 +703,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 </section>
 
 <!-- S4 BIO -->
-<section class="scene has-hiero" id="s4" data-screen-label="04 Bio" style="height:auto;min-height:100vh;overflow:visible;padding-top:90px;padding-bottom:60px">
+<section class="scene has-hiero scene-fullmin" id="s4" data-screen-label="04 Bio" style="height:auto;overflow:visible;padding-top:90px;padding-bottom:60px">
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
   <div class="bio-wrap">
@@ -716,7 +717,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 </section>
 
 <!-- S5 ARCHIVE -->
-<section class="scene has-hiero" id="s5" data-screen-label="05 Archive" style="height:auto;min-height:100vh;overflow:visible;padding-top:90px;padding-bottom:60px">
+<section class="scene has-hiero scene-fullmin" id="s5" data-screen-label="05 Archive" style="height:auto;overflow:visible;padding-top:90px;padding-bottom:60px">
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
   <div class="archive-wrap">
@@ -781,7 +782,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 </section>
 
 <!-- S6 COMMUNITY -->
-<section class="scene has-hiero" id="s6" data-screen-label="06 Community" style="height:auto;min-height:100vh;overflow:visible;padding-top:90px;padding-bottom:60px">
+<section class="scene has-hiero scene-fullmin" id="s6" data-screen-label="06 Community" style="height:auto;overflow:visible;padding-top:90px;padding-bottom:60px">
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
   <div class="community-wrap">
