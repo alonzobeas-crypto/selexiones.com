@@ -903,7 +903,7 @@ const audios = {};
   a.preload = 'none';
   a.volume = channels[ch].vol;
   a.addEventListener('playing', ()=> { reflectState(ch, true); });
-  a.addEventListener('pause',   ()=> { reflectState(ch, false); resumeIfWanted(ch); });
+  a.addEventListener('pause',   ()=> { reflectState(ch, false); });
   a.addEventListener('error',   ()=> { reflectState(ch, false); scheduleReconnect(ch, 2000); });
   a.addEventListener('ended',   ()=> { if(channels[ch].wantPlay) scheduleReconnect(ch, 500); });
   audios[ch] = a;
@@ -911,9 +911,11 @@ const audios = {};
 const stallTimers = {};
 /* ── RESUME AFTER PHONE-CALL / OS INTERRUPTION ──
    A call, another app grabbing audio focus, etc. pauses the <audio> element
-   without going through togglePlay(), so wantPlay stays true. Retry right away
-   (harmless no-op if the interruption is still active) and again once the page
-   is back in the foreground, which is the reliable signal that a call ended. */
+   without going through togglePlay(), so wantPlay stays true. Deliberately NOT
+   retried from the 'pause' listener itself — calling play() while the OS still
+   has the audio session claimed for the call just fights it and glitches/stutters.
+   Only resume once the page is back in the foreground, which is the reliable
+   signal that the interruption (call, other app, etc.) has actually ended. */
 function resumeIfWanted(ch){
   const a = audios[ch];
   if(a && channels[ch].wantPlay && a.paused) a.play().catch(()=>{});
