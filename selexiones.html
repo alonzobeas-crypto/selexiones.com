@@ -1288,9 +1288,15 @@ var updateStatus;
   const el = document.getElementById('tb-status');
   const txt = document.getElementById('tb-status-text');
   if (!el || !txt) return;
+  /* Schedule is fixed to Pacific Time regardless of the visitor's own device
+     timezone, so this reads the day/hour as observed in Los Angeles rather
+     than trusting d.getDay()/d.getHours(), which are local-timezone methods
+     and gave wrong results for anyone not physically in the Pacific timezone. */
   function isLive(d) {
-    const day = d.getDay(), h = d.getHours();
-    return (day === 6 && h >= 19) || (day === 0 && h < 2);
+    const parts = new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', weekday:'short', hour:'numeric', hourCycle:'h23' }).formatToParts(d);
+    const day = parts.find(p=>p.type==='weekday').value;
+    const h = parseInt(parts.find(p=>p.type==='hour').value, 10);
+    return (day === 'Sat' && h >= 19) || (day === 'Sun' && h < 2);
   }
   updateStatus = function() {
     if (isLive(new Date())) { el.classList.add('live'); txt.textContent = DYN.statusLive[LANG]; el.href = 'https://www.mixcloud.com/live/SELEXIONES/'; }
