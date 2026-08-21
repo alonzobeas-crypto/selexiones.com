@@ -308,13 +308,21 @@ function applyLang(){
   if(typeof updateStatus === 'function') updateStatus();
 }
 
-/* ── CURSOR ── */
+/* ── CURSOR ──
+   Touch devices never fire mousemove and the cursor is CSS-hidden below
+   768px anyway, but without the pointer:fine guard below the rAF loop
+   still ran forever on every device regardless — a whole extra animation
+   frame callback every 16ms, all the time, for a cursor nobody on a
+   phone can even see. cur/ring stay accessible below for the hover
+   bindings, which are harmless no-ops on touch since hover never fires. */
 const cur = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
 let mx = window.innerWidth/2, my = window.innerHeight/2;
 let rx = mx, ry = my;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
-(function lerpCursor(){ rx += (mx-rx)*.12; ry += (my-ry)*.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(lerpCursor); })();
+if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
+  (function lerpCursor(){ rx += (mx-rx)*.12; ry += (my-ry)*.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(lerpCursor); })();
+}
 
 /* ── BOTH CHANNEL PLAYERS (UNO + DOS) ── real AzuraCast streams + now-playing ── */
 const STREAMS = {
