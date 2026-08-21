@@ -1168,16 +1168,22 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
   let mx = window.innerWidth/2, my = window.innerHeight/2;
   let rx = mx, ry = my;
 
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cur.style.left = mx+'px'; cur.style.top = my+'px';
-  });
-  function lerpCursor(){
-    rx += (mx-rx)*.12; ry += (my-ry)*.12;
-    ring.style.left = rx+'px'; ring.style.top = ry+'px';
-    requestAnimationFrame(lerpCursor);
+  /* Touch devices never fire mousemove and the cursor is CSS-hidden below
+     768px anyway, but without this guard the rAF loop below ran forever on
+     every device regardless — a whole extra animation frame callback every
+     16ms, all the time, for a cursor nobody on a phone can even see. */
+  if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx+'px'; cur.style.top = my+'px';
+    });
+    function lerpCursor(){
+      rx += (mx-rx)*.12; ry += (my-ry)*.12;
+      ring.style.left = rx+'px'; ring.style.top = ry+'px';
+      requestAnimationFrame(lerpCursor);
+    }
+    lerpCursor();
   }
-  lerpCursor();
 
   function bindHover(root){
     root.querySelectorAll('a,button,.pg,.s-btn,.play-btn,.ctrl-btn,.queue-item,.archive-item,.mail-wrap,.si-row,.drop-zone').forEach(el=>{
