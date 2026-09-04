@@ -439,6 +439,18 @@ html.lite .hero-glyphs .gp { animation:none; }
 .archive-list { column-count:2; column-gap:14px; }
 .bio-wrap { padding:0 60px; width:100%; max-width:900px; margin:0 auto; }
 .community-wrap { padding:0 60px; width:100%; }
+.events-wrap { padding:0 60px; width:100%; max-width:900px; margin:0 auto; }
+.event-list { display:flex; flex-direction:column; gap:10px; }
+.event-item { background:rgba(7,4,12,.78); padding:16px 20px; position:relative; overflow:hidden; transition:background .2s; opacity:0; transform:translateY(12px); display:flex; align-items:center; gap:20px; text-decoration:none; }
+.event-item:hover { background:rgba(224,64,160,.06); }
+.event-item::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--pink); transform:scaleY(0); transform-origin:bottom; transition:transform .3s; }
+.event-item:hover::before { transform:scaleY(1); }
+.ev-date { font-size:11px; letter-spacing:2px; color:var(--pink-bright); white-space:nowrap; min-width:100px; }
+.ev-info { flex:1; min-width:0; }
+.ev-title { font-size:15px; letter-spacing:1px; color:var(--fg); margin-bottom:3px; }
+.ev-venue { font-size:11px; letter-spacing:1px; color:var(--dim); }
+.ev-cta { font-size:10px; letter-spacing:2px; color:var(--pink-bright); white-space:nowrap; }
+.events-empty { padding:40px 20px; text-align:center; font-size:13px; letter-spacing:1px; color:var(--dim); border:1px dashed rgba(224,64,160,.28); opacity:0; transform:translateY(12px); }
 .archive-item { break-inside:avoid; margin-bottom:1px; }
 .archive-item { background:rgba(7,4,12,.78); padding:7px 14px; position:relative; overflow:hidden; transition:background .2s; opacity:0; transform:translateY(12px); display:flex; align-items:center; gap:18px; }
 .archive-item:hover { background:rgba(224,64,160,.06); }
@@ -448,8 +460,8 @@ html.lite .hero-glyphs .gp { animation:none; }
 .ai-title { font-size:14px; letter-spacing:1.5px; color:var(--fg); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .ai-meta { font-size:16px; letter-spacing:2px; color:var(--dim); opacity:.7; flex-shrink:0; white-space:nowrap; }
 
-/* ── S6 CONTACT ── */
-#s6 { padding:0; }
+/* ── S7 CONTACT ── */
+#s7 { padding:0; }
 .community-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
 .contact-block { background:rgba(7,4,12,.5); padding:clamp(18px,4vw,48px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(20px); }
 .cb-label { font-size:clamp(10px,1.8vw,14px); letter-spacing:3px; color:var(--pink); margin-bottom:16px; }
@@ -523,6 +535,9 @@ html.lite .hero-glyphs .gp { animation:none; }
   .bio-wrap { padding:0 14px; }
   .bio-text { font-size:19px; }
   .community-wrap { padding:0 14px; }
+  .events-wrap { padding:0 14px; }
+  .event-item { flex-wrap:wrap; gap:6px 20px; padding:14px 16px; }
+  .ev-cta { width:100%; }
   .ch-grid, .show-left::after, .mixcloud-placeholder::before { display:none; }
   .topbar { height:52px; }
   .tb-links, .tb-right .tb-status { display:none; }
@@ -557,7 +572,8 @@ html.lite .hero-glyphs .gp { animation:none; }
     <a href="#s3" class="tb-link" data-en="LIVE" data-es="EN VIVO">LIVE</a>
     <a href="#s4" class="tb-link" data-en="BIO" data-es="BIOGRAFÍA">BIO</a>
     <a href="#s5" class="tb-link" data-en="ARCHIVE" data-es="ARCHIVO">ARCHIVE</a>
-    <a href="#s6" class="tb-link" data-en="COMMUNITY" data-es="COMUNIDAD">COMMUNITY</a>
+    <a href="#s6" class="tb-link" data-en="EVENTS" data-es="EVENTOS">EVENTS</a>
+    <a href="#s7" class="tb-link" data-en="COMMUNITY" data-es="COMUNIDAD">COMMUNITY</a>
     <a href="mailto:contact@selexiones.com" class="tb-link" data-en="CONTACT" data-es="CONTACTO">CONTACT</a>
   </div>
   <div class="tb-right"><a href="https://www.mixcloud.com/live/SELEXIONES/" target="_blank" id="tb-status" class="tb-status"><span class="pinkdot"></span><span id="tb-status-text">EVERY SAT · LIVE 7PM</span></a><div class="tb-lang"><button id="lang-en" onclick="setLang('en')">EN</button><span>/</span><button id="lang-es" onclick="setLang('es')">ES</button></div><a href="https://www.instagram.com/selexionesradio/" target="_blank" class="tb-link" aria-label="Instagram" style="display:flex;align-items:center;padding:0 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4.2"></circle><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"></circle></svg></a><form action="https://buttondown.com/api/emails/embed-subscribe/selexiones" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/selexiones','popupwindow')" class="tb-subscribe embeddable-buttondown-form"><input type="email" name="email" class="tb-subscribe-in" placeholder="EMAIL" required data-en-ph="EMAIL" data-es-ph="CORREO"><input type="hidden" value="1" name="embed"><button type="submit" class="tb-subscribe-btn" data-en="SUBSCRIBE" data-es="SUSCRIBIRSE">SUBSCRIBE</button></form><a href="https://ko-fi.com/selexiones" target="_blank" class="tb-donate" data-en="DONATE ♥" data-es="DONAR ♥">DONATE ♥</a></div>
@@ -569,6 +585,8 @@ html.lite .hero-glyphs .gp { animation:none; }
   <div class="pg" onclick="goTo(2)"></div>
   <div class="pg" onclick="goTo(3)"></div>
   <div class="pg" onclick="goTo(4)"></div>
+  <div class="pg" onclick="goTo(5)"></div>
+  <div class="pg" onclick="goTo(6)"></div>
 </div>
 
 <!-- S1 HERO -->
@@ -595,7 +613,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     </div>
   </div>
   <div class="s1-scroll" data-en="SCROLL" data-es="DESLIZA">SCROLL</div>
-  <div class="scene-counter">01 / 06</div>
+  <div class="scene-counter">01 / 07</div>
 </section>
 
 <!-- S2 CHANNELS -->
@@ -677,7 +695,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     </div>
 
   </div>
-  <div class="scene-counter">02 / 06</div>
+  <div class="scene-counter">02 / 07</div>
 </section>
 
 <!-- S3 LIVE SHOW -->
@@ -702,7 +720,7 @@ html.lite .hero-glyphs .gp { animation:none; }
       </div>
     </div>
   </div>
-  <div class="scene-counter">03 / 06</div>
+  <div class="scene-counter">03 / 07</div>
 </section>
 
 <!-- S4 BIO -->
@@ -716,7 +734,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     <div class="bio-text" style="font-family:'Cinzel',serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px" data-en-html="Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing." data-es-html="Tu apoyo mantiene la señal encendida — cubriendo infraestructura de streaming, licencias, y dando a los DJs una plataforma real para ser escuchados. Cada contribución se reinvierte directamente en mantener a SELEXIONES independiente y en crecimiento.">Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing.</div>
     <a href="https://ko-fi.com/selexiones" target="_blank" class="s-btn primary" style="display:inline-flex;margin-top:32px" data-en="DONATE / SUPPORT →" data-es="DONAR / APOYAR →">DONATE / SUPPORT →</a>
   </div>
-  <div class="scene-counter">04 / 06</div>
+  <div class="scene-counter">04 / 07</div>
 </section>
 
 <!-- S5 ARCHIVE -->
@@ -785,11 +803,25 @@ html.lite .hero-glyphs .gp { animation:none; }
       </div>
     </div>
   </div>
-  <div class="scene-counter">05 / 06</div>
+  <div class="scene-counter">05 / 07</div>
 </section>
 
-<!-- S6 COMMUNITY -->
-<section class="scene has-hiero" id="s6" data-screen-label="06 Community" style="height:auto;overflow:visible;padding-top:90px;padding-bottom:60px">
+<!-- S6 EVENTS -->
+<section class="scene has-hiero" id="s6" data-screen-label="06 Events" style="height:auto;overflow:visible;padding-top:90px;padding-bottom:60px">
+  <div class="hiero-fill"></div>
+  <div class="gc tl"></div><div class="gc tr"></div>
+  <div class="events-wrap">
+    <div class="sec-eye" style="opacity:1" data-en="SHOWS &amp; DJ GIGS" data-es="SHOWS Y DJ SETS">SHOWS &amp; DJ GIGS</div>
+    <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(32px,5vw,60px)" data-en="EVENTS" data-es="EVENTOS">EVENTS</div>
+    <div class="event-list">
+      <div class="events-empty" data-en="No shows announced yet — follow us on Instagram for the next one." data-es="Aún no hay shows anunciados — síguenos en Instagram para el próximo.">No shows announced yet &mdash; follow us on Instagram for the next one.</div>
+    </div>
+  </div>
+  <div class="scene-counter">06 / 07</div>
+</section>
+
+<!-- S7 COMMUNITY -->
+<section class="scene has-hiero" id="s7" data-screen-label="07 Community" style="height:auto;overflow:visible;padding-top:90px;padding-bottom:60px">
   <div class="hiero-fill"></div>
   <div class="gc tl"></div><div class="gc tr"></div>
   <div class="community-wrap">
@@ -820,7 +852,7 @@ html.lite .hero-glyphs .gp { animation:none; }
       </div>
     </div>
   </div>
-  <div class="scene-counter">06 / 06</div>
+  <div class="scene-counter">07 / 07</div>
 </section>
 
 
@@ -1160,12 +1192,15 @@ document.addEventListener('DOMContentLoaded', function(){
       gsap.to('.archive-item',{opacity:1,y:0,duration:.5,stagger:.1,delay:.3});
     }});
     ScrollTrigger.create({trigger:'#s6',start:'top 80%',onEnter:()=>{
+      gsap.to('.event-item,.events-empty',{opacity:1,y:0,duration:.5,stagger:.08,delay:.2});
+    }});
+    ScrollTrigger.create({trigger:'#s7',start:'top 80%',onEnter:()=>{
       gsap.to('.contact-block',{opacity:1,y:0,duration:.7,stagger:.2,delay:.1});
     }});
   } else {
     document.querySelectorAll(
       '.s1-eyebrow,.s1-logo,.s1-tagline,.s1-divider,.live-badge,.s1-player,.s1-stream-links,.s1-scroll,'+
-      '.sec-eye,.sec-title,.show-row,.host-row,.stream-embed,.archive-item,.contact-block'
+      '.sec-eye,.sec-title,.show-row,.host-row,.stream-embed,.archive-item,.event-item,.events-empty,.contact-block'
     ).forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
   }
 });
