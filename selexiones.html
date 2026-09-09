@@ -1428,8 +1428,18 @@ var updateDOSBlock;
     nameEl.textContent = b.name;
     if (timeEl) timeEl.textContent = b.time ? ('· ' + b.time) : '';
   };
+  /* Every block boundary falls on the hour, and an hour is always also a
+     minute boundary regardless of timezone offset, so waking up exactly at
+     the top of each minute (using the real clock's own seconds/ms, which is
+     timezone-invariant) catches every schedule change within ~1s instead of
+     the up-to-30s staleness a plain setInterval(...,30000) would allow. */
+  function scheduleNextTick(){
+    const now = new Date();
+    const msToNextMinute = 60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
+    setTimeout(() => { updateDOSBlock(); scheduleNextTick(); }, msToNextMinute);
+  }
   updateDOSBlock();
-  setInterval(updateDOSBlock, 30000);
+  scheduleNextTick();
 })();
 </script>
 </body>
