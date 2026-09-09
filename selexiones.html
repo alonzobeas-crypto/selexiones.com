@@ -360,6 +360,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .dos-block-label { font-size:clamp(15px,2vw,20px); letter-spacing:2px; color:rgba(240,216,240,.6); margin-bottom:14px; text-transform:uppercase; position:relative; z-index:2; }
 .dos-block-label .dbl-tag { color:var(--dos); margin-right:10px; font-weight:700; }
 .dos-block-label .dbl-name { color:#e8d0ff; font-weight:700; }
+.dos-block-label .dbl-time { color:rgba(240,216,240,.45); font-weight:400; letter-spacing:1px; margin-left:10px; font-size:.82em; }
 .track-title { font-family:'Cinzel',serif; font-size:clamp(26px,2.8vw,40px); letter-spacing:2px; line-height:1.12;
   margin-bottom:8px; position:relative; z-index:2; max-width:92%; }
 .track-artist { display:flex; align-items:center; justify-content:center; gap:14px;
@@ -674,7 +675,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 
       <div class="ch-stage">
         <div class="ch-eyebrow" id="dos-eyebrow" data-tagline-en="WHAT NEVER MISSES" data-tagline-es="LO QUE NUNCA FALLA"><span class="np-live-dot"></span><span class="eyebrow-text">LO QUE NUNCA FALLA</span></div>
-        <div class="dos-block-label" id="dos-block-label"><span class="dbl-tag" id="dos-block-tag">NOW SCHEDULED</span><span class="dbl-name" id="dos-block-name">&mdash;</span></div>
+        <div class="dos-block-label" id="dos-block-label"><span class="dbl-tag" id="dos-block-tag">NOW SCHEDULED</span><span class="dbl-name" id="dos-block-name">&mdash;</span><span class="dbl-time" id="dos-block-time"></span></div>
         <div class="np-meta">
           <div class="track-title" id="dos-title">SELEXIONES DOS</div>
           <div class="track-artist"><span id="dos-artist">CONNECTING…</span></div>
@@ -1378,7 +1379,24 @@ var updateDOSBlock;
 (function () {
   const tagEl  = document.getElementById('dos-block-tag');
   const nameEl = document.getElementById('dos-block-name');
+  const timeEl = document.getElementById('dos-block-time');
   if (!tagEl || !nameEl) return;
+
+  /* base weekday/weekend grid, 1/2/4-hour blocks — [end-of-block minute, weekday name, weekend name, time-range label] */
+  const GRID = [
+    [240,  'EL DARK GOTH',           'EL DARK GOTH — AFTER HOURS',           '12AM–4AM'],
+    [360,  'DREAM CORE — CAFÉ VIBES','DREAM CORE — LEAVING THE AFTER HOURS', '4AM–6AM'],
+    [600,  'RANCHERAS & TRADICIONAL','RANCHERAS & TRADICIONAL — ABUELA MELLOW','6AM–10AM'],
+    [720,  'CUMBIÓN',                'CUMBIÓN',                              '10AM–12PM'],
+    [840,  'ROCKERO',                'ROCKERO',                              '12PM–2PM'],
+    [960,  'NUKUMBIA',               'NUKUMBIA',                             '2PM–4PM'],
+    [1080, 'RAPERO',                 'RAPERO',                               '4PM–6PM'],
+    [1140, 'CHICANO PUNK HOUR',      'CHICANO PUNK HOUR',                    '6PM–7PM'],
+    [1200, 'CASA',                   'CASA',                                 '7PM–8PM'],
+    [1260, 'ELECTRÓNICA',            'ELECTRÓNICA',                         '8PM–9PM'],
+    [1320, 'BEATS FUTURE',           'BEATS FUTURE',                         '9PM–10PM'],
+    [1440, 'DREAM CORE — CAFÉ VIBES','GOTHICUMBIA',                         '10PM–12AM'],
+  ];
 
   function getDOSBlock(d) {
     const parts = new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', weekday:'short', hour:'numeric', minute:'numeric', hourCycle:'h23' }).formatToParts(d);
@@ -1389,31 +1407,24 @@ var updateDOSBlock;
     const isWeekend = (day === 'Sat' || day === 'Sun');
 
     /* day-specific specials override the base grid */
-    if (day === 'Sat' && mins >= 1140)               return 'LIVE BROADCAST';
-    if (day === 'Sun' && mins < 120)                 return 'LIVE BROADCAST';
-    if (day === 'Mon' && mins >= 1080 && mins < 1200) return 'MONDAY MIX';
-    if (day === 'Fri' && mins >= 1260 && mins < 1320) return 'WILDCARD HOUR';
-    if (day === 'Sun' && mins >= 720  && mins < 960)  return 'SOBREMESA SUNDAYS';
-    if (day === 'Sun' && mins >= 1200 && mins < 1320) return 'COMMUNITY REQUEST HOUR';
+    if (day === 'Sat' && mins >= 1140)                return { name:'LIVE BROADCAST', time:'7PM–2AM' };
+    if (day === 'Sun' && mins < 120)                  return { name:'LIVE BROADCAST', time:'7PM–2AM' };
+    if (day === 'Mon' && mins >= 1080 && mins < 1200) return { name:'MONDAY MIX', time:'6PM–8PM' };
+    if (day === 'Fri' && mins >= 1260 && mins < 1320) return { name:'WILDCARD HOUR', time:'9PM–10PM' };
+    if (day === 'Sun' && mins >= 720  && mins < 960)  return { name:'SOBREMESA SUNDAYS', time:'12PM–4PM' };
+    if (day === 'Sun' && mins >= 1200 && mins < 1320) return { name:'COMMUNITY REQUEST HOUR', time:'8PM–10PM' };
 
-    /* base weekday/weekend grid, 1/2/4-hour blocks */
-    if (mins < 240)  return isWeekend ? 'EL DARK GOTH — AFTER HOURS' : 'EL DARK GOTH';
-    if (mins < 360)  return isWeekend ? 'DREAM CORE — LEAVING THE AFTER HOURS' : 'DREAM CORE — CAFÉ VIBES';
-    if (mins < 600)  return isWeekend ? 'RANCHERAS & TRADICIONAL — ABUELA MELLOW' : 'RANCHERAS & TRADICIONAL';
-    if (mins < 720)  return 'CUMBIÓN';
-    if (mins < 840)  return 'ROCKERO';
-    if (mins < 960)  return 'NUKUMBIA';
-    if (mins < 1080) return 'RAPERO';
-    if (mins < 1140) return 'CHICANO PUNK HOUR';
-    if (mins < 1200) return 'CASA';
-    if (mins < 1260) return 'ELECTRÓNICA';
-    if (mins < 1320) return 'BEATS FUTURE';
-    return isWeekend ? 'GOTHICUMBIA' : 'DREAM CORE — CAFÉ VIBES';
+    for (const [end, wd, we, time] of GRID) {
+      if (mins < end) return { name: isWeekend ? we : wd, time };
+    }
+    return { name:'SELEXIONES DOS', time:'' };
   }
 
   updateDOSBlock = function() {
     tagEl.textContent = DYN.nowScheduled[LANG];
-    nameEl.textContent = getDOSBlock(new Date());
+    const b = getDOSBlock(new Date());
+    nameEl.textContent = b.name;
+    if (timeEl) timeEl.textContent = b.time ? ('· ' + b.time) : '';
   };
   updateDOSBlock();
   setInterval(updateDOSBlock, 30000);
