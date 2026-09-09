@@ -358,7 +358,6 @@ html.lite .hero-glyphs .gp { animation:none; }
   text-align:center; gap:0; padding:12px 24px 16px; position:relative; z-index:2; }
 .ch-eyebrow { font-size:14px; letter-spacing:6px; margin-bottom:10px; opacity:.6; position:relative; z-index:2; }
 .dos-block-label { font-size:clamp(15px,2vw,20px); letter-spacing:2px; color:rgba(240,216,240,.6); margin-bottom:14px; text-transform:uppercase; position:relative; z-index:2; }
-.dos-block-label .dbl-tag { color:var(--dos); margin-right:10px; font-weight:700; }
 .dos-block-label .dbl-name { color:#e8d0ff; font-weight:700; }
 .dos-block-label .dbl-time { color:rgba(240,216,240,.45); font-weight:400; letter-spacing:1px; margin-left:10px; font-size:.82em; }
 .track-title { font-family:'Cinzel',serif; font-size:clamp(26px,2.8vw,40px); letter-spacing:2px; line-height:1.12;
@@ -675,7 +674,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 
       <div class="ch-stage">
         <div class="ch-eyebrow" id="dos-eyebrow" data-tagline-en="WHAT NEVER MISSES" data-tagline-es="LO QUE NUNCA FALLA"><span class="np-live-dot"></span><span class="eyebrow-text">LO QUE NUNCA FALLA</span></div>
-        <div class="dos-block-label" id="dos-block-label"><span class="dbl-tag" id="dos-block-tag">NOW SCHEDULED</span><span class="dbl-name" id="dos-block-name">&mdash;</span><span class="dbl-time" id="dos-block-time"></span></div>
+        <div class="dos-block-label" id="dos-block-label"><span class="dbl-name" id="dos-block-name">&mdash;</span><span class="dbl-time" id="dos-block-time"></span></div>
         <div class="np-meta">
           <div class="track-title" id="dos-title">SELEXIONES DOS</div>
           <div class="track-artist"><span id="dos-artist">CONNECTING…</span></div>
@@ -878,8 +877,7 @@ const DYN = {
   onair:        { en:'ON AIR NOW · LIVE',   es:'AL AIRE AHORA · EN VIVO' },
   statusIdle:   { en:'EVERY SAT · LIVE 7PM', es:'CADA SÁB · EN VIVO 7PM' },
   statusLive:   { en:'ON AIR NOW · LIVE',   es:'AL AIRE AHORA · EN VIVO' },
-  fullBroadcast:{ en:'FULL BROADCAST · LISTEN ON MIXCLOUD →', es:'TRANSMISIÓN COMPLETA · ESCUCHA EN MIXCLOUD →' },
-  nowScheduled: { en:'NOW SCHEDULED', es:'PROGRAMACIÓN ACTUAL' }
+  fullBroadcast:{ en:'FULL BROADCAST · LISTEN ON MIXCLOUD →', es:'TRANSMISIÓN COMPLETA · ESCUCHA EN MIXCLOUD →' }
 };
 function eyebrowFor(ch){
   const eb = document.getElementById(ch+'-eyebrow');
@@ -1377,10 +1375,9 @@ var updateStatus;
    regardless of the visitor's own device timezone, same reasoning as isLive(). ── */
 var updateDOSBlock;
 (function () {
-  const tagEl  = document.getElementById('dos-block-tag');
   const nameEl = document.getElementById('dos-block-name');
   const timeEl = document.getElementById('dos-block-time');
-  if (!tagEl || !nameEl) return;
+  if (!nameEl) return;
 
   /* base weekday/weekend grid, 1/2/4-hour blocks — [end-of-block minute, weekday name, weekend name, time-range label] */
   const GRID = [
@@ -1421,7 +1418,6 @@ var updateDOSBlock;
   }
 
   updateDOSBlock = function() {
-    tagEl.textContent = DYN.nowScheduled[LANG];
     const b = getDOSBlock(new Date());
     nameEl.textContent = b.name;
     if (timeEl) timeEl.textContent = b.time ? ('· ' + b.time) : '';
