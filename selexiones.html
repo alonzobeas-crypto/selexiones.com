@@ -939,6 +939,11 @@ const channels = {
   uno: { playing:false, vol:0.7 },
   dos: { playing:false, vol:0.7 }
 };
+/* AzuraCast's own nowplaying API reports which playlist a song actually came
+   from (now_playing.playlist) — when it's populated, that's ground truth and
+   takes priority over the computed schedule guess below. Set by pull() in
+   startNowPlaying('dos'), read by updateDOSBlock(). */
+var DOS_LIVE_PLAYLIST = null;
 
 const UNO_STREAM     = 'https://stream.selexiones.com/listen/uno/radio.mp3';
 const UNO_NOWPLAYING = 'https://stream.selexiones.com/api/nowplaying/uno';
@@ -1109,6 +1114,10 @@ function startNowPlaying(ch){
       if(song.title)  titleEl.textContent  = song.title.toUpperCase();
       artistEl.dataset.live = '1';
       artistEl.textContent = (song.artist || 'SELEXIONES').toUpperCase();
+      if(ch === 'dos'){
+        DOS_LIVE_PLAYLIST = (data.now_playing.playlist || '').trim() || null;
+        if(typeof updateDOSBlock === 'function') updateDOSBlock();
+      }
       if(ch === 'uno'){
         const heroNow = document.getElementById('hero-uno-now');
         if(heroNow){
@@ -1425,7 +1434,10 @@ var updateDOSBlock;
 
   updateDOSBlock = function() {
     const b = getDOSBlock(new Date());
-    nameEl.textContent = b.name;
+    /* Prefer AzuraCast's own confirmed playlist name (set from the nowplaying
+       API's now_playing.playlist field) over the computed guess — it's only
+       ever a guess when AzuraCast hasn't reported a live value yet. */
+    nameEl.textContent = DOS_LIVE_PLAYLIST ? DOS_LIVE_PLAYLIST.toUpperCase() : b.name;
     if (timeEl) timeEl.textContent = b.time ? ('· ' + b.time) : '';
   };
   /* Every block boundary falls on the hour, and an hour is always also a
