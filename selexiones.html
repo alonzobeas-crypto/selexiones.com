@@ -902,6 +902,12 @@ html.lite .hero-glyphs .gp { animation:none; }
 /* ── I18N (EN / ES) ── */
 let LANG = 'en';
 try { if (localStorage.getItem('sx-lang') === 'es') LANG = 'es'; } catch(e){}
+/* setLang() (only invoked by clicking a language button) was the only place
+   that synced this — a returning visitor with a saved Spanish preference got
+   all-Spanish text but <html lang="en"> stayed wrong for the whole session
+   unless they clicked ES again. Sync it here too, right where LANG itself is
+   first determined. */
+document.documentElement.lang = LANG;
 const DYN = {
   connecting:   { en:'CONNECTING…',        es:'CONECTANDO…' },
   reconnecting: { en:'RECONNECTING…',      es:'RECONECTANDO…' },
