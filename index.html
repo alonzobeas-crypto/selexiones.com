@@ -205,6 +205,16 @@ body:hover #cursor { opacity:1; }
   #freq { height:30px; }
 }
 </style>
+<noscript><style>
+/* Every element below defaults to opacity:0 and is only revealed by the JS
+   entrance sequence — with JS disabled/blocked the whole page (including the
+   nav and ENTER buttons) would otherwise stay permanently invisible with no
+   way to reach the rest of the site. This forces the same end-state the JS
+   animation reaches, without depending on it running at all. */
+#topbar, .wordmark, .divider, .channels, .enter-langs, #scroll-hint, #freq {
+  opacity:1 !important; transform:none !important;
+}
+</style></noscript>
 </head>
 <body>
 

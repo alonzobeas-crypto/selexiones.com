@@ -557,6 +557,16 @@ html.lite .hero-glyphs .gp { animation:none; }
   .community-grid { grid-template-columns:1fr; gap:36px; }
 }
 </style>
+<noscript><style>
+/* Same fallback list the DOMContentLoaded handler uses when GSAP itself fails
+   to load — but that handler is JS, so with JS disabled entirely none of it
+   ever runs and this content (hero, live-show info, every archive/event
+   listing, the newsletter box) stays permanently invisible otherwise. */
+.s1-eyebrow,.s1-logo,.s1-tagline,.s1-divider,.live-badge,.s1-player,.s1-stream-links,.s1-scroll,
+.sec-eye,.sec-title,.show-row,.host-row,.stream-embed,.archive-item,.event-item,.events-empty,.contact-block {
+  opacity:1 !important; transform:none !important;
+}
+</style></noscript>
 </head>
 <body>
 
