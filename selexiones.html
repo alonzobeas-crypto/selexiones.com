@@ -357,6 +357,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .ch-stage { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; gap:0; padding:12px 24px 16px; position:relative; z-index:2; }
 .ch-eyebrow { font-size:14px; letter-spacing:6px; margin-bottom:10px; opacity:.6; position:relative; z-index:2; }
+.onair-sub { font-size:11px; letter-spacing:4px; color:var(--dos); opacity:.6; margin-top:-4px; margin-bottom:10px; text-transform:uppercase; position:relative; z-index:2; }
 .dos-block-label { font-size:clamp(15px,2vw,20px); letter-spacing:2px; color:rgba(240,216,240,.6); margin-bottom:14px; text-transform:uppercase; position:relative; z-index:2; }
 .dos-block-label .dbl-name { color:#e8d0ff; font-weight:700; }
 .dos-block-label .dbl-time { color:#e8d0ff; font-weight:700; letter-spacing:2px; margin-left:10px; }
@@ -674,6 +675,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 
       <div class="ch-stage">
         <div class="ch-eyebrow" id="dos-eyebrow" data-tagline-en="SCHEDULED PROGRAMMING" data-tagline-es="PROGRAMACIÓN FIJA"><span class="np-live-dot"></span><span class="eyebrow-text">PROGRAMACIÓN FIJA</span></div>
+        <div class="onair-sub" id="dos-onair-sub" hidden data-en="SCHEDULED PROGRAMMING" data-es="PROGRAMACIÓN FIJA">SCHEDULED PROGRAMMING</div>
         <div class="dos-block-label" id="dos-block-label"><span class="dbl-name" id="dos-block-name">&mdash;</span><span class="dbl-time" id="dos-block-time"></span></div>
         <div class="np-meta">
           <div class="track-title" id="dos-title">SELEXIONES DOS</div>
@@ -886,6 +888,8 @@ function eyebrowFor(ch){
   if(!txt) return;
   const playing = (typeof channels !== 'undefined') && channels[ch] && channels[ch].playing;
   txt.textContent = playing ? DYN.onair[LANG] : (LANG==='es' ? eb.dataset.taglineEs : eb.dataset.taglineEn);
+  const sub = document.getElementById(ch+'-onair-sub');
+  if(sub) sub.hidden = !playing;
 }
 function applyI18n(){
   const be = document.getElementById('lang-en'), bs = document.getElementById('lang-es');
@@ -1028,6 +1032,8 @@ function reflectState(ch, playing){
     const txt = eb.querySelector('.eyebrow-text');
     if(txt) txt.textContent = playing ? DYN.onair[LANG] : (LANG==='es' ? eb.dataset.taglineEs : eb.dataset.taglineEn);
   }
+  const sub = document.getElementById(ch+'-onair-sub');
+  if(sub) sub.hidden = !playing;
   if(ch === 'uno'){
     const hb = document.getElementById('hero-uno-play');
     const hsvg = hb && hb.querySelector('svg');
