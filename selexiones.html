@@ -357,6 +357,8 @@ html.lite .hero-glyphs .gp { animation:none; }
 .ch-stage { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; gap:0; padding:12px 24px 16px; position:relative; z-index:2; }
 .ch-eyebrow { font-size:14px; letter-spacing:6px; margin-bottom:10px; opacity:.6; position:relative; z-index:2; }
+.dos-block-label { font-size:10px; letter-spacing:2.5px; color:rgba(230,200,230,.4); margin-bottom:10px; text-transform:uppercase; position:relative; z-index:2; }
+.dos-block-label .dbl-tag { color:var(--dos); margin-right:7px; }
 .track-title { font-family:'Cinzel',serif; font-size:clamp(26px,2.8vw,40px); letter-spacing:2px; line-height:1.12;
   margin-bottom:8px; position:relative; z-index:2; max-width:92%; }
 .track-artist { display:flex; align-items:center; justify-content:center; gap:14px;
@@ -671,6 +673,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 
       <div class="ch-stage">
         <div class="ch-eyebrow" id="dos-eyebrow" data-tagline-en="WHAT NEVER MISSES" data-tagline-es="LO QUE NUNCA FALLA"><span class="np-live-dot"></span><span class="eyebrow-text">LO QUE NUNCA FALLA</span></div>
+        <div class="dos-block-label" id="dos-block-label"><span class="dbl-tag" id="dos-block-tag">NOW SCHEDULED</span><span id="dos-block-name">&mdash;</span></div>
         <div class="np-meta">
           <div class="track-title" id="dos-title">SELEXIONES DOS</div>
           <div class="track-artist"><span id="dos-artist">CONNECTING…</span></div>
@@ -872,7 +875,8 @@ const DYN = {
   onair:        { en:'ON AIR NOW · LIVE',   es:'AL AIRE AHORA · EN VIVO' },
   statusIdle:   { en:'EVERY SAT · LIVE 7PM', es:'CADA SÁB · EN VIVO 7PM' },
   statusLive:   { en:'ON AIR NOW · LIVE',   es:'AL AIRE AHORA · EN VIVO' },
-  fullBroadcast:{ en:'FULL BROADCAST · LISTEN ON MIXCLOUD →', es:'TRANSMISIÓN COMPLETA · ESCUCHA EN MIXCLOUD →' }
+  fullBroadcast:{ en:'FULL BROADCAST · LISTEN ON MIXCLOUD →', es:'TRANSMISIÓN COMPLETA · ESCUCHA EN MIXCLOUD →' },
+  nowScheduled: { en:'NOW SCHEDULED', es:'PROGRAMACIÓN ACTUAL' }
 };
 function eyebrowFor(ch){
   const eb = document.getElementById(ch+'-eyebrow');
@@ -896,6 +900,7 @@ function applyI18n(){
     eyebrowFor(ch);
   });
   if(typeof updateStatus === 'function') updateStatus();
+  if(typeof updateDOSBlock === 'function') updateDOSBlock();
 }
 function setLang(l){
   LANG = (l==='es') ? 'es' : 'en';
@@ -1359,6 +1364,57 @@ var updateStatus;
   };
   updateStatus();
   setInterval(updateStatus, 30000);
+})();
+</script>
+<script>
+/* ── DOS SCHEDULE ── mirrors the DOS channel's fixed AzuraCast weekly grid so the
+   site can show what's currently scheduled without depending on any nowplaying
+   API field for it (AzuraCast's public nowplaying endpoint only exposes the
+   current song, not the active scheduled playlist). Read in Pacific Time
+   regardless of the visitor's own device timezone, same reasoning as isLive(). ── */
+var updateDOSBlock;
+(function () {
+  const tagEl  = document.getElementById('dos-block-tag');
+  const nameEl = document.getElementById('dos-block-name');
+  if (!tagEl || !nameEl) return;
+
+  function getDOSBlock(d) {
+    const parts = new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', weekday:'short', hour:'numeric', minute:'numeric', hourCycle:'h23' }).formatToParts(d);
+    const day = parts.find(p=>p.type==='weekday').value;
+    const h   = parseInt(parts.find(p=>p.type==='hour').value, 10);
+    const m   = parseInt(parts.find(p=>p.type==='minute').value, 10);
+    const mins = h * 60 + m;
+    const isWeekend = (day === 'Sat' || day === 'Sun');
+
+    /* day-specific specials override the base grid */
+    if (day === 'Sat' && mins >= 1140)               return 'LIVE BROADCAST';
+    if (day === 'Sun' && mins < 120)                 return 'LIVE BROADCAST';
+    if (day === 'Mon' && mins >= 1080 && mins < 1200) return 'MONDAY MIX';
+    if (day === 'Fri' && mins >= 1260 && mins < 1320) return 'WILDCARD HOUR';
+    if (day === 'Sun' && mins >= 720  && mins < 960)  return 'SOBREMESA SUNDAYS';
+    if (day === 'Sun' && mins >= 1200 && mins < 1320) return 'COMMUNITY REQUEST HOUR';
+
+    /* base weekday/weekend grid, 1/2/4-hour blocks */
+    if (mins < 240)  return isWeekend ? 'EL DARK GOTH — AFTER HOURS' : 'EL DARK GOTH';
+    if (mins < 360)  return isWeekend ? 'DREAM CORE — LEAVING THE AFTER HOURS' : 'DREAM CORE — CAFÉ VIBES';
+    if (mins < 600)  return isWeekend ? 'RANCHERAS & TRADICIONAL — ABUELA MELLOW' : 'RANCHERAS & TRADICIONAL';
+    if (mins < 720)  return 'CUMBIÓN';
+    if (mins < 840)  return 'ROCKERO';
+    if (mins < 960)  return 'NUKUMBIA';
+    if (mins < 1080) return 'RAPERO';
+    if (mins < 1140) return 'CHICANO PUNK HOUR';
+    if (mins < 1200) return 'CASA';
+    if (mins < 1260) return 'ELECTRÓNICA';
+    if (mins < 1320) return 'BEATS FUTURE';
+    return isWeekend ? 'GOTHICUMBIA' : 'DREAM CORE — CAFÉ VIBES';
+  }
+
+  updateDOSBlock = function() {
+    tagEl.textContent = DYN.nowScheduled[LANG];
+    nameEl.textContent = getDOSBlock(new Date());
+  };
+  updateDOSBlock();
+  setInterval(updateDOSBlock, 30000);
 })();
 </script>
 </body>
