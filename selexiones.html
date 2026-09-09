@@ -447,7 +447,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .host-name a.link-3eas { color:#ffffff; }
 .host-name a.link-3eas:hover { color:var(--pink-bright); }
 
-/* ── S4 ARCHIVE ── */
+/* ── S4 BIO / S5 ARCHIVE / S6 EVENTS shared wrap styles ── */
 .stream-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; align-items:start; }
 .stream-embed { border:1px solid var(--dimmer); background:rgba(123,31,162,.05); overflow:hidden; opacity:0; }
 .mixcloud-placeholder { height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(224,64,160,.04); position:relative; overflow:hidden; }
@@ -974,8 +974,6 @@ const channels = {
    startNowPlaying('dos'), read by updateDOSBlock(). */
 var DOS_LIVE_PLAYLIST = null;
 
-const UNO_STREAM     = 'https://stream.selexiones.com/listen/uno/radio.mp3';
-const UNO_NOWPLAYING = 'https://stream.selexiones.com/api/nowplaying/uno';
 const STREAMS = {
   uno: { stream:'https://stream.selexiones.com/listen/uno/radio.mp3', np:'https://stream.selexiones.com/api/nowplaying/uno' },
   dos: { stream:'https://stream.selexiones.com/listen/dos/radio.mp3', np:'https://stream.selexiones.com/api/nowplaying/dos' }
@@ -1041,7 +1039,6 @@ setInterval(()=>{
     a.__lastCt = ct;
   });
 }, 1000);
-const unoAudio = audios.uno;
 
 document.getElementById('uno-vol-fill').style.width = (channels.uno.vol*100)+'%';
 document.getElementById('dos-vol-fill').style.width = (channels.dos.vol*100)+'%';
@@ -1061,13 +1058,7 @@ function reflectState(ch, playing){
   setPauseIcon(ch, playing);
   setWave(ch, playing);
   document.getElementById('ch-'+ch).classList.toggle('is-live', playing);
-  const eb = document.getElementById(ch+'-eyebrow');
-  if(eb){
-    const txt = eb.querySelector('.eyebrow-text');
-    if(txt) txt.textContent = playing ? DYN.onair[LANG] : (LANG==='es' ? eb.dataset.taglineEs : eb.dataset.taglineEn);
-  }
-  const sub = document.getElementById(ch+'-onair-sub');
-  if(sub) sub.hidden = !playing;
+  eyebrowFor(ch);
   if(ch === 'uno'){
     const hb = document.getElementById('hero-uno-play');
     const hsvg = hb && hb.querySelector('svg');
@@ -1138,15 +1129,15 @@ function startNowPlaying(ch){
       const res = await fetch(STREAMS[ch].np, { cache:'no-store' });
       if(!res.ok) return;
       const data = await res.json();
+      if(ch === 'dos'){
+        DOS_LIVE_PLAYLIST = (data.now_playing && data.now_playing.playlist || '').trim() || null;
+        if(typeof updateDOSBlock === 'function') updateDOSBlock();
+      }
       const song = data && data.now_playing && data.now_playing.song;
       if(!song) return;
       if(song.title)  titleEl.textContent  = song.title.toUpperCase();
       artistEl.dataset.live = '1';
       artistEl.textContent = (song.artist || 'SELEXIONES').toUpperCase();
-      if(ch === 'dos'){
-        DOS_LIVE_PLAYLIST = (data.now_playing.playlist || '').trim() || null;
-        if(typeof updateDOSBlock === 'function') updateDOSBlock();
-      }
       if(ch === 'uno'){
         const heroNow = document.getElementById('hero-uno-now');
         if(heroNow){
