@@ -613,13 +613,13 @@ html.lite .hero-glyphs .gp { animation:none; }
 </nav>
 
 <div class="progress">
-  <div class="pg active" onclick="goTo(0)"></div>
-  <div class="pg" onclick="goTo(1)"></div>
-  <div class="pg" onclick="goTo(2)"></div>
-  <div class="pg" onclick="goTo(3)"></div>
-  <div class="pg" onclick="goTo(4)"></div>
-  <div class="pg" onclick="goTo(5)"></div>
-  <div class="pg" onclick="goTo(6)"></div>
+  <div class="pg active" onclick="goTo(0)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goTo(0);}" role="button" tabindex="0" aria-label="Go to Hero"></div>
+  <div class="pg" onclick="goTo(1)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goTo(1);}" role="button" tabindex="0" aria-label="Go to Channels"></div>
+  <div class="pg" onclick="goTo(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goTo(2);}" role="button" tabindex="0" aria-label="Go to Live Show"></div>
+  <div class="pg" onclick="goTo(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goTo(3);}" role="button" tabindex="0" aria-label="Go to Bio"></div>
+  <div class="pg" onclick="goTo(4)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goTo(4);}" role="button" tabindex="0" aria-label="Go to Archive"></div>
+  <div class="pg" onclick="goTo(5)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goTo(5);}" role="button" tabindex="0" aria-label="Go to Events"></div>
+  <div class="pg" onclick="goTo(6)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goTo(6);}" role="button" tabindex="0" aria-label="Go to Community"></div>
 </div>
 
 <!-- S1 HERO -->
