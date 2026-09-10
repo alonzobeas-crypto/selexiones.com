@@ -1027,20 +1027,31 @@ function scheduleReconnect(ch, delay){
 function reconnect(ch){
   const a = audios[ch];
   if(!a || !channels[ch].wantPlay) return;
-  // visible reconnecting state so a flaky server reads as "buffering", not "broken"
+  /* visible reconnecting state so a flaky server reads as "buffering", not "broken".
+     dataset.live is a one-way "we've shown real song data at least once" flag set
+     by the nowplaying poll and never cleared — gating on it here meant this text
+     could only ever appear during the first ~17s of a session, before the first
+     poll landed. Every reconnect after that point showed nothing but the stale
+     last-known title, with zero indication anything was happening. */
   const artistEl = document.getElementById(ch+'-artist');
-  if(artistEl && artistEl.dataset.live !== '1') artistEl.textContent = DYN.reconnecting[LANG];
+  if(artistEl) artistEl.textContent = DYN.reconnecting[LANG];
+  channels[ch].starting = true;
+  const btn = document.getElementById(ch+'-play');
+  if(btn) btn.classList.add('loading');
   if(ch === 'uno'){
     const hp = document.getElementById('hero-uno-play');
     if(hp) hp.classList.add('loading');
     const hn = document.getElementById('hero-uno-now');
-    if(hn && hn.dataset.live !== '1') hn.textContent = DYN.reconnecting[LANG];
+    if(hn) hn.textContent = DYN.reconnecting[LANG];
   }
   try { a.src = STREAMS[ch].stream + '?_=' + Date.now(); a.play().catch(()=>{}); } catch(e){}
 }
-/* progress-based watchdog: only reconnect if playback is TRULY frozen for ~12s.
+/* progress-based watchdog: reconnect once playback has been TRULY frozen for ~6s.
    iOS Safari fires waiting/stalled constantly during healthy live playback, so we
-   deliberately do NOT react to those events — we watch actual time progress instead. */
+   deliberately do NOT react to those events — we watch actual time progress instead.
+   (Previously waited a full 12s, meaning a real freeze — the kind that doesn't
+   fire an 'error'/'ended' event at all, just silently stops delivering data —
+   went unnoticed for up to 12s of dead air before any recovery even began.) */
 setInterval(()=>{
   ['uno','dos'].forEach(ch=>{
     const a = audios[ch];
@@ -1048,7 +1059,7 @@ setInterval(()=>{
     const ct = a.currentTime;
     if(a.__lastCt !== undefined && Math.abs(ct - a.__lastCt) < 0.05){
       a.__frozen = (a.__frozen||0) + 1;
-      if(a.__frozen >= 12){ a.__frozen = 0; reconnect(ch); }
+      if(a.__frozen >= 6){ a.__frozen = 0; reconnect(ch); }
     } else { a.__frozen = 0; }
     a.__lastCt = ct;
   });
