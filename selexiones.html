@@ -556,6 +556,12 @@ html.lite .hero-glyphs .gp { animation:none; }
   .show-left, .show-right, .contact-block { height:auto; }
   .archive-wrap { padding:0 14px; }
   .archive-list { max-height:none; column-count:1; }
+  /* Titles get clipped with an ellipsis on desktop where there's room to
+     widen the layout instead, but on phone width that hides real content
+     with no way to read it. Let each title scroll horizontally so a swipe
+     reveals the full text without growing the row or wrapping to 2 lines. */
+  .ai-title { overflow-x:auto; overflow-y:hidden; text-overflow:clip; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .ai-title::-webkit-scrollbar { display:none; }
   .bio-wrap { padding:0 14px; }
   .bio-text { font-size:19px; }
   .community-wrap { padding:0 14px; }
