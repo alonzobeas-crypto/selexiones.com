@@ -667,7 +667,7 @@ html.lite .hero-glyphs .gp { animation:none; }
       </div>
 
       <div class="ch-stage">
-        <div class="ch-eyebrow" id="uno-eyebrow" data-tagline-en="NO ALGORITHM. OUR SELEXIONES." data-tagline-es="SIN ALGORITMO. NUESTRA SELEXIONES."><span class="np-live-dot"></span><span class="eyebrow-text">SIN ALGORITMO. NUESTRA SELEXIONES.</span></div>
+        <div class="ch-eyebrow" id="uno-eyebrow" data-tagline-en="NO ALGORITHM.<br>OUR SELEXIONES." data-tagline-es="SIN ALGORITMO.<br>NUESTRA SELEXIONES."><span class="np-live-dot"></span><span class="eyebrow-text">SIN ALGORITMO.<br>NUESTRA SELEXIONES.</span></div>
         <div class="np-meta">
           <div class="track-title" id="uno-title">SELEXIONES UNO</div>
           <div class="track-artist"><span id="uno-artist">CONNECTING…</span></div>
@@ -923,7 +923,7 @@ function eyebrowFor(ch){
   const txt = eb.querySelector('.eyebrow-text');
   if(!txt) return;
   const playing = (typeof channels !== 'undefined') && channels[ch] && channels[ch].playing;
-  txt.textContent = playing ? DYN.onair[LANG] : (LANG==='es' ? eb.dataset.taglineEs : eb.dataset.taglineEn);
+  txt.innerHTML = playing ? DYN.onair[LANG] : (LANG==='es' ? eb.dataset.taglineEs : eb.dataset.taglineEn);
   const sub = document.getElementById(ch+'-onair-sub');
   if(sub) sub.hidden = !playing;
 }
