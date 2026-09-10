@@ -391,6 +391,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .ch-controls { display:flex; flex-direction:column; align-items:center; gap:18px; }
 .play-btn { width:68px; height:68px; border:1.5px solid; border-radius:50%; display:flex; align-items:center; justify-content:center;
   cursor:pointer; transition:all .15s; flex-shrink:0; background:none; }
+.play-btn.loading { animation:pinkglow 1s infinite; }
 .play-btn svg { width:24px; height:24px; pointer-events:none; }
 .vol-row { display:flex; align-items:center; gap:16px; }
 .vol-label { font-size:12px; letter-spacing:3px; color:rgba(230,200,230,.7); }
@@ -1068,6 +1069,13 @@ function setPauseIcon(ch, playing){
 }
 function reflectState(ch, playing){
   channels[ch].playing = playing;
+  /* Whether it landed on playing or on paused/stopped/errored, any in-flight
+     play attempt this state change represents has now resolved — clear the
+     loading indicator either way, otherwise a stream that fails to start
+     would leave the button stuck spinning forever. */
+  channels[ch].starting = false;
+  const btn = document.getElementById(ch+'-play');
+  if(btn) btn.classList.remove('loading');
   setPauseIcon(ch, playing);
   setWave(ch, playing);
   document.getElementById('ch-'+ch).classList.toggle('is-live', playing);
@@ -1090,11 +1098,30 @@ function togglePlay(ch){
   if(!a) return;
   if(channels[ch].playing){
     channels[ch].wantPlay = false;
+    channels[ch].starting = false;
     clearStallTimer(ch);
     a.pause();
+  } else if(channels[ch].starting){
+    /* A play attempt is already in flight (waiting on the network before the
+       'playing' event fires) — channels[ch].playing is still false, so
+       without this branch a second click here would silently re-enter the
+       "start playing" branch below and restart the stream with a brand new
+       cache-busted src, aborting the buffering that was already in progress.
+       Repeated impatient clicks then just keep resetting the connection
+       instead of ever finishing it — the "glitchy, needs multiple pushes"
+       symptom. Treat a click while loading as "cancel" instead. */
+    channels[ch].wantPlay = false;
+    channels[ch].starting = false;
+    clearStallTimer(ch);
+    const btn = document.getElementById(ch+'-play');
+    if(btn) btn.classList.remove('loading');
+    a.pause();
   } else {
-    Object.keys(audios).forEach(other => { if(other !== ch){ channels[other].wantPlay = false; clearStallTimer(other); audios[other].pause(); } });
+    Object.keys(audios).forEach(other => { if(other !== ch){ channels[other].wantPlay = false; channels[other].starting = false; clearStallTimer(other); audios[other].pause(); } });
     channels[ch].wantPlay = true;
+    channels[ch].starting = true;
+    const btn = document.getElementById(ch+'-play');
+    if(btn) btn.classList.add('loading');
     if(ch === 'uno'){
       const hp = document.getElementById('hero-uno-play');
       if(hp) hp.classList.add('loading');
