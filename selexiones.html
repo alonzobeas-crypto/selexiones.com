@@ -997,8 +997,8 @@ const audios = {};
   const a = new Audio();
   a.preload = 'none';
   a.volume = channels[ch].vol;
-  a.addEventListener('playing', ()=> { reflectState(ch, true); });
-  a.addEventListener('pause',   ()=> { reflectState(ch, false); });
+  a.addEventListener('playing', ()=> { reflectState(ch, true); pauseRetryCount[ch] = 0; clearPauseRetryTimer(ch); });
+  a.addEventListener('pause',   ()=> { reflectState(ch, false); if(channels[ch].wantPlay) schedulePauseRetry(ch); });
   a.addEventListener('error',   ()=> { reflectState(ch, false); scheduleReconnect(ch, 2000); });
   a.addEventListener('ended',   ()=> { if(channels[ch].wantPlay) scheduleReconnect(ch, 500); });
   audios[ch] = a;
@@ -1006,11 +1006,39 @@ const audios = {};
 const stallTimers = {};
 /* ── RESUME AFTER PHONE-CALL / OS INTERRUPTION ──
    A call, another app grabbing audio focus, etc. pauses the <audio> element
-   without going through togglePlay(), so wantPlay stays true. Deliberately NOT
-   retried from the 'pause' listener itself — calling play() while the OS still
-   has the audio session claimed for the call just fights it and glitches/stutters.
-   Only resume once the page is back in the foreground, which is the reliable
-   signal that the interruption (call, other app, etc.) has actually ended. */
+   without going through togglePlay(), so wantPlay stays true.
+   visibilitychange/pageshow/focus catch most cases, but a MISSED call (rings,
+   never answered) often never backgrounds the tab at all on mobile — the OS
+   still briefly grabs the audio session for the ringtone, pauses playback,
+   and hands it back, but none of those events fire because the page was never
+   hidden or blurred. Without a pause-driven retry, that leaves playback
+   silently stopped forever with nothing to bring it back. So also retry
+   directly off the 'pause' event with backoff, capped so a genuinely ongoing
+   call (which usually DOES background the tab) doesn't get fought — those
+   still recover via the visibility/focus listeners below once it ends. */
+const pauseRetryCount = {};
+const pauseRetryTimers = {};
+function clearPauseRetryTimer(ch){ if(pauseRetryTimers[ch]){ clearTimeout(pauseRetryTimers[ch]); pauseRetryTimers[ch] = null; } }
+function schedulePauseRetry(ch){
+  const attempt = pauseRetryCount[ch] || 0;
+  if(attempt >= 5) return;
+  clearPauseRetryTimer(ch);
+  pauseRetryTimers[ch] = setTimeout(()=>{
+    pauseRetryTimers[ch] = null;
+    pauseRetryCount[ch] = attempt + 1;
+    const a = audios[ch];
+    if(!a || !channels[ch].wantPlay) return;
+    if(a.paused){
+      /* A failed/ignored play() here doesn't re-fire 'pause' (it's already
+         paused), so the next attempt has to be chained explicitly rather than
+         waiting on another event that isn't coming. Re-check paused after the
+         call in case it resolved synchronously — otherwise a success here
+         would still queue one more needless retry before 'playing' cancels it. */
+      a.play().catch(()=>{});
+      if(a.paused) schedulePauseRetry(ch);
+    }
+  }, 500 * (attempt + 1));
+}
 function resumeIfWanted(ch){
   const a = audios[ch];
   if(a && channels[ch].wantPlay && a.paused) a.play().catch(()=>{});
