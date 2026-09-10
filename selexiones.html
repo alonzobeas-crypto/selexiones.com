@@ -1459,13 +1459,23 @@ var updateDOSBlock;
     return { name:'SELEXIONES DOS', time:'' };
   }
 
+  /* Requested: hide the time-range text from 6PM to 6AM (Pacific) until
+     further notice — the block name still shows, just not its time range. */
+  function isOvernightHideWindow(d) {
+    const parts = new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', hour:'numeric', minute:'numeric', hourCycle:'h23' }).formatToParts(d);
+    const h = parseInt(parts.find(p=>p.type==='hour').value, 10);
+    const m = parseInt(parts.find(p=>p.type==='minute').value, 10);
+    const mins = h * 60 + m;
+    return mins >= 1080 || mins < 360; // 6PM–6AM, spans midnight
+  }
+
   updateDOSBlock = function() {
     const b = getDOSBlock(new Date());
     /* Prefer AzuraCast's own confirmed playlist name (set from the nowplaying
        API's now_playing.playlist field) over the computed guess — it's only
        ever a guess when AzuraCast hasn't reported a live value yet. */
     nameEl.textContent = DOS_LIVE_PLAYLIST ? DOS_LIVE_PLAYLIST.toUpperCase() : b.name;
-    if (timeEl) timeEl.textContent = b.time ? ('· ' + b.time) : '';
+    if (timeEl) timeEl.textContent = (b.time && !isOvernightHideWindow(new Date())) ? ('· ' + b.time) : '';
   };
   /* Every block boundary falls on the hour, and an hour is always also a
      minute boundary regardless of timezone offset, so waking up exactly at
