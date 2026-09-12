@@ -1218,10 +1218,16 @@ function renderLen(ch){
     return;
   }
   const live = Math.min(st.duration, st.elapsed + (Date.now() - st.syncedAt) / 1000);
-  if(lenEl) lenEl.textContent = fmtClock(live) + ' / ' + fmtClock(st.duration);
+  const text = fmtClock(live) + ' / ' + fmtClock(st.duration);
+  /* Check every 250ms rather than exactly every 1000ms, and only touch the
+     DOM when the displayed second actually changes — a plain 1000ms
+     interval drifts against wall-clock time, so consecutive ticks land at
+     slightly uneven real-world spacing and the seconds digit visibly
+     stutters (skipping or holding a beat) instead of advancing evenly. */
+  if(lenEl && lenEl.textContent !== text) lenEl.textContent = text;
   if(lenSepEl) lenSepEl.hidden = false;
 }
-setInterval(()=>{ renderLen('uno'); renderLen('dos'); }, 1000);
+setInterval(()=>{ renderLen('uno'); renderLen('dos'); }, 250);
 function startNowPlaying(ch){
   const titleEl  = document.getElementById(ch+'-title');
   const artistEl = document.getElementById(ch+'-artist');
