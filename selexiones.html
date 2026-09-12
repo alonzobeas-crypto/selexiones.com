@@ -1199,16 +1199,32 @@ function setVol(ch,clientX){
 });
 
 /* poll AzuraCast now-playing every ~17s, per channel */
-function fmtDur(secs){
-  if(!secs || !isFinite(secs) || secs <= 0) return '';
-  const m = Math.floor(secs / 60), s = Math.floor(secs % 60);
+function fmtClock(secs){
+  secs = Math.max(0, Math.floor(secs || 0));
+  const m = Math.floor(secs / 60), s = secs % 60;
   return m + ':' + String(s).padStart(2, '0');
 }
+/* Elapsed position ticks locally between ~17s polls (synced to the API's
+   elapsed/duration on each poll) so it reads as live playback progress
+   instead of a number frozen until the next poll lands. */
+const lenState = {};
+function renderLen(ch){
+  const lenEl    = document.getElementById(ch+'-len');
+  const lenSepEl = document.getElementById(ch+'-len-sep');
+  const st = lenState[ch];
+  if(!st || !st.duration){
+    if(lenEl) lenEl.textContent = '';
+    if(lenSepEl) lenSepEl.hidden = true;
+    return;
+  }
+  const live = Math.min(st.duration, st.elapsed + (Date.now() - st.syncedAt) / 1000);
+  if(lenEl) lenEl.textContent = fmtClock(live) + ' / ' + fmtClock(st.duration);
+  if(lenSepEl) lenSepEl.hidden = false;
+}
+setInterval(()=>{ renderLen('uno'); renderLen('dos'); }, 1000);
 function startNowPlaying(ch){
   const titleEl  = document.getElementById(ch+'-title');
   const artistEl = document.getElementById(ch+'-artist');
-  const lenEl    = document.getElementById(ch+'-len');
-  const lenSepEl = document.getElementById(ch+'-len-sep');
   const listEl   = document.getElementById(ch+'-list');
   const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
@@ -1227,9 +1243,8 @@ function startNowPlaying(ch){
       if(song.title)  titleEl.textContent  = song.title.toUpperCase();
       artistEl.dataset.live = '1';
       artistEl.textContent = (song.artist || 'SELEXIONES').toUpperCase();
-      const len = fmtDur(data.now_playing && data.now_playing.duration);
-      if(lenEl) lenEl.textContent = len;
-      if(lenSepEl) lenSepEl.hidden = !len;
+      lenState[ch] = { elapsed: data.now_playing.elapsed || 0, duration: data.now_playing.duration || 0, syncedAt: Date.now() };
+      renderLen(ch);
       if(ch === 'uno'){
         const heroNow = document.getElementById('hero-uno-now');
         if(heroNow){
