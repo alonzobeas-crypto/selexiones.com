@@ -1024,7 +1024,19 @@ const pauseRetryTimers = {};
 function clearPauseRetryTimer(ch){ if(pauseRetryTimers[ch]){ clearTimeout(pauseRetryTimers[ch]); pauseRetryTimers[ch] = null; } }
 function schedulePauseRetry(ch){
   const attempt = pauseRetryCount[ch] || 0;
-  if(attempt >= 5) return;
+  if(attempt >= 5){
+    /* Exhausted the quick same-connection retries without ever seeing
+       'playing' fire. Previously this just gave up here — fine for a brief
+       OS audio-session hold (a call), but if the pause was actually caused
+       by a dead/stalled stream connection, calling .play() again on that
+       same connection was never going to work, and playback was left
+       silently paused forever with nothing left watching it (the
+       freeze-watchdog below explicitly ignores paused audio). Escalate to
+       a real reconnect() — fresh cache-busted src — instead of stopping. */
+    pauseRetryCount[ch] = 0;
+    reconnect(ch);
+    return;
+  }
   clearPauseRetryTimer(ch);
   pauseRetryTimers[ch] = setTimeout(()=>{
     pauseRetryTimers[ch] = null;
