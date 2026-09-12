@@ -680,7 +680,7 @@ html.lite .hero-glyphs .gp { animation:none; }
         <div class="ch-eyebrow" id="uno-eyebrow" data-tagline-en="NO ALGORITHM.<br>OUR SELEXIONES." data-tagline-es="SIN ALGORITMO.<br>NUESTRA SELEXIONES."><span class="np-live-dot"></span><span class="eyebrow-text">SIN ALGORITMO.<br>NUESTRA SELEXIONES.</span></div>
         <div class="np-meta">
           <div class="track-title" id="uno-title">SELEXIONES UNO</div>
-          <div class="track-artist"><span id="uno-artist">CONNECTING…</span></div>
+          <div class="track-artist"><span id="uno-artist">CONNECTING…</span><span class="track-sep" id="uno-len-sep" hidden>·</span><span class="track-len" id="uno-len"></span></div>
         </div>
         <div class="ch-controls">
           <button class="play-btn" id="uno-play" onclick="togglePlay('uno')" aria-label="Play UNO">
@@ -719,7 +719,7 @@ html.lite .hero-glyphs .gp { animation:none; }
         <div class="dos-block-label" id="dos-block-label"><span class="dbl-name" id="dos-block-name">&mdash;</span><span class="dbl-time" id="dos-block-time"></span></div>
         <div class="np-meta">
           <div class="track-title" id="dos-title">SELEXIONES DOS</div>
-          <div class="track-artist"><span id="dos-artist">CONNECTING…</span></div>
+          <div class="track-artist"><span id="dos-artist">CONNECTING…</span><span class="track-sep" id="dos-len-sep" hidden>·</span><span class="track-len" id="dos-len"></span></div>
         </div>
         <div class="ch-controls">
           <button class="play-btn" id="dos-play" onclick="togglePlay('dos')" aria-label="Play DOS">
@@ -1199,9 +1199,16 @@ function setVol(ch,clientX){
 });
 
 /* poll AzuraCast now-playing every ~17s, per channel */
+function fmtDur(secs){
+  if(!secs || !isFinite(secs) || secs <= 0) return '';
+  const m = Math.floor(secs / 60), s = Math.floor(secs % 60);
+  return m + ':' + String(s).padStart(2, '0');
+}
 function startNowPlaying(ch){
   const titleEl  = document.getElementById(ch+'-title');
   const artistEl = document.getElementById(ch+'-artist');
+  const lenEl    = document.getElementById(ch+'-len');
+  const lenSepEl = document.getElementById(ch+'-len-sep');
   const listEl   = document.getElementById(ch+'-list');
   const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
@@ -1220,6 +1227,9 @@ function startNowPlaying(ch){
       if(song.title)  titleEl.textContent  = song.title.toUpperCase();
       artistEl.dataset.live = '1';
       artistEl.textContent = (song.artist || 'SELEXIONES').toUpperCase();
+      const len = fmtDur(data.now_playing && data.now_playing.duration);
+      if(lenEl) lenEl.textContent = len;
+      if(lenSepEl) lenSepEl.hidden = !len;
       if(ch === 'uno'){
         const heroNow = document.getElementById('hero-uno-now');
         if(heroNow){
