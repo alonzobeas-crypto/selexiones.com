@@ -1001,7 +1001,7 @@ const audios = {};
   a.preload = 'none';
   a.volume = channels[ch].vol;
   a.addEventListener('playing', ()=> { reflectState(ch, true); pauseRetryCount[ch] = 0; clearPauseRetryTimer(ch); });
-  a.addEventListener('pause',   ()=> { reflectState(ch, false); if(channels[ch].wantPlay) schedulePauseRetry(ch); });
+  a.addEventListener('pause',   ()=> { reflectState(ch, false); if(channels[ch].wantPlay && document.visibilityState === 'visible') schedulePauseRetry(ch); });
   a.addEventListener('error',   ()=> { reflectState(ch, false); scheduleReconnect(ch, 2000); });
   a.addEventListener('ended',   ()=> { if(channels[ch].wantPlay) scheduleReconnect(ch, 500); });
   audios[ch] = a;
@@ -1023,6 +1023,17 @@ const pauseRetryCount = {};
 const pauseRetryTimers = {};
 function clearPauseRetryTimer(ch){ if(pauseRetryTimers[ch]){ clearTimeout(pauseRetryTimers[ch]); pauseRetryTimers[ch] = null; } }
 function schedulePauseRetry(ch){
+  if(document.visibilityState !== 'visible'){
+    /* The tab went to the background mid-chain (switched apps, locked the
+       phone) — stop churning through retries / escalating to a forced
+       reconnect() here. That was causing an audible restart-from-scratch
+       glitch on ordinary app-switching, which isn't a dead connection, just
+       normal backgrounding. Let it sit paused; resumeIfWanted() below does a
+       plain, gentle .play() once the tab is actually foregrounded again. */
+    pauseRetryCount[ch] = 0;
+    clearPauseRetryTimer(ch);
+    return;
+  }
   const attempt = pauseRetryCount[ch] || 0;
   if(attempt >= 5){
     /* Exhausted the quick same-connection retries without ever seeing
@@ -1040,6 +1051,7 @@ function schedulePauseRetry(ch){
   clearPauseRetryTimer(ch);
   pauseRetryTimers[ch] = setTimeout(()=>{
     pauseRetryTimers[ch] = null;
+    if(document.visibilityState !== 'visible'){ pauseRetryCount[ch] = 0; return; }
     pauseRetryCount[ch] = attempt + 1;
     const a = audios[ch];
     if(!a || !channels[ch].wantPlay) return;
