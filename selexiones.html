@@ -396,23 +396,23 @@ html.lite .hero-glyphs .gp { animation:none; }
   border:1px solid rgba(185,103,255,.4); box-shadow:0 12px 40px rgba(0,0,0,.6); padding:14px 16px; }
 .dos-sched-panel[hidden] { display:none; }
 .dos-sched-head { display:flex; align-items:baseline; justify-content:space-between; gap:10px;
-  font-size:11px; letter-spacing:2px; color:var(--dos); padding-bottom:8px; border-bottom:1px solid var(--dimmer); margin-bottom:6px; }
-.dos-sched-tz { font-size:9px; letter-spacing:1.5px; color:var(--dim); opacity:.7; }
-.dos-sched-today { font-size:10px; letter-spacing:2px; color:var(--dos); margin:6px 0 2px; }
-.dos-sched-cols-head { display:flex; gap:10px; font-size:9px; letter-spacing:1.5px; color:var(--dim); opacity:.7; padding:2px 0 4px; }
+  font-size:14px; letter-spacing:2px; color:var(--dos); padding-bottom:8px; border-bottom:1px solid var(--dimmer); margin-bottom:6px; }
+.dos-sched-tz { font-size:11px; letter-spacing:1.5px; color:var(--dim); opacity:.7; }
+.dos-sched-today { font-size:13px; letter-spacing:2px; color:var(--dos); margin:6px 0 4px; }
+.dos-sched-cols-head { display:flex; gap:10px; font-size:11px; letter-spacing:1.5px; color:var(--dim); opacity:.7; padding:2px 0 4px; }
 .dos-sched-cols-head .dsr-cols { flex:1; }
 .dos-sched-cols-head .today { color:var(--dos); opacity:1; font-weight:700; }
-.dos-sched-row { display:flex; gap:10px; align-items:baseline; padding:4px 0; font-size:11px; letter-spacing:.5px; }
-.dsr-time { flex-shrink:0; width:96px; color:var(--dim); font-size:10px; letter-spacing:1px; font-variant-numeric:tabular-nums; }
+.dos-sched-row { display:flex; gap:10px; align-items:baseline; padding:6px 0; font-size:14px; letter-spacing:.5px; }
+.dsr-time { flex-shrink:0; width:118px; color:var(--dim); font-size:12px; letter-spacing:1px; font-variant-numeric:tabular-nums; }
 .dsr-cols { flex:1; display:flex; gap:10px; min-width:0; }
 .dsr-cols > .dsr-name { flex:1; min-width:0; }
 .dsr-name { color:rgba(240,216,240,.85); }
 .dsr-name.dsr-both { flex:1; }
 .dsr-name.active { color:#fff; font-weight:700; }
-.dos-sched-row.active { background:rgba(185,103,255,.08); margin:0 -8px; padding:4px 8px; }
+.dos-sched-row.active { background:rgba(185,103,255,.08); margin:0 -8px; padding:6px 8px; }
 @media (max-width:600px) {
-  .dsr-cols { flex-direction:column; gap:1px; }
-  .dsr-time { width:78px; }
+  .dsr-cols { flex-direction:column; gap:2px; }
+  .dsr-time { width:92px; }
 }
 .track-title { font-family:'Cinzel',serif; font-size:clamp(26px,2.8vw,40px); letter-spacing:2px; line-height:1.12;
   margin-bottom:8px; position:relative; z-index:2; max-width:92%; }
@@ -1714,7 +1714,7 @@ var toggleDOSSchedule;
     if (!schedPanel.hidden){ closeDOSSchedule(); return; }
     buildSchedulePanel();
     const r = schedToggle.getBoundingClientRect();
-    const panelWidth = Math.min(420, window.innerWidth - 24);
+    const panelWidth = Math.min(480, window.innerWidth - 24);
     let left = r.left;
     if (left + panelWidth > window.innerWidth - 12) left = window.innerWidth - panelWidth - 12;
     if (left < 12) left = 12;
