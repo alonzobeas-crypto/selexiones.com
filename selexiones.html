@@ -384,6 +384,34 @@ html.lite .hero-glyphs .gp { animation:none; }
 .dos-block-label { font-size:clamp(15px,2vw,20px); letter-spacing:2px; color:rgba(240,216,240,.6); margin-bottom:14px; text-transform:uppercase; position:relative; z-index:2; }
 .dos-block-label .dbl-name { color:#e8d0ff; font-weight:700; }
 .dos-block-label .dbl-time { color:#e8d0ff; font-weight:700; letter-spacing:2px; margin-left:10px; }
+
+.dos-sched-toggle { display:inline-flex; align-items:center; gap:5px; margin:-6px 0 14px; background:none;
+  border:1px solid var(--dimmer); color:var(--dim); font-family:inherit; font-size:10px; letter-spacing:2px;
+  padding:5px 10px; cursor:pointer; transition:all .15s; position:relative; z-index:2; }
+.dos-sched-toggle:hover, .dos-sched-toggle:focus-visible, .dos-sched-toggle[aria-expanded="true"] {
+  color:var(--dos); border-color:var(--dos); background:rgba(185,103,255,.08); }
+.dos-sched-toggle[aria-expanded="true"] span { transform:rotate(180deg); }
+.dos-sched-toggle span { display:inline-block; transition:transform .15s; }
+.dos-sched-panel { position:fixed; z-index:2000; max-height:70vh; overflow-y:auto; background:var(--bg2);
+  border:1px solid rgba(185,103,255,.4); box-shadow:0 12px 40px rgba(0,0,0,.6); padding:14px 16px; }
+.dos-sched-panel[hidden] { display:none; }
+.dos-sched-head { display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+  font-size:11px; letter-spacing:2px; color:var(--dos); padding-bottom:8px; border-bottom:1px solid var(--dimmer); margin-bottom:6px; }
+.dos-sched-tz { font-size:9px; letter-spacing:1.5px; color:var(--dim); opacity:.7; }
+.dos-sched-cols-head { display:flex; gap:10px; font-size:9px; letter-spacing:1.5px; color:var(--dim); opacity:.7; padding:2px 0 4px; }
+.dos-sched-cols-head .dsr-cols { flex:1; }
+.dos-sched-row { display:flex; gap:10px; align-items:baseline; padding:4px 0; font-size:11px; letter-spacing:.5px; }
+.dsr-time { flex-shrink:0; width:96px; color:var(--dim); font-size:10px; letter-spacing:1px; font-variant-numeric:tabular-nums; }
+.dsr-cols { flex:1; display:flex; gap:10px; min-width:0; }
+.dsr-cols > .dsr-name { flex:1; min-width:0; }
+.dsr-name { color:rgba(240,216,240,.85); }
+.dsr-name.dsr-both { flex:1; }
+.dsr-name.active { color:#fff; font-weight:700; }
+.dos-sched-row.active { background:rgba(185,103,255,.08); margin:0 -8px; padding:4px 8px; }
+@media (max-width:600px) {
+  .dsr-cols { flex-direction:column; gap:1px; }
+  .dsr-time { width:78px; }
+}
 .track-title { font-family:'Cinzel',serif; font-size:clamp(26px,2.8vw,40px); letter-spacing:2px; line-height:1.12;
   margin-bottom:8px; position:relative; z-index:2; max-width:92%; }
 .track-artist { display:flex; align-items:center; justify-content:center; gap:14px;
@@ -735,6 +763,8 @@ html.lite .hero-glyphs .gp { animation:none; }
         <div class="ch-eyebrow" id="dos-eyebrow" data-tagline-en="SCHEDULED PROGRAMMING" data-tagline-es="PROGRAMACIÓN FIJA"><span class="np-live-dot"></span><span class="eyebrow-text">PROGRAMACIÓN FIJA</span></div>
         <div class="onair-sub" id="dos-onair-sub" hidden data-en="SCHEDULED PROGRAMMING" data-es="PROGRAMACIÓN FIJA">SCHEDULED PROGRAMMING</div>
         <div class="dos-block-label" id="dos-block-label"><span class="dbl-name" id="dos-block-name">&mdash;</span><span class="dbl-time" id="dos-block-time"></span></div>
+        <button type="button" class="dos-sched-toggle" id="dosSchedToggle" onclick="toggleDOSSchedule()" aria-haspopup="true" aria-expanded="false" data-en-html="SCHEDULE &lt;span aria-hidden=&quot;true&quot;&gt;&#9662;&lt;/span&gt;" data-es-html="PROGRAMACIÓN &lt;span aria-hidden=&quot;true&quot;&gt;&#9662;&lt;/span&gt;">SCHEDULE <span aria-hidden="true">&#9662;</span></button>
+        <div class="dos-sched-panel" id="dosSchedPanel" hidden role="dialog" aria-label="DOS weekly schedule"></div>
         <div class="np-meta">
           <div class="track-title" id="dos-title">SELEXIONES DOS</div>
           <div class="track-artist"><span id="dos-artist">CONNECTING…</span><span class="track-sep" id="dos-len-sep" hidden>·</span><span class="track-len" id="dos-len"></span></div>
@@ -1564,6 +1594,7 @@ var updateStatus;
    current song, not the active scheduled playlist). Read in Pacific Time
    regardless of the visitor's own device timezone, same reasoning as isLive(). ── */
 var updateDOSBlock;
+var toggleDOSSchedule;
 (function () {
   const labelEl = document.getElementById('dos-block-label');
   const nameEl = document.getElementById('dos-block-name');
@@ -1586,6 +1617,18 @@ var updateDOSBlock;
     [1440, 'DREAM CORE — CAFÉ VIBES','GOTHICUMBIA',                         '10PM–12AM'],
   ];
 
+  /* day-specific specials override the base grid. Kept as data (rather than
+     inline if-statements) so the schedule dropdown below can render the
+     exact same list instead of a second, driftable copy of it. */
+  const SPECIALS = [
+    { day:'Sat', from:1140, to:1440, name:'LIVE BROADCAST',         time:'7PM–2AM', display:'SAT 7PM – SUN 2AM' },
+    { day:'Sun', from:0,    to:120,  name:'LIVE BROADCAST',         time:'7PM–2AM', listed:false }, // same block as the Sat entry above, spans midnight — listed once via that entry's display label
+    { day:'Mon', from:1080, to:1200, name:'MONDAY MIX',             time:'6PM–8PM', display:'MON 6PM–8PM' },
+    { day:'Fri', from:1260, to:1320, name:'WILDCARD HOUR',          time:'9PM–10PM', display:'FRI 9PM–10PM' },
+    { day:'Sun', from:720,  to:960,  name:'SOBREMESA SUNDAYS',      time:'12PM–4PM', display:'SUN 12PM–4PM' },
+    { day:'Sun', from:1200, to:1320, name:'COMMUNITY REQUEST HOUR', time:'8PM–10PM', display:'SUN 8PM–10PM' },
+  ];
+
   function getDOSBlock(d) {
     const parts = new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', weekday:'short', hour:'numeric', minute:'numeric', hourCycle:'h23' }).formatToParts(d);
     const day = parts.find(p=>p.type==='weekday').value;
@@ -1594,19 +1637,101 @@ var updateDOSBlock;
     const mins = h * 60 + m;
     const isWeekend = (day === 'Sat' || day === 'Sun');
 
-    /* day-specific specials override the base grid */
-    if (day === 'Sat' && mins >= 1140)                return { name:'LIVE BROADCAST', time:'7PM–2AM' };
-    if (day === 'Sun' && mins < 120)                  return { name:'LIVE BROADCAST', time:'7PM–2AM' };
-    if (day === 'Mon' && mins >= 1080 && mins < 1200) return { name:'MONDAY MIX', time:'6PM–8PM' };
-    if (day === 'Fri' && mins >= 1260 && mins < 1320) return { name:'WILDCARD HOUR', time:'9PM–10PM' };
-    if (day === 'Sun' && mins >= 720  && mins < 960)  return { name:'SOBREMESA SUNDAYS', time:'12PM–4PM' };
-    if (day === 'Sun' && mins >= 1200 && mins < 1320) return { name:'COMMUNITY REQUEST HOUR', time:'8PM–10PM' };
+    for (const s of SPECIALS) {
+      if (day === s.day && mins >= s.from && mins < s.to) return { name:s.name, time:s.time };
+    }
 
     for (const [end, wd, we, time] of GRID) {
       if (mins < end) return { name: isWeekend ? we : wd, time };
     }
     return { name:'SELEXIONES DOS', time:'' };
   }
+
+  /* ── SCHEDULE DROPDOWN ──
+     Renders the same GRID/SPECIALS data the live block-label logic above
+     reads from, so the dropdown can never drift out of sync with what's
+     actually on air. Built once, lazily, on first open. */
+  const schedPanel = document.getElementById('dosSchedPanel');
+  const schedToggle = document.getElementById('dosSchedToggle');
+  let schedBuilt = false;
+  function buildSchedulePanel(){
+    if (schedBuilt || !schedPanel) return;
+    schedBuilt = true;
+    const current = getDOSBlock(new Date());
+    const rowHtml = (time, wd, we) => {
+      const same = wd === we;
+      const isActive = n => n === current.name;
+      return '<div class="dos-sched-row' + (isActive(wd) || isActive(we) ? ' active' : '') + '">'
+        + '<div class="dsr-time">' + time + '</div>'
+        + (same
+          ? '<div class="dsr-name dsr-both">' + wd + '</div>'
+          : '<div class="dsr-cols"><div class="dsr-name' + (isActive(wd) ? ' active' : '') + '">' + wd + '</div><div class="dsr-name' + (isActive(we) ? ' active' : '') + '">' + we + '</div></div>')
+        + '</div>';
+    };
+    const gridHtml = GRID.map(([end, wd, we, time]) => rowHtml(time, wd, we)).join('');
+    const specialsHtml = SPECIALS.filter(s => s.listed !== false).map(s =>
+      '<div class="dos-sched-row' + (s.name === current.name ? ' active' : '') + '">'
+        + '<div class="dsr-time">' + s.display + '</div>'
+        + '<div class="dsr-name dsr-both">' + s.name + '</div>'
+      + '</div>'
+    ).join('');
+    schedPanel.innerHTML =
+      '<div class="dos-sched-head"><span data-en="WEEKLY SCHEDULE" data-es="PROGRAMACIÓN SEMANAL">WEEKLY SCHEDULE</span><span class="dos-sched-tz">(PACIFIC TIME)</span></div>'
+      + '<div class="dos-sched-cols-head"><div></div><div class="dsr-cols"><div data-en="WEEKDAYS" data-es="ENTRE SEMANA">WEEKDAYS</div><div data-en="WEEKENDS" data-es="FIN DE SEMANA">WEEKENDS</div></div></div>'
+      + gridHtml
+      + '<div class="dos-sched-head" style="margin-top:10px" data-en="SPECIALS" data-es="ESPECIALES">SPECIALS</div>'
+      + specialsHtml;
+    if (typeof applyI18n === 'function') applyI18n();
+  }
+  function closeDOSSchedule(){
+    if (!schedPanel || schedPanel.hidden) return;
+    schedPanel.hidden = true;
+    if (schedToggle) schedToggle.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('keydown', dosSchedKeydown);
+    document.removeEventListener('click', dosSchedOutsideClick, true);
+    window.removeEventListener('scroll', closeDOSSchedule, true);
+    window.removeEventListener('resize', closeDOSSchedule);
+  }
+  function dosSchedKeydown(e){ if (e.key === 'Escape') closeDOSSchedule(); }
+  function dosSchedOutsideClick(e){ if (schedPanel && !schedPanel.contains(e.target) && e.target !== schedToggle) closeDOSSchedule(); }
+  toggleDOSSchedule = function(){
+    if (!schedPanel || !schedToggle) return;
+    if (!schedPanel.hidden){ closeDOSSchedule(); return; }
+    buildSchedulePanel();
+    const r = schedToggle.getBoundingClientRect();
+    const panelWidth = Math.min(420, window.innerWidth - 24);
+    let left = r.left;
+    if (left + panelWidth > window.innerWidth - 12) left = window.innerWidth - panelWidth - 12;
+    if (left < 12) left = 12;
+    /* The schedule list is long (17 rows) and the toggle sits partway down
+       the DOS card, so opening straight below it can run off the bottom of
+       the viewport. Pick whichever side — below or above the toggle — has
+       more room, and cap max-height to what that side can actually fit
+       (with its own internal scroll for the rest) instead of letting the
+       panel spill past the viewport edge. */
+    const margin = 12;
+    const spaceBelow = window.innerHeight - r.bottom - margin;
+    const spaceAbove = r.top - margin;
+    const openBelow = spaceBelow >= 220 || spaceBelow >= spaceAbove;
+    schedPanel.style.width = panelWidth + 'px';
+    schedPanel.style.left = left + 'px';
+    if (openBelow) {
+      schedPanel.style.top = (r.bottom + 8) + 'px';
+      schedPanel.style.bottom = 'auto';
+      schedPanel.style.maxHeight = Math.max(160, spaceBelow - 8) + 'px';
+    } else {
+      schedPanel.style.top = 'auto';
+      schedPanel.style.bottom = (window.innerHeight - r.top + 8) + 'px';
+      schedPanel.style.maxHeight = Math.max(160, spaceAbove - 8) + 'px';
+    }
+    schedPanel.hidden = false;
+    schedToggle.setAttribute('aria-expanded', 'true');
+    document.addEventListener('keydown', dosSchedKeydown);
+    // capture phase + a microtask delay so the click that opened it doesn't also immediately close it via dosSchedOutsideClick
+    setTimeout(() => document.addEventListener('click', dosSchedOutsideClick, true), 0);
+    window.addEventListener('scroll', closeDOSSchedule, true);
+    window.addEventListener('resize', closeDOSSchedule);
+  };
 
   /* Requested: hide the whole block-name/time label from 6PM to 6AM (Pacific)
      until further notice — while AzuraCast's playlists for that window aren't
