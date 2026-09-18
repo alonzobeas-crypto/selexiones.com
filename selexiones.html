@@ -1698,7 +1698,14 @@ var toggleDOSSchedule;
       + specialsHtml;
     if (typeof applyI18n === 'function') applyI18n();
   }
-  function closeDOSSchedule(){
+  function closeDOSSchedule(e){
+    /* window's scroll listener is capture-phase, so it also sees scroll
+       events fired by the panel's own internal overflow-y:auto list (scroll
+       events don't bubble, but they still pass through capture on the way
+       down to whatever element is actually scrolling) — without this check,
+       scrolling the schedule itself on a phone closed it before you could
+       read past the first screenful. Only page-level scroll should close it. */
+    if (e && e.target instanceof Node && schedPanel && schedPanel.contains(e.target)) return;
     if (!schedPanel || schedPanel.hidden) return;
     schedPanel.hidden = true;
     if (schedToggle) schedToggle.setAttribute('aria-expanded', 'false');
