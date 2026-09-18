@@ -218,7 +218,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .scene { scroll-snap-align:start; scroll-snap-stop:always; height:100vh; width:100%;
   position:relative; display:flex; flex-direction:column; justify-content:center;
   overflow:hidden; border-bottom:1px solid var(--dimmer); }
-.scene-counter { position:absolute; right:36px; bottom:32px; font-size:11px; letter-spacing:3px; color:var(--dim); z-index:10; }
+.scene-counter { position:absolute; right:36px; bottom:32px; font-size:12px; letter-spacing:3px; color:var(--dim); z-index:10; }
 
 .gc { position:absolute; width:40px; height:40px; opacity:.25; pointer-events:none;
   border-color:var(--pink); border-style:solid; border-width:0; }
@@ -255,9 +255,9 @@ html.lite .hero-glyphs .gp { animation:none; }
 
 .s1-inner { position:relative; z-index:10; display:flex; flex-direction:column;
   align-items:center; text-align:center; padding:0 40px; }
-.s1-eyebrow { font-size:clamp(14px,1.3vw,18px); letter-spacing:8px; color:var(--pink); margin-bottom:12px; opacity:0; }
+.s1-eyebrow { font-size:clamp(15px,1.4vw,20px); letter-spacing:8px; color:var(--pink); margin-bottom:12px; opacity:0; }
 .s1-logo { font-family:'Cinzel',serif; font-weight:900;
-  font-size:clamp(58px,11vw,148px); letter-spacing:clamp(8px,1.6vw,20px);
+  font-size:clamp(64px,12.1vw,163px); letter-spacing:clamp(8px,1.6vw,20px);
   color:transparent;
   background:linear-gradient(180deg, #b6f2e8 0%, #ff9fde 24%, #ef52aa 54%, #0a0008 100%);
   -webkit-background-clip:text; background-clip:text;
@@ -265,7 +265,7 @@ html.lite .hero-glyphs .gp { animation:none; }
   filter:drop-shadow(0 0 12px rgba(255,130,215,.5)) drop-shadow(0 0 32px rgba(240,80,184,.34)) drop-shadow(0 0 70px rgba(224,64,160,.22));
   transition:filter .3s; opacity:0; }
 .s1-logo:hover { filter:drop-shadow(0 0 22px rgba(255,150,225,.85)) drop-shadow(0 0 54px rgba(240,80,184,.62)) drop-shadow(0 0 104px rgba(224,64,160,.42)); }
-.s1-tagline { font-size:12px; letter-spacing:6px; color:var(--pink); margin-top:12px; opacity:0; }
+.s1-tagline { font-size:13px; letter-spacing:6px; color:var(--pink); margin-top:12px; opacity:0; }
 @media (max-width: 560px){
   .s1-inner { padding:0 18px; }
   .s1-logo { font-size:clamp(34px,12.5vw,72px); letter-spacing:clamp(2px,1vw,8px); }
@@ -279,8 +279,8 @@ html.lite .hero-glyphs .gp { animation:none; }
 .live-badge::before { content:''; position:absolute; inset:0;
   background:repeating-linear-gradient(-45deg,transparent,transparent 4px,rgba(224,64,160,.04) 4px,rgba(224,64,160,.04) 5px); }
 .live-dot { width:7px; height:7px; background:var(--pink-bright); animation:pinkglow 1.5s infinite; position:relative; z-index:1; }
-.live-text { font-size:11px; letter-spacing:4px; color:var(--fg); position:relative; z-index:1; }
-.live-time { font-size:11px; letter-spacing:2px; color:var(--pink); margin-left:8px; position:relative; z-index:1; }
+.live-text { font-size:12px; letter-spacing:4px; color:var(--fg); position:relative; z-index:1; }
+.live-time { font-size:12px; letter-spacing:2px; color:var(--pink); margin-left:8px; position:relative; z-index:1; }
 .s1-player { display:flex; align-items:center; gap:16px; margin-top:20px; padding:12px 14px 12px 12px;
   border:1px solid rgba(255,113,206,.3); background:rgba(255,113,206,.05); opacity:0; max-width:420px; }
 .s1-play { width:52px; height:52px; flex-shrink:0; border:1.5px solid rgba(255,113,206,.55); border-radius:50%;
@@ -289,16 +289,16 @@ html.lite .hero-glyphs .gp { animation:none; }
 .s1-play svg { width:18px; height:18px; fill:var(--uno); pointer-events:none; }
 .s1-play.loading { animation:pinkglow 1s infinite; }
 .s1-player-meta { flex:1; min-width:0; text-align:left; }
-.s1-player-label { font-size:10px; letter-spacing:3px; color:var(--uno); margin-bottom:4px; }
-.s1-player-now { font-size:12px; letter-spacing:1px; color:rgba(255,244,251,.85); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.s1-player-label { font-size:11px; letter-spacing:3px; color:var(--uno); margin-bottom:4px; }
+.s1-player-now { font-size:13px; letter-spacing:1px; color:rgba(255,244,251,.85); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .s1-player .wave-bars { height:24px; }
 .s1-stream-links { display:flex; gap:10px; margin-top:14px; opacity:0; flex-wrap:wrap; justify-content:center; }
-.s-btn { font-size:10px; letter-spacing:3px; color:var(--dim); border:1px solid var(--dimmer);
+.s-btn { font-size:11px; letter-spacing:3px; color:var(--dim); border:1px solid var(--dimmer);
   padding:10px 20px; text-decoration:none; transition:all .2s; }
 .s-btn:hover { color:var(--pink-bright); border-color:var(--pink); background:rgba(224,64,160,.07); }
 .s-btn.primary { border-color:var(--pink-deep); color:var(--pink-bright); background:rgba(224,64,160,.1); }
 .s-btn.primary:hover { background:rgba(224,64,160,.18); }
-.s1-scroll { position:absolute; left:50%; transform:translateX(-50%); bottom:36px; font-size:10px; letter-spacing:4px; color:var(--dim);
+.s1-scroll { position:absolute; left:50%; transform:translateX(-50%); bottom:36px; font-size:11px; letter-spacing:4px; color:var(--dim);
   opacity:0; display:flex; flex-direction:column; align-items:center; gap:8px; }
 .s1-scroll::after { content:''; width:1px; height:30px; background:linear-gradient(to bottom,var(--pink),transparent); }
 
@@ -367,26 +367,26 @@ html.lite .hero-glyphs .gp { animation:none; }
   .ch-grid,.ch-grid::before,.ch-grid::after,.show-left::after,.mixcloud-placeholder::before,.grid-overlay,.grid-overlay::before,.grid-overlay::after{ animation:none !important; }
 }
 .ch-header { display:flex; align-items:center; justify-content:space-between; padding:20px 26px 0; position:relative; z-index:2; }
-.ch-label { font-family:'Cinzel',serif; font-size:38px; font-weight:900; letter-spacing:7px; line-height:1; }
+.ch-label { font-family:'Cinzel',serif; font-size:42px; font-weight:900; letter-spacing:7px; line-height:1; }
 .ch-badge { display:flex; align-items:center; gap:8px; }
 .ch-dot { width:7px; height:7px; flex-shrink:0; }
-.ch-status { font-size:12px; letter-spacing:3px; color:rgba(230,200,230,.7); }
+.ch-status { font-size:13px; letter-spacing:3px; color:rgba(230,200,230,.7); }
 .dos-soon { opacity:.45; }
 .dos-soon .play-btn { cursor:not-allowed; }
 
 .ch-stage { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; gap:0; padding:12px 24px 16px; position:relative; z-index:2; }
-.ch-eyebrow { font-size:14px; letter-spacing:6px; margin-bottom:10px; opacity:.6; position:relative; z-index:2; }
+.ch-eyebrow { font-size:15px; letter-spacing:6px; margin-bottom:10px; opacity:.6; position:relative; z-index:2; }
 @media (min-width:769px){
-  .ch-eyebrow { font-size:20px; }
+  .ch-eyebrow { font-size:22px; }
 }
-.onair-sub { font-size:11px; letter-spacing:4px; color:var(--dos); opacity:.6; margin-top:-4px; margin-bottom:10px; text-transform:uppercase; position:relative; z-index:2; }
-.dos-block-label { font-size:clamp(15px,2vw,20px); letter-spacing:2px; color:rgba(240,216,240,.6); margin-bottom:14px; text-transform:uppercase; position:relative; z-index:2; }
+.onair-sub { font-size:12px; letter-spacing:4px; color:var(--dos); opacity:.6; margin-top:-4px; margin-bottom:10px; text-transform:uppercase; position:relative; z-index:2; }
+.dos-block-label { font-size:clamp(16px,2.2vw,22px); letter-spacing:2px; color:rgba(240,216,240,.6); margin-bottom:14px; text-transform:uppercase; position:relative; z-index:2; }
 .dos-block-label .dbl-name { color:#e8d0ff; font-weight:700; }
 .dos-block-label .dbl-time { color:#e8d0ff; font-weight:700; letter-spacing:2px; margin-left:10px; }
 
 .dos-sched-toggle { display:inline-flex; align-items:center; gap:5px; margin:-6px 0 14px; background:none;
-  border:1px solid var(--dimmer); color:var(--dim); font-family:inherit; font-size:10px; letter-spacing:2px;
+  border:1px solid var(--dimmer); color:var(--dim); font-family:inherit; font-size:11px; letter-spacing:2px;
   padding:5px 10px; cursor:pointer; transition:all .15s; position:relative; z-index:2; }
 .dos-sched-toggle:hover, .dos-sched-toggle:focus-visible, .dos-sched-toggle[aria-expanded="true"] {
   color:var(--dos); border-color:var(--dos); background:rgba(185,103,255,.08); }
@@ -396,14 +396,14 @@ html.lite .hero-glyphs .gp { animation:none; }
   border:1px solid rgba(185,103,255,.4); box-shadow:0 12px 40px rgba(0,0,0,.6); padding:14px 16px; }
 .dos-sched-panel[hidden] { display:none; }
 .dos-sched-head { display:flex; align-items:baseline; justify-content:space-between; gap:10px;
-  font-size:17px; letter-spacing:2px; color:var(--dos); padding-bottom:8px; border-bottom:1px solid var(--dimmer); margin-bottom:6px; }
-.dos-sched-tz { font-size:13px; letter-spacing:1.5px; color:var(--dim); opacity:.7; }
-.dos-sched-today { font-size:16px; letter-spacing:2px; color:var(--dos); margin:6px 0 4px; }
-.dos-sched-cols-head { display:flex; gap:10px; font-size:13px; letter-spacing:1.5px; color:var(--dim); opacity:.7; padding:2px 0 4px; }
+  font-size:19px; letter-spacing:2px; color:var(--dos); padding-bottom:8px; border-bottom:1px solid var(--dimmer); margin-bottom:6px; }
+.dos-sched-tz { font-size:14px; letter-spacing:1.5px; color:var(--dim); opacity:.7; }
+.dos-sched-today { font-size:18px; letter-spacing:2px; color:var(--dos); margin:6px 0 4px; }
+.dos-sched-cols-head { display:flex; gap:10px; font-size:14px; letter-spacing:1.5px; color:var(--dim); opacity:.7; padding:2px 0 4px; }
 .dos-sched-cols-head .dsr-cols { flex:1; }
 .dos-sched-cols-head .today { color:var(--dos); opacity:1; font-weight:700; }
-.dos-sched-row { display:flex; gap:10px; align-items:baseline; padding:7px 0; font-size:18px; letter-spacing:.5px; }
-.dsr-time { flex-shrink:0; width:138px; color:var(--dim); font-size:15px; letter-spacing:1px; font-variant-numeric:tabular-nums; }
+.dos-sched-row { display:flex; gap:10px; align-items:baseline; padding:7px 0; font-size:20px; letter-spacing:.5px; }
+.dsr-time { flex-shrink:0; width:138px; color:var(--dim); font-size:16px; letter-spacing:1px; font-variant-numeric:tabular-nums; }
 .dsr-cols { flex:1; display:flex; gap:10px; min-width:0; }
 .dsr-cols > .dsr-name { flex:1; min-width:0; }
 .dsr-name { color:rgba(240,216,240,.85); }
@@ -414,10 +414,10 @@ html.lite .hero-glyphs .gp { animation:none; }
   .dsr-cols { flex-direction:column; gap:3px; }
   .dsr-time { width:110px; }
 }
-.track-title { font-family:'Cinzel',serif; font-size:clamp(26px,2.8vw,40px); letter-spacing:2px; line-height:1.12;
+.track-title { font-family:'Cinzel',serif; font-size:clamp(29px,3.1vw,44px); letter-spacing:2px; line-height:1.12;
   margin-bottom:8px; position:relative; z-index:2; max-width:92%; }
 .track-artist { display:flex; align-items:center; justify-content:center; gap:14px;
-  font-size:20px; letter-spacing:3px; color:rgba(230,200,230,.7); margin-bottom:20px; position:relative; z-index:2; }
+  font-size:22px; letter-spacing:3px; color:rgba(230,200,230,.7); margin-bottom:20px; position:relative; z-index:2; }
 .track-sep { opacity:.4; }
 .track-len { color:rgba(230,200,230,.78); font-variant-numeric:tabular-nums; }
 
@@ -427,7 +427,7 @@ html.lite .hero-glyphs .gp { animation:none; }
 .play-btn.loading { animation:pinkglow 1s infinite; }
 .play-btn svg { width:24px; height:24px; pointer-events:none; }
 .vol-row { display:flex; align-items:center; gap:16px; }
-.vol-label { font-size:12px; letter-spacing:3px; color:rgba(230,200,230,.7); }
+.vol-label { font-size:13px; letter-spacing:3px; color:rgba(230,200,230,.7); }
 .vol-bar { width:180px; height:20px; display:flex; align-items:center; border-radius:4px; cursor:pointer; position:relative; touch-action:none; }
 .vol-bar::before { content:''; position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:6px; border-radius:4px; background:rgba(255,255,255,.1); }
 .vol-fill { height:6px; width:70%; border-radius:4px; pointer-events:none; position:relative; }
@@ -448,12 +448,12 @@ html.lite .hero-glyphs .gp { animation:none; }
 .np-live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--uno); box-shadow:0 0 8px var(--uno-glow); margin-right:8px; vertical-align:middle; animation:pulse 1.6s infinite; }
 .np-list { margin-top:18px; border-top:1px solid rgba(255,113,206,.14); padding-top:6px; width:100%; max-width:520px; }
 .np-li { display:flex; align-items:baseline; gap:14px; padding:11px 0; border-bottom:1px solid rgba(255,255,255,.03); }
-.np-tag { font-size:10px; letter-spacing:2px; width:62px; flex-shrink:0; color:rgba(230,200,230,.3); text-align:left; }
+.np-tag { font-size:11px; letter-spacing:2px; width:62px; flex-shrink:0; color:rgba(230,200,230,.3); text-align:left; }
 .np-li.next .np-tag { color:var(--uno); }
 .np-li-main { min-width:0; flex:1; text-align:left; }
-.np-li-artist { font-size:15px; letter-spacing:1px; color:#ffd6f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.np-li-artist { font-size:16px; letter-spacing:1px; color:#ffd6f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .np-li.next .np-li-artist { color:#fff; }
-.np-li-title { font-size:12px; letter-spacing:1px; color:rgba(230,200,230,.4); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:3px; }
+.np-li-title { font-size:13px; letter-spacing:1px; color:rgba(230,200,230,.4); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:3px; }
 
 /* ── S3 LIVE SHOW ── */
 #s3 { padding:0; }
@@ -463,20 +463,20 @@ html.lite .hero-glyphs .gp { animation:none; }
   animation: glyphDrift 30s linear infinite, glyphFlick 8s steps(1,end) infinite; }
 .show-left > * { position:relative; z-index:1; }
 .show-right { background:rgba(5,3,8,.76); position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; padding:clamp(28px,4vw,52px); }
-.sec-eye { font-size:13px; letter-spacing:5px; color:var(--pink-bright); margin-bottom:14px; opacity:0; display:flex; align-items:center; gap:12px; }
+.sec-eye { font-size:14px; letter-spacing:5px; color:var(--pink-bright); margin-bottom:14px; opacity:0; display:flex; align-items:center; gap:12px; }
 .sec-eye::before { content:''; width:24px; height:1px; background:var(--pink); display:block; }
-.sec-title { font-family:'Cinzel',serif; font-size:clamp(36px,5.4vw,72px); letter-spacing:6px; color:var(--cream); line-height:.9; margin-bottom:24px; opacity:0; text-shadow:1px 1px 0 var(--purple-dim); }
+.sec-title { font-family:'Cinzel',serif; font-size:clamp(40px,5.9vw,79px); letter-spacing:6px; color:var(--cream); line-height:.9; margin-bottom:24px; opacity:0; text-shadow:1px 1px 0 var(--purple-dim); }
 .show-info { display:flex; flex-direction:column; gap:1px; position:relative; z-index:1; }
 .show-row { display:grid; grid-template-columns:130px 1fr; gap:20px; padding:15px 0; border-bottom:1px solid var(--dimmer); opacity:0; transform:translateX(-16px); }
 .show-row:last-child { border-bottom:none; }
-.sr-label { font-size:12px; letter-spacing:3px; color:var(--pink); }
-.sr-val { font-size:16px; letter-spacing:2px; color:var(--fg); }
+.sr-label { font-size:13px; letter-spacing:3px; color:var(--pink); }
+.sr-val { font-size:18px; letter-spacing:2px; color:var(--fg); }
 .sr-val.live { color:var(--pink-bright); }
 .hosts-list { display:flex; flex-direction:column; gap:1px; }
 .host-row { display:flex; align-items:center; gap:16px; padding:10px 0; border-bottom:1px solid var(--dimmer); opacity:0; transform:translateX(20px); }
 .host-row:last-child { border-bottom:none; }
-.host-name { font-family:'Cinzel',serif; font-size:34px; letter-spacing:3px; color:#ffffff; line-height:1; }
-.host-role { font-size:12px; letter-spacing:3px; color:var(--dim); margin-top:5px; }
+.host-name { font-family:'Cinzel',serif; font-size:37px; letter-spacing:3px; color:#ffffff; line-height:1; }
+.host-role { font-size:13px; letter-spacing:3px; color:var(--dim); margin-top:5px; }
 .link-3eas { color:var(--pink-bright); text-decoration:none; transition:color .15s; }
 .link-3eas:hover { color:#ffffff; }
 .host-name a.link-3eas { color:#ffffff; }
@@ -487,10 +487,10 @@ html.lite .hero-glyphs .gp { animation:none; }
 .stream-embed { border:1px solid var(--dimmer); background:rgba(123,31,162,.05); overflow:hidden; opacity:0; }
 .mixcloud-placeholder { height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(224,64,160,.04); position:relative; overflow:hidden; }
 .mixcloud-placeholder::before { content:''; position:absolute; inset:0; opacity:.85; --gop:.85; animation: glyphDrift 24s linear infinite, glyphFlick 6.5s steps(1,end) infinite; }
-.mcp-label { font-size:15px; letter-spacing:4px; color:var(--pink); position:relative; z-index:1; }
-.mcp-sub { font-size:15px; color:var(--dim); letter-spacing:2px; position:relative; z-index:1; }
+.mcp-label { font-size:16px; letter-spacing:4px; color:var(--pink); position:relative; z-index:1; }
+.mcp-sub { font-size:16px; color:var(--dim); letter-spacing:2px; position:relative; z-index:1; }
 .stream-info { display:flex; flex-direction:column; gap:1px; margin-top:1px; }
-.si-row { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; border:1px solid var(--dimmer); font-size:12px; letter-spacing:1.5px; color:var(--dim); transition:background .2s; }
+.si-row { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; border:1px solid var(--dimmer); font-size:13px; letter-spacing:1.5px; color:var(--dim); transition:background .2s; }
 .si-row:hover { background:rgba(224,64,160,.07); color:var(--pink-bright); }
 .si-label { color:var(--pink); }
 .archive-wrap { padding:0 60px; width:100%; }
@@ -503,20 +503,20 @@ html.lite .hero-glyphs .gp { animation:none; }
 .event-item:hover { background:rgba(224,64,160,.06); }
 .event-item::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--pink); transform:scaleY(0); transform-origin:bottom; transition:transform .3s; }
 .event-item:hover::before { transform:scaleY(1); }
-.ev-date { font-size:11px; letter-spacing:2px; color:var(--pink-bright); white-space:nowrap; min-width:100px; }
+.ev-date { font-size:12px; letter-spacing:2px; color:var(--pink-bright); white-space:nowrap; min-width:100px; }
 .ev-info { flex:1; min-width:0; }
-.ev-title { font-size:15px; letter-spacing:1px; color:var(--fg); margin-bottom:3px; }
-.ev-venue { font-size:11px; letter-spacing:1px; color:var(--dim); }
-.ev-cta { font-size:10px; letter-spacing:2px; color:var(--pink-bright); white-space:nowrap; }
-.events-empty { padding:40px 20px; text-align:center; font-size:13px; letter-spacing:1px; color:var(--dim); border:1px dashed rgba(224,64,160,.28); opacity:0; transform:translateY(12px); }
+.ev-title { font-size:16px; letter-spacing:1px; color:var(--fg); margin-bottom:3px; }
+.ev-venue { font-size:12px; letter-spacing:1px; color:var(--dim); }
+.ev-cta { font-size:11px; letter-spacing:2px; color:var(--pink-bright); white-space:nowrap; }
+.events-empty { padding:40px 20px; text-align:center; font-size:14px; letter-spacing:1px; color:var(--dim); border:1px dashed rgba(224,64,160,.28); opacity:0; transform:translateY(12px); }
 .archive-item { break-inside:avoid; margin-bottom:1px; }
 .archive-item { background:rgba(7,4,12,.78); padding:7px 14px; position:relative; overflow:hidden; transition:background .2s; opacity:0; transform:translateY(12px); display:flex; align-items:center; gap:18px; }
 .archive-item:hover { background:rgba(224,64,160,.06); }
 .archive-item::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--pink); transform:scaleY(0); transform-origin:bottom; transition:transform .3s; }
 .archive-item:hover::before { transform:scaleY(1); }
-.ai-date { font-size:12px; letter-spacing:1.5px; color:var(--pink); flex-shrink:0; width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.ai-title { font-size:14px; letter-spacing:1.5px; color:var(--fg); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.ai-meta { font-size:16px; letter-spacing:2px; color:var(--dim); opacity:.7; flex-shrink:0; white-space:nowrap; }
+.ai-date { font-size:13px; letter-spacing:1.5px; color:var(--pink); flex-shrink:0; width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ai-title { font-size:15px; letter-spacing:1.5px; color:var(--fg); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ai-meta { font-size:18px; letter-spacing:2px; color:var(--dim); opacity:.7; flex-shrink:0; white-space:nowrap; }
 
 .mix-modal { position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center;
   padding:20px; background:rgba(6,3,10,.5); }
@@ -525,43 +525,43 @@ html.lite .hero-glyphs .gp { animation:none; }
   border:1px solid var(--pink-glow); box-shadow:0 0 50px var(--pink-glow); }
 .mix-modal-head { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px;
   border-bottom:1px solid var(--dimmer); }
-.mix-modal-title { font-size:13px; letter-spacing:1.5px; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mix-modal-title { font-size:14px; letter-spacing:1.5px; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .mix-modal-close { background:none; border:1px solid var(--dimmer); color:var(--dim); width:30px; height:30px;
-  flex-shrink:0; cursor:pointer; font-size:16px; line-height:1; transition:all .15s; }
+  flex-shrink:0; cursor:pointer; font-size:18px; line-height:1; transition:all .15s; }
 .mix-modal-close:hover, .mix-modal-close:focus-visible { color:var(--pink-bright); border-color:var(--pink); }
 .mix-modal-body { position:relative; width:100%; height:180px; background:#000; }
 .mix-modal-body iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
 @media (max-width:600px) { .mix-modal-body { height:220px; } }
 .mix-modal-foot { padding:8px 18px; border-top:1px solid var(--dimmer); text-align:right; }
-.mix-modal-foot a { font-size:10px; letter-spacing:2px; color:var(--dim); text-decoration:none; transition:color .15s; }
+.mix-modal-foot a { font-size:11px; letter-spacing:2px; color:var(--dim); text-decoration:none; transition:color .15s; }
 .mix-modal-foot a:hover, .mix-modal-foot a:focus-visible { color:var(--pink-bright); }
 
 /* ── S7 CONTACT ── */
 #s7 { padding:0; }
 .community-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
 .contact-block { background:rgba(7,4,12,.5); padding:clamp(18px,4vw,48px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(20px); }
-.cb-label { font-size:clamp(10px,1.8vw,14px); letter-spacing:3px; color:var(--pink); margin-bottom:16px; }
+.cb-label { font-size:clamp(11px,2vw,15px); letter-spacing:3px; color:var(--pink); margin-bottom:16px; }
 .mail-wrap { border:1px solid rgba(160,111,186,.35); display:flex; transition:border-color .2s; width:100%; }
 .mail-wrap:focus-within { border-color:rgba(224,64,160,.5); }
-.mail-in { flex:1; min-width:0; background:none; border:none; padding:clamp(10px,2vw,16px) clamp(8px,2vw,20px); font-family:'Share Tech Mono',monospace; font-size:clamp(11px,2.2vw,16px); color:var(--fg); letter-spacing:1px; outline:none; text-align:center; }
+.mail-in { flex:1; min-width:0; background:none; border:none; padding:clamp(10px,2vw,16px) clamp(8px,2vw,20px); font-family:'Share Tech Mono',monospace; font-size:clamp(12px,2.4vw,18px); color:var(--fg); letter-spacing:1px; outline:none; text-align:center; }
 .mail-in::placeholder { color:rgba(255,255,255,.85); }
-.mail-sub { background:none; border:none; border-left:1px solid rgba(160,111,186,.35); padding:16px 20px; font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:3px; color:var(--dim); cursor:pointer; transition:all .15s; }
+.mail-sub { background:none; border:none; border-left:1px solid rgba(160,111,186,.35); padding:16px 20px; font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:3px; color:var(--dim); cursor:pointer; transition:all .15s; }
 .mail-sub:hover { color:var(--pink-bright); background:rgba(224,64,160,.08); }
 .social-links { display:flex; flex-direction:column; margin-top:14px; }
-.sl { font-family:'Cinzel',serif; font-size:19px; letter-spacing:3px; color:var(--dim); text-decoration:none; padding:12px 0; border-bottom:1px solid var(--dimmer); display:flex; align-items:center; justify-content:space-between; transition:color .15s; }
+.sl { font-family:'Cinzel',serif; font-size:21px; letter-spacing:3px; color:var(--dim); text-decoration:none; padding:12px 0; border-bottom:1px solid var(--dimmer); display:flex; align-items:center; justify-content:space-between; transition:color .15s; }
 .sl:last-child { border-bottom:none; }
 .sl:hover { color:var(--pink-bright); }
 .sla { opacity:0; transition:opacity .15s; color:var(--pink-bright); }
 .sl:hover .sla { opacity:1; }
-.ghost-logo { font-family:'Cinzel',serif; font-size:clamp(28px,5vw,56px); color:var(--pink); opacity:.06; line-height:.85; margin-bottom:12px; letter-spacing:6px; }
-.submit-btn { width:100%; border:1px solid var(--pink-deep); color:#ffffff; padding:clamp(10px,2vw,16px); background:rgba(224,64,160,.08); font-family:'Share Tech Mono',monospace; font-size:clamp(10px,1.8vw,13px); letter-spacing:2px; cursor:pointer; transition:all .15s; margin-top:1px; }
+.ghost-logo { font-family:'Cinzel',serif; font-size:clamp(31px,5.5vw,62px); color:var(--pink); opacity:.06; line-height:.85; margin-bottom:12px; letter-spacing:6px; }
+.submit-btn { width:100%; border:1px solid var(--pink-deep); color:#ffffff; padding:clamp(10px,2vw,16px); background:rgba(224,64,160,.08); font-family:'Share Tech Mono',monospace; font-size:clamp(11px,2vw,14px); letter-spacing:2px; cursor:pointer; transition:all .15s; margin-top:1px; }
 .submit-btn:hover { background:rgba(224,64,160,.18); }
 
 /* ── FOOTER ── */
 .footer-bar { position:fixed; bottom:0; left:0; right:0; height:28px; border-top:1px solid var(--dimmer);
   background:rgba(12,5,18,.98); display:flex; align-items:center; justify-content:space-between; padding:0 24px; z-index:400; }
-.fb-l { font-size:10px; letter-spacing:3px; color:var(--dim); }
-.fb-r { font-family:'Cinzel',serif; font-size:14px; letter-spacing:4px; color:var(--pink); display:flex; align-items:center; gap:8px; }
+.fb-l { font-size:11px; letter-spacing:3px; color:var(--dim); }
+.fb-r { font-family:'Cinzel',serif; font-size:15px; letter-spacing:4px; color:var(--pink); display:flex; align-items:center; gap:8px; }
 .fb-r .pinkdot { animation:pulse 3s infinite; }
 
 /* ── REUSABLE CARVED-GLYPH (HIERO) LAYER ── */
@@ -825,9 +825,9 @@ html.lite .hero-glyphs .gp { animation:none; }
   <div class="gc tl"></div><div class="gc tr"></div>
   <div class="bio-wrap">
     <div class="sec-eye" style="opacity:1" data-en="OUR STORY" data-es="NUESTRA HISTORIA">OUR STORY</div>
-    <div class="sec-title" style="opacity:1;margin-bottom:28px;font-size:clamp(32px,5vw,60px)" data-en="BIO" data-es="BIOGRAFÍA">BIO</div>
-    <div class="bio-text" style="font-family:'Cinzel',serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px;margin-bottom:24px" data-en-html="SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and &lt;a href=&quot;https://3eascortex.com&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; class=&quot;link-3eas&quot;&gt;3EAS&lt;/a&gt;, two brothers rooted in the Los Angeles Chicano Underground." data-es-html="SELEXIONES es una estación de radio clandestina de Los Ángeles, transmitiendo desde Lincoln Heights. Dos canales, una sola señal — UNO para lo que nunca se ha escuchado y DOS para lo que nunca falla. Creado por Jesus German y &lt;a href=&quot;https://3eascortex.com&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; class=&quot;link-3eas&quot;&gt;3EAS&lt;/a&gt;, dos hermanos arraigados en el Underground chicano de Los Ángeles.">SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and <a href="https://3eascortex.com" target="_blank" rel="noopener noreferrer" class="link-3eas">3EAS</a>, two brothers rooted in the Los Angeles Chicano Underground.</div>
-    <div class="bio-text" style="font-family:'Cinzel',serif;font-size:clamp(16px,1.6vw,20px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px" data-en-html="Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing." data-es-html="Tu apoyo mantiene la señal encendida — cubriendo infraestructura de streaming, licencias, y dando a los DJs una plataforma real para ser escuchados. Cada contribución se reinvierte directamente en mantener a SELEXIONES independiente y en crecimiento.">Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing.</div>
+    <div class="sec-title" style="opacity:1;margin-bottom:28px;font-size:clamp(35px,5.5vw,66px)" data-en="BIO" data-es="BIOGRAFÍA">BIO</div>
+    <div class="bio-text" style="font-family:'Cinzel',serif;font-size:clamp(18px,1.8vw,22px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px;margin-bottom:24px" data-en-html="SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and &lt;a href=&quot;https://3eascortex.com&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; class=&quot;link-3eas&quot;&gt;3EAS&lt;/a&gt;, two brothers rooted in the Los Angeles Chicano Underground." data-es-html="SELEXIONES es una estación de radio clandestina de Los Ángeles, transmitiendo desde Lincoln Heights. Dos canales, una sola señal — UNO para lo que nunca se ha escuchado y DOS para lo que nunca falla. Creado por Jesus German y &lt;a href=&quot;https://3eascortex.com&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; class=&quot;link-3eas&quot;&gt;3EAS&lt;/a&gt;, dos hermanos arraigados en el Underground chicano de Los Ángeles.">SELEXIONES is an underground LA radio station, broadcasting from Lincoln Heights. Two channels, one signal — UNO for what&rsquo;s never been heard and DOS for what never fails. Built by Jesus German and <a href="https://3eascortex.com" target="_blank" rel="noopener noreferrer" class="link-3eas">3EAS</a>, two brothers rooted in the Los Angeles Chicano Underground.</div>
+    <div class="bio-text" style="font-family:'Cinzel',serif;font-size:clamp(18px,1.8vw,22px);line-height:1.7;color:rgba(240,216,240,.85);letter-spacing:.5px" data-en-html="Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing." data-es-html="Tu apoyo mantiene la señal encendida — cubriendo infraestructura de streaming, licencias, y dando a los DJs una plataforma real para ser escuchados. Cada contribución se reinvierte directamente en mantener a SELEXIONES independiente y en crecimiento.">Your support keeps the signal on — covering streaming infrastructure, licensing, and giving DJs a real platform to be heard. Every contribution goes straight back into keeping SELEXIONES independent and growing.</div>
     <a href="https://ko-fi.com/selexiones" target="_blank" rel="noopener noreferrer" class="s-btn primary" style="display:inline-flex;margin-top:32px" data-en="DONATE / SUPPORT →" data-es="DONAR / APOYAR →">DONATE / SUPPORT →</a>
   </div>
   <div class="scene-counter">04 / 07</div>
@@ -839,7 +839,7 @@ html.lite .hero-glyphs .gp { animation:none; }
   <div class="gc tl"></div><div class="gc tr"></div>
   <div class="archive-wrap">
     <div class="sec-eye" style="opacity:1" data-en="PAST BROADCASTS" data-es="TRANSMISIONES PASADAS">PAST BROADCASTS</div>
-    <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(32px,5vw,60px)" data-en="ARCHIVE" data-es="ARCHIVO">ARCHIVE</div>
+    <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(35px,5.5vw,66px)" data-en="ARCHIVE" data-es="ARCHIVO">ARCHIVE</div>
     <div class="stream-layout">
       <div style="display:flex;gap:24px;flex-wrap:wrap">
         <div class="stream-embed" style="flex:1;min-width:220px">
@@ -909,7 +909,7 @@ html.lite .hero-glyphs .gp { animation:none; }
   <div class="gc tl"></div><div class="gc tr"></div>
   <div class="events-wrap">
     <div class="sec-eye" style="opacity:1" data-en="SHOWS &amp; DJ GIGS" data-es="SHOWS Y DJ SETS">SHOWS &amp; DJ GIGS</div>
-    <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(32px,5vw,60px)" data-en="EVENTS" data-es="EVENTOS">EVENTS</div>
+    <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(35px,5.5vw,66px)" data-en="EVENTS" data-es="EVENTOS">EVENTS</div>
     <div class="event-list">
       <div class="events-empty" data-en="No shows announced yet — follow us on Instagram for the next one." data-es="Aún no hay shows anunciados — síguenos en Instagram para el próximo.">No shows announced yet &mdash; follow us on Instagram for the next one.</div>
     </div>
@@ -925,7 +925,7 @@ html.lite .hero-glyphs .gp { animation:none; }
     <div class="community-grid">
       <div>
         <div class="sec-eye" style="opacity:1" data-en="FIND US EVERYWHERE" data-es="ENCUÉNTRANOS EN TODAS PARTES">FIND US EVERYWHERE</div>
-        <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(32px,5vw,60px)" data-en="COMMUNITY" data-es="COMUNIDAD">COMMUNITY</div>
+        <div class="sec-title" style="opacity:1;margin-bottom:22px;font-size:clamp(35px,5.5vw,66px)" data-en="COMMUNITY" data-es="COMUNIDAD">COMMUNITY</div>
         <div class="social-links" style="max-width:640px">
           <a href="https://www.mixcloud.com/SELEXIONES/" target="_blank" rel="noopener noreferrer" class="sl">MIXCLOUD <span class="sla">→</span></a>
           <a href="https://www.instagram.com/selexionesradio/" target="_blank" rel="noopener noreferrer" class="sl">INSTAGRAM <span class="sla">→</span></a>
@@ -935,12 +935,12 @@ html.lite .hero-glyphs .gp { animation:none; }
           <a href="https://worldofmusicshop.com" target="_blank" rel="noopener noreferrer" class="sl">WORLDOFMUSICSHOP.COM <span class="sla">→</span></a>
           <a href="https://ko-fi.com/selexiones" target="_blank" rel="noopener noreferrer" class="sl" style="color:var(--pink-bright)" data-en="DONATE / SUPPORT" data-es="DONAR / APOYAR">DONATE / SUPPORT <span class="sla">→</span></a>
         </div>
-        <div style="margin-top:32px;font-size:10px;letter-spacing:3px;color:var(--dimmer)" data-en="© 2026 SELEXIONES · NORTH EAST LOS ANGELES" data-es="© 2026 SELEXIONES · NORESTE DE LOS ÁNGELES">© 2026 SELEXIONES · NORTH EAST LOS ANGELES</div>
+        <div style="margin-top:32px;font-size:11px;letter-spacing:3px;color:var(--dimmer)" data-en="© 2026 SELEXIONES · NORTH EAST LOS ANGELES" data-es="© 2026 SELEXIONES · NORESTE DE LOS ÁNGELES">© 2026 SELEXIONES · NORTH EAST LOS ANGELES</div>
       </div>
       <div class="contact-block has-hiero" style="background:rgba(5,3,8,.46);min-width:0">
         <div class="hiero-fill"></div>
         <div class="cb-label" data-en="STAY IN THE LOOP" data-es="MANTENTE AL TANTO">STAY IN THE LOOP</div>
-        <div style="font-family:'Cinzel',serif;font-size:clamp(15px,3.2vw,38px);color:var(--cream);letter-spacing:2px;line-height:1.15;margin-bottom:22px;overflow-wrap:break-word;max-width:100%" data-en-html="JOIN THE<br><span style=&quot;color:var(--pink-bright)&quot;>NEWSLETTER</span>" data-es-html="ÚNETE AL<br><span style=&quot;color:var(--pink-bright)&quot;>BOLETÍN</span>">JOIN THE<br><span style="color:var(--pink-bright)">NEWSLETTER</span></div>
+        <div style="font-family:'Cinzel',serif;font-size:clamp(16px,3.5vw,42px);color:var(--cream);letter-spacing:2px;line-height:1.15;margin-bottom:22px;overflow-wrap:break-word;max-width:100%" data-en-html="JOIN THE<br><span style=&quot;color:var(--pink-bright)&quot;>NEWSLETTER</span>" data-es-html="ÚNETE AL<br><span style=&quot;color:var(--pink-bright)&quot;>BOLETÍN</span>">JOIN THE<br><span style="color:var(--pink-bright)">NEWSLETTER</span></div>
         <form action="https://buttondown.com/api/emails/embed-subscribe/selexiones" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/selexiones','popupwindow')" class="embeddable-buttondown-form" style="width:100%">
           <div class="mail-wrap"><input type="email" name="email" class="mail-in" placeholder="YOUR EMAIL" required data-en-ph="YOUR EMAIL" data-es-ph="TU CORREO"></div>
           <input type="hidden" value="1" name="embed">
