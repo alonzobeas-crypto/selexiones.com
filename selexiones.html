@@ -502,6 +502,9 @@ html.lite .hero-glyphs .gp { animation:none; }
 .mix-modal-body { position:relative; width:100%; height:180px; background:#000; }
 .mix-modal-body iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
 @media (max-width:600px) { .mix-modal-body { height:220px; } }
+.mix-modal-foot { padding:8px 18px; border-top:1px solid var(--dimmer); text-align:right; }
+.mix-modal-foot a { font-size:10px; letter-spacing:2px; color:var(--dim); text-decoration:none; transition:color .15s; }
+.mix-modal-foot a:hover, .mix-modal-foot a:focus-visible { color:var(--pink-bright); }
 
 /* ── S7 CONTACT ── */
 #s7 { padding:0; }
@@ -1650,6 +1653,7 @@ var updateDOSBlock;
       <button type="button" class="mix-modal-close" id="mixModalClose" onclick="closeMixPlayer()" aria-label="Close player">✕</button>
     </div>
     <div class="mix-modal-body"><iframe id="mixModalFrame" src="" allow="autoplay" loading="lazy" title="Mixcloud player"></iframe></div>
+    <div class="mix-modal-foot"><a id="mixModalCredit" href="https://www.mixcloud.com/SELEXIONES/" target="_blank" rel="noopener noreferrer">POWERED BY MIXCLOUD ↗</a></div>
   </div>
 </div>
 <script>
@@ -1667,6 +1671,7 @@ function openMixPlayer(e, el){
   const aiTitle = el.querySelector('.ai-title');
   titleEl.textContent = aiTitle ? aiTitle.textContent : '';
   document.getElementById('mixModalFrame').src = 'https://www.mixcloud.com/widget/iframe/?hide_cover=1&light=0&feed=' + encodeURIComponent(path);
+  document.getElementById('mixModalCredit').href = el.getAttribute('href'); // credit links to this specific mix on Mixcloud, not just the profile
   mixModalLastFocus = el;
   document.getElementById('mixModal').hidden = false;
   document.addEventListener('keydown', mixModalKeydown);
