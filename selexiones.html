@@ -488,6 +488,21 @@ html.lite .hero-glyphs .gp { animation:none; }
 .ai-title { font-size:14px; letter-spacing:1.5px; color:var(--fg); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .ai-meta { font-size:16px; letter-spacing:2px; color:var(--dim); opacity:.7; flex-shrink:0; white-space:nowrap; }
 
+.mix-modal { position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center;
+  padding:20px; background:rgba(6,3,10,.88); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+.mix-modal[hidden] { display:none; }
+.mix-modal-panel { position:relative; width:100%; max-width:720px; background:var(--bg2);
+  border:1px solid var(--pink-glow); box-shadow:0 0 50px var(--pink-glow); }
+.mix-modal-head { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px;
+  border-bottom:1px solid var(--dimmer); }
+.mix-modal-title { font-size:13px; letter-spacing:1.5px; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mix-modal-close { background:none; border:1px solid var(--dimmer); color:var(--dim); width:30px; height:30px;
+  flex-shrink:0; cursor:pointer; font-size:16px; line-height:1; transition:all .15s; }
+.mix-modal-close:hover, .mix-modal-close:focus-visible { color:var(--pink-bright); border-color:var(--pink); }
+.mix-modal-body { position:relative; width:100%; height:180px; background:#000; }
+.mix-modal-body iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+@media (max-width:600px) { .mix-modal-body { height:220px; } }
+
 /* ── S7 CONTACT ── */
 #s7 { padding:0; }
 .community-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
@@ -805,47 +820,47 @@ html.lite .hero-glyphs .gp { animation:none; }
       </div>
       <div>
         <div class="archive-list">
-          <a href="https://www.mixcloud.com/SELEXIONES/pea-brain-selexiones-mix-09_05_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">SEP 05 2026 · MIXCLOUD</div><div class="ai-title">PEA BRAIN MIX · 09.05.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_31_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">AUG 31 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.31.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones-antiq-mix-08_29_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">AUG 29 2026 · MIXCLOUD</div><div class="ai-title">ANTIQ MIX · 08.29.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_24_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">AUG 24 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.24.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_17_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">AUG 17 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.17.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_10_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">AUG 10 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.10.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_03_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">AUG 03 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.03.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_07_27_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUL 27 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 07.27.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_07_20_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUL 20 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 07.20.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_07_13_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUL 13 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 07.13.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_29_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUN 29 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.29.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_22_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUN 22 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.22.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_15_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUN 15 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.15.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_08_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUN 08 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.08.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_01_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">JUN 01 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.01.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_05_18_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MAY 18 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 05.18.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_05_11_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MAY 11 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 05.11.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_05_04_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MAY 04 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 05.04.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_04_27_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">APR 27 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 04.27.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_04_13_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">APR 13 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 04.13.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_04_06_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">APR 06 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 04.06.2026</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/like-our-lives-depend-on-it-0003/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">LIKE OUR LIVES DEPEND ON IT · 0003</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/walls-of-annexation-0002/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">WALLS OF ANNEXATION · 0002</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/dual-citizen-0001/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DUAL CITIZEN · 0001</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/fall-0101-despierto/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DESPIERTO · 0101</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/la-vaganciamarionetas-0102/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">LA VAGANCIA / MARIONETAS · 0102</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/tumltuoso/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">TUMULTUOSO</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selecciones-120817/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">SELECCIONES · 12.08.17</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/entumecido/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">ENTUMECIDO</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones-desafio/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DESAFÍO</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/selexiones-lejos/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">LEJOS</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/calor%C3%ADfugo01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">CALORÍFUGO · 01</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/naufragio01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">NAUFRAGIO · 01</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/surgir01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">SURGIR · 01</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/sublevaci%C3%B3n01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">SUBLEVACIÓN · 01</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/ermita%C3%B1o01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">ERMITAÑO · 01</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/desactivacion-slx_01_24/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DESACTIVACIÓN · SLX 01.24</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/pave-dcj0124/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">PAVE · DCJ 01.24</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/dcj0224-tokenize/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">TOKENIZE · DCJ 02.24</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/visiones-slx_02_24/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">VISIONES · SLX 02.24</div></a>
-          <a href="https://www.mixcloud.com/SELEXIONES/discourse-slx_03_24/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DISCOURSE · SLX 03.24</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/pea-brain-selexiones-mix-09_05_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">SEP 05 2026 · MIXCLOUD</div><div class="ai-title">PEA BRAIN MIX · 09.05.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_31_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">AUG 31 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.31.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones-antiq-mix-08_29_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">AUG 29 2026 · MIXCLOUD</div><div class="ai-title">ANTIQ MIX · 08.29.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_24_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">AUG 24 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.24.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_17_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">AUG 17 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.17.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_10_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">AUG 10 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.10.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_08_03_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">AUG 03 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 08.03.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_07_27_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUL 27 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 07.27.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_07_20_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUL 20 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 07.20.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_07_13_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUL 13 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 07.13.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_29_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUN 29 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.29.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_22_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUN 22 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.22.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_15_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUN 15 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.15.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_08_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUN 08 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.08.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_06_01_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">JUN 01 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 06.01.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_05_18_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MAY 18 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 05.18.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_05_11_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MAY 11 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 05.11.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_05_04_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MAY 04 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 05.04.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_04_27_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">APR 27 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 04.27.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_04_13_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">APR 13 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 04.13.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones_04_06_2026/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">APR 06 2026 · MIXCLOUD</div><div class="ai-title">SELEXIONES · 04.06.2026</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/like-our-lives-depend-on-it-0003/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">LIKE OUR LIVES DEPEND ON IT · 0003</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/walls-of-annexation-0002/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">WALLS OF ANNEXATION · 0002</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/dual-citizen-0001/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DUAL CITIZEN · 0001</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/fall-0101-despierto/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DESPIERTO · 0101</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/la-vaganciamarionetas-0102/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">LA VAGANCIA / MARIONETAS · 0102</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/tumltuoso/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">TUMULTUOSO</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selecciones-120817/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">SELECCIONES · 12.08.17</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/entumecido/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">ENTUMECIDO</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones-desafio/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DESAFÍO</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/selexiones-lejos/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">LEJOS</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/calor%C3%ADfugo01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">CALORÍFUGO · 01</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/naufragio01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">NAUFRAGIO · 01</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/surgir01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">SURGIR · 01</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/sublevaci%C3%B3n01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">SUBLEVACIÓN · 01</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/ermita%C3%B1o01/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">ERMITAÑO · 01</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/desactivacion-slx_01_24/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DESACTIVACIÓN · SLX 01.24</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/pave-dcj0124/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">PAVE · DCJ 01.24</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/dcj0224-tokenize/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">TOKENIZE · DCJ 02.24</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/visiones-slx_02_24/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">VISIONES · SLX 02.24</div></a>
+          <a href="https://www.mixcloud.com/SELEXIONES/discourse-slx_03_24/" target="_blank" rel="noopener noreferrer" class="archive-item" style="text-decoration:none;display:flex;align-items:center;gap:18px" onclick="return openMixPlayer(event,this)"><div class="ai-date">MIXCLOUD</div><div class="ai-title">DISCOURSE · SLX 03.24</div></a>
         </div>
       </div>
     </div>
@@ -1626,6 +1641,47 @@ var updateDOSBlock;
   updateDOSBlock();
   scheduleNextTick();
 })();
+</script>
+
+<div class="mix-modal" id="mixModal" hidden role="dialog" aria-modal="true" aria-labelledby="mixModalTitle" onclick="if(event.target===this)closeMixPlayer()">
+  <div class="mix-modal-panel">
+    <div class="mix-modal-head">
+      <div class="mix-modal-title" id="mixModalTitle"></div>
+      <button type="button" class="mix-modal-close" id="mixModalClose" onclick="closeMixPlayer()" aria-label="Close player">✕</button>
+    </div>
+    <div class="mix-modal-body"><iframe id="mixModalFrame" src="" allow="autoplay" loading="lazy" title="Mixcloud player"></iframe></div>
+  </div>
+</div>
+<script>
+/* Archive items link straight to Mixcloud (kept as real hrefs — middle-click/
+   right-click "open in new tab" still works, and it's the no-JS fallback).
+   On a plain click we intercept and open Mixcloud's embeddable widget in a
+   modal instead, using the same /SELEXIONES/<slug>/ path as the feed. */
+let mixModalLastFocus = null;
+function openMixPlayer(e, el){
+  if(e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return true; // let modified clicks open a new tab as normal
+  e.preventDefault();
+  let path;
+  try { path = new URL(el.getAttribute('href')).pathname; } catch(err){ window.open(el.href, '_blank'); return false; }
+  const titleEl = document.getElementById('mixModalTitle');
+  const aiTitle = el.querySelector('.ai-title');
+  titleEl.textContent = aiTitle ? aiTitle.textContent : '';
+  document.getElementById('mixModalFrame').src = 'https://www.mixcloud.com/widget/iframe/?hide_cover=1&light=0&feed=' + encodeURIComponent(path);
+  mixModalLastFocus = el;
+  document.getElementById('mixModal').hidden = false;
+  document.addEventListener('keydown', mixModalKeydown);
+  document.getElementById('mixModalClose').focus();
+  return false;
+}
+function closeMixPlayer(){
+  const modal = document.getElementById('mixModal');
+  if(modal.hidden) return;
+  modal.hidden = true;
+  document.getElementById('mixModalFrame').src = ''; // stop playback
+  document.removeEventListener('keydown', mixModalKeydown);
+  if(mixModalLastFocus){ mixModalLastFocus.focus(); mixModalLastFocus = null; }
+}
+function mixModalKeydown(e){ if(e.key === 'Escape') closeMixPlayer(); }
 </script>
 </body>
 </html>
