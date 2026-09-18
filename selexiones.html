@@ -398,8 +398,10 @@ html.lite .hero-glyphs .gp { animation:none; }
 .dos-sched-head { display:flex; align-items:baseline; justify-content:space-between; gap:10px;
   font-size:11px; letter-spacing:2px; color:var(--dos); padding-bottom:8px; border-bottom:1px solid var(--dimmer); margin-bottom:6px; }
 .dos-sched-tz { font-size:9px; letter-spacing:1.5px; color:var(--dim); opacity:.7; }
+.dos-sched-today { font-size:10px; letter-spacing:2px; color:var(--dos); margin:6px 0 2px; }
 .dos-sched-cols-head { display:flex; gap:10px; font-size:9px; letter-spacing:1.5px; color:var(--dim); opacity:.7; padding:2px 0 4px; }
 .dos-sched-cols-head .dsr-cols { flex:1; }
+.dos-sched-cols-head .today { color:var(--dos); opacity:1; font-weight:700; }
 .dos-sched-row { display:flex; gap:10px; align-items:baseline; padding:4px 0; font-size:11px; letter-spacing:.5px; }
 .dsr-time { flex-shrink:0; width:96px; color:var(--dim); font-size:10px; letter-spacing:1px; font-variant-numeric:tabular-nums; }
 .dsr-cols { flex:1; display:flex; gap:10px; min-width:0; }
@@ -1650,14 +1652,24 @@ var toggleDOSSchedule;
   /* ── SCHEDULE DROPDOWN ──
      Renders the same GRID/SPECIALS data the live block-label logic above
      reads from, so the dropdown can never drift out of sync with what's
-     actually on air. Built once, lazily, on first open. */
+     actually on air. Rebuilt fresh on every open — cheap, and the current
+     day/highlighted block would otherwise go stale for a tab left open
+     across midnight or a block boundary. */
   const schedPanel = document.getElementById('dosSchedPanel');
   const schedToggle = document.getElementById('dosSchedToggle');
-  let schedBuilt = false;
+  const DAY_NAMES = {
+    en: { Mon:'MONDAY', Tue:'TUESDAY', Wed:'WEDNESDAY', Thu:'THURSDAY', Fri:'FRIDAY', Sat:'SATURDAY', Sun:'SUNDAY' },
+    es: { Mon:'LUNES', Tue:'MARTES', Wed:'MIÉRCOLES', Thu:'JUEVES', Fri:'VIERNES', Sat:'SÁBADO', Sun:'DOMINGO' },
+  };
+  function todayShortName(d){
+    return new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', weekday:'short' }).formatToParts(d).find(p=>p.type==='weekday').value;
+  }
   function buildSchedulePanel(){
-    if (schedBuilt || !schedPanel) return;
-    schedBuilt = true;
-    const current = getDOSBlock(new Date());
+    if (!schedPanel) return;
+    const now = new Date();
+    const current = getDOSBlock(now);
+    const todayShort = todayShortName(now);
+    const isWeekendToday = todayShort === 'Sat' || todayShort === 'Sun';
     const rowHtml = (time, wd, we) => {
       const same = wd === we;
       const isActive = n => n === current.name;
@@ -1675,9 +1687,12 @@ var toggleDOSSchedule;
         + '<div class="dsr-name dsr-both">' + s.name + '</div>'
       + '</div>'
     ).join('');
+    const todayEn = 'TODAY: ' + DAY_NAMES.en[todayShort];
+    const todayEs = 'HOY: ' + DAY_NAMES.es[todayShort];
     schedPanel.innerHTML =
       '<div class="dos-sched-head"><span data-en="WEEKLY SCHEDULE" data-es="PROGRAMACIÓN SEMANAL">WEEKLY SCHEDULE</span><span class="dos-sched-tz">(PACIFIC TIME)</span></div>'
-      + '<div class="dos-sched-cols-head"><div></div><div class="dsr-cols"><div data-en="WEEKDAYS" data-es="ENTRE SEMANA">WEEKDAYS</div><div data-en="WEEKENDS" data-es="FIN DE SEMANA">WEEKENDS</div></div></div>'
+      + '<div class="dos-sched-today" data-en="' + todayEn + '" data-es="' + todayEs + '">' + todayEn + '</div>'
+      + '<div class="dos-sched-cols-head"><div></div><div class="dsr-cols"><div' + (isWeekendToday ? '' : ' class="today"') + ' data-en="WEEKDAYS" data-es="ENTRE SEMANA">WEEKDAYS</div><div' + (isWeekendToday ? ' class="today"' : '') + ' data-en="WEEKENDS" data-es="FIN DE SEMANA">WEEKENDS</div></div></div>'
       + gridHtml
       + '<div class="dos-sched-head" style="margin-top:10px" data-en="SPECIALS" data-es="ESPECIALES">SPECIALS</div>'
       + specialsHtml;
