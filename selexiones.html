@@ -1658,18 +1658,18 @@ var toggleDOSSchedule;
 
   /* base weekday/weekend grid, 1/2/4-hour blocks — [end-of-block minute, weekday name, weekend name, time-range label] */
   const GRID = [
-    [240,  'EL DARK GOTH',           'EL DARK GOTH — AFTER HOURS',           '12AM–4AM'],
-    [360,  'DREAM CORE — CAFÉ VIBES','DREAM CORE — LEAVING THE AFTER HOURS', '4AM–6AM'],
-    [600,  'RANCHERAS & TRADICIONAL','RANCHERAS & TRADICIONAL — ABUELA MELLOW','6AM–10AM'],
-    [720,  'CUMBIÓN',                'CUMBIÓN',                              '10AM–12PM'],
-    [840,  'ROCKERO',                'ROCKERO',                              '12PM–2PM'],
-    [960,  'NUKUMBIA',               'NUKUMBIA',                             '2PM–4PM'],
-    [1080, 'RAPERO',                 'RAPERO',                               '4PM–6PM'],
-    [1140, 'CHICANO PUNK HOUR',      'CHICANO PUNK HOUR',                    '6PM–7PM'],
-    [1200, 'CASA',                   'CASA',                                 '7PM–8PM'],
-    [1260, 'ELECTRÓNICA',            'ELECTRÓNICA',                         '8PM–9PM'],
-    [1320, 'BEATS FUTURE',           'BEATS FUTURE',                         '9PM–10PM'],
-    [1440, 'DREAM CORE — CAFÉ VIBES','GOTHICUMBIA',                         '10PM–12AM'],
+    [240,  'EL DARK GOTH',           'EL DARK GOTH',           '12AM–4AM'],
+    [360,  'DREAM CORE — CAFÉ VIBES','DREAM CORE — CAFÉ VIBES','4AM–6AM'],
+    [600,  'RANCHERAS & TRADICIONAL','RANCHERAS & TRADICIONAL','6AM–10AM'],
+    [720,  'CUMBIÓN',                'CUMBIÓN',                '10AM–12PM'],
+    [840,  'ROCKERO',                'ROCKERO',                '12PM–2PM'],
+    [960,  'NUKUMBIA',               'NUKUMBIA',               '2PM–4PM'],
+    [1080, 'RAPERO',                 'RAPERO',                 '4PM–6PM'],
+    [1140, 'CHICANO PUNK HOUR',      'CHICANO PUNK HOUR',      '6PM–7PM'],
+    [1200, 'CASA',                   'CASA',                   '7PM–8PM'],
+    [1260, 'ELECTRÓNICA',            'ELECTRÓNICA',            '8PM–9PM'],
+    [1320, 'BEATS FUTURE',           'BEATS FUTURE',           '9PM–10PM'],
+    [1440, 'DREAM CORE — CAFÉ VIBES','DREAM CORE — CAFÉ VIBES','10PM–12AM'],
   ];
 
   /* day-specific specials override the base grid. Kept as data (rather than
@@ -1680,8 +1680,6 @@ var toggleDOSSchedule;
     { day:'Sun', from:0,    to:120,  name:'LIVE BROADCAST',         time:'7PM–2AM', listed:false }, // same block as the Sat entry above, spans midnight — listed once via that entry's display label
     { day:'Mon', from:1080, to:1200, name:'MONDAY MIX',             time:'6PM–8PM', display:'MON 6PM–8PM' },
     { day:'Fri', from:1260, to:1320, name:'WILDCARD HOUR',          time:'9PM–10PM', display:'FRI 9PM–10PM' },
-    { day:'Sun', from:720,  to:960,  name:'SOBREMESA SUNDAYS',      time:'12PM–4PM', display:'SUN 12PM–4PM' },
-    { day:'Sun', from:1200, to:1320, name:'COMMUNITY REQUEST HOUR', time:'8PM–10PM', display:'SUN 8PM–10PM' },
   ];
 
   function getDOSBlock(d) {
