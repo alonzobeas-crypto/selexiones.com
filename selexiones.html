@@ -1864,7 +1864,10 @@ var toggleDOSSchedule;
 var updateDOSChatVisibility;
 (function () {
   const SUPABASE_URL = 'https://lfiqauwctctodqfuyief.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_Xdbx89GsCKWu662aUl6t0A_NTcOHPBj';
+  /* The new-format "publishable" key (sb_publishable_...) returned 401s from
+     PostgREST — this project's Data API doesn't accept it yet, at least not
+     from this supabase-js version. The legacy anon JWT works reliably. */
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmaXFhdXdjdGN0b2RxZnV5aWVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MzUzMzYsImV4cCI6MjEwNTUxMTMzNn0.OGcZ9AOSkVr71MlmNsSZWAQ1m-d0Y7zDTpOPqANbxeA';
   const panel = document.getElementById('dosChat');
   const listEl = document.getElementById('dosChatMessages');
   const form = document.getElementById('dosChatForm');
