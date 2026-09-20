@@ -1040,6 +1040,14 @@ const channels = {
    takes priority over the computed schedule guess below. Set by pull() in
    startNowPlaying('dos'), read by updateDOSBlock(). */
 var DOS_LIVE_PLAYLIST = null;
+/* A real streamer connected directly (bypassing AutoDJ) reports through a
+   separate now_playing.live object, not now_playing.playlist — so without
+   this, an actual live broadcast happening outside the normal Sat 7PM–2AM
+   window (or during the 6PM–6AM hours the block label is otherwise hidden
+   for) would show nothing, or a stale computed schedule guess, instead of
+   the fact that it's live right now. Takes priority over everything else. */
+var DOS_IS_LIVE = false;
+var DOS_STREAMER_NAME = null;
 
 const STREAMS = {
   uno: { stream:'https://stream.selexiones.com/listen/uno/radio.mp3', np:'https://stream.selexiones.com/api/nowplaying/uno' },
@@ -1316,7 +1324,23 @@ function startNowPlaying(ch){
       const data = await res.json();
       if(ch === 'dos'){
         DOS_LIVE_PLAYLIST = (data.now_playing && data.now_playing.playlist || '').trim() || null;
+        const live = data.now_playing && data.now_playing.live;
+        DOS_IS_LIVE = !!(live && live.is_live);
+        DOS_STREAMER_NAME = (live && live.streamer_name || '').trim() || null;
         if(typeof updateDOSBlock === 'function') updateDOSBlock();
+      }
+      if(ch === 'dos' && DOS_IS_LIVE){
+        /* A live streamer's audio has no associated "song" — AzuraCast just
+           keeps reporting whatever AutoDJ last played before the live
+           source connected, since there's no new track to report. Left
+           alone, that reads as "the site is showing the last mix, not the
+           live broadcast" — which is exactly backwards from what's true. */
+        titleEl.textContent = 'LIVE BROADCAST';
+        artistEl.dataset.live = '1';
+        artistEl.textContent = DOS_STREAMER_NAME ? DOS_STREAMER_NAME.toUpperCase() : 'ON AIR NOW';
+        lenState[ch] = { elapsed: 0, duration: 0, syncedAt: Date.now() };
+        renderLen(ch);
+        return;
       }
       const song = data && data.now_playing && data.now_playing.song;
       if(!song) return;
@@ -1768,6 +1792,15 @@ var toggleDOSSchedule;
   }
 
   updateDOSBlock = function() {
+    if (DOS_IS_LIVE){
+      /* A real streamer is connected right now — this is always the most
+         useful thing to show, so it overrides even the overnight hide
+         window (no reason to hide "we're live" just because it's 3am). */
+      if (labelEl) labelEl.hidden = false;
+      nameEl.textContent = DOS_STREAMER_NAME ? ('LIVE · ' + DOS_STREAMER_NAME.toUpperCase()) : 'LIVE BROADCAST';
+      if (timeEl) timeEl.textContent = '';
+      return;
+    }
     const hide = isOvernightHideWindow(new Date());
     if (labelEl) labelEl.hidden = hide;
     if (hide) return;
