@@ -480,6 +480,8 @@ html.lite .hero-glyphs .gp { animation:none; }
 .dos-chat-send { background:none; border:1px solid var(--dos); color:var(--dos); font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:2px; padding:8px 14px; cursor:pointer; transition:background .2s,color .2s; }
 .dos-chat-send:hover { background:var(--dos); color:#0d0717; }
 .dos-chat-send:disabled { opacity:.4; cursor:default; background:none; color:var(--dos); }
+.dos-chat-err { padding:0 14px 10px; font-size:11px; letter-spacing:.5px; color:#ff6f9a; }
+.dos-chat-err[hidden] { display:none; }
 
 /* ── S3 LIVE SHOW ── */
 #s3 { padding:0; }
@@ -821,6 +823,7 @@ html.lite .hero-glyphs .gp { animation:none; }
             <input type="text" id="dosChatInput" class="dos-chat-input" placeholder="Say something…" data-en-ph="Say something…" data-es-ph="Escribe algo…" maxlength="300" autocomplete="off" required>
             <button type="submit" class="dos-chat-send" id="dosChatSend" data-en="SEND" data-es="ENVIAR">SEND</button>
           </form>
+          <div class="dos-chat-err" id="dosChatErr" hidden data-en="That name is taken this stream — try another." data-es="Ese nombre ya está en uso en esta transmisión — prueba otro."></div>
         </div>
       </div>
     </div>
@@ -1083,6 +1086,7 @@ var DOS_LIVE_PLAYLIST = null;
    the fact that it's live right now. Takes priority over everything else. */
 var DOS_IS_LIVE = false;
 var DOS_STREAMER_NAME = null;
+var DOS_BROADCAST_START = null;
 
 const STREAMS = {
   uno: { stream:'https://stream.selexiones.com/listen/uno/radio.mp3', np:'https://stream.selexiones.com/api/nowplaying/uno' },
@@ -1362,6 +1366,7 @@ function startNowPlaying(ch){
         const live = data.live;
         DOS_IS_LIVE = !!(live && live.is_live);
         DOS_STREAMER_NAME = (live && live.streamer_name || '').trim() || null;
+        DOS_BROADCAST_START = (live && live.broadcast_start) || null;
         if(typeof updateDOSBlock === 'function') updateDOSBlock();
       }
       if(ch === 'dos' && DOS_IS_LIVE){
@@ -1880,7 +1885,16 @@ var updateDOSChatVisibility;
   const nameInput = document.getElementById('dosChatName');
   const bodyInput = document.getElementById('dosChatInput');
   const sendBtn = document.getElementById('dosChatSend');
+  const errEl = document.getElementById('dosChatErr');
   if (!panel || !form || typeof window.supabase === 'undefined') return;
+
+  const EMPTY_HTML = document.getElementById('dosChatMessages').innerHTML;
+  function showErr(){
+    if (!errEl) return;
+    errEl.hidden = false;
+    errEl.textContent = (typeof LANG !== 'undefined' && LANG === 'es') ? errEl.dataset.es : errEl.dataset.en;
+  }
+  function hideErr(){ if (errEl) errEl.hidden = true; }
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   const savedName = (localStorage.getItem('selexionesChatName') || '').trim();
@@ -1909,8 +1923,13 @@ var updateDOSChatVisibility;
 
   let loaded = false;
   let subscribed = false;
+  let sessionStart = null;
 
-  const MAX_VISIBLE_MESSAGES = 5;
+  const MAX_VISIBLE_MESSAGES = 30;
+
+  function sessionStartIso() {
+    return DOS_BROADCAST_START ? new Date(DOS_BROADCAST_START * 1000).toISOString() : null;
+  }
 
   function renderMessage(row) {
     const empty = listEl.querySelector('.dos-chat-empty');
@@ -1936,11 +1955,14 @@ var updateDOSChatVisibility;
   async function loadRecent() {
     if (loaded) return;
     loaded = true;
-    const { data, error } = await client
+    let query = client
       .from('chat_messages')
       .select('username,body,created_at')
       .order('created_at', { ascending: false })
       .limit(MAX_VISIBLE_MESSAGES);
+    const since = sessionStartIso();
+    if (since) query = query.gte('created_at', since);
+    const { data, error } = await query;
     if (error || !data) { console.error('[dos-chat] load error:', error); return; }
     data.reverse().forEach(renderMessage);
   }
@@ -1954,8 +1976,20 @@ var updateDOSChatVisibility;
       .subscribe();
   }
 
+  /* Each broadcast_start value marks a new stream — reset the visible chat
+     (without deleting anything server-side) so a new stream doesn't open
+     with the previous one's leftover messages, and a page left open across
+     two streams picks up the reset too. */
+  function resetForNewSession() {
+    listEl.innerHTML = EMPTY_HTML;
+    loaded = false;
+    hideErr();
+  }
+
   updateDOSChatVisibility = function () {
     if (DOS_IS_LIVE) {
+      if (sessionStart !== null && DOS_BROADCAST_START !== sessionStart) resetForNewSession();
+      sessionStart = DOS_BROADCAST_START;
       panel.hidden = false;
       loadRecent();
       subscribeRealtime();
@@ -1964,14 +1998,36 @@ var updateDOSChatVisibility;
     }
   };
 
+  async function isNameTaken(rawName) {
+    let query = client.from('chat_messages').select('username').limit(200);
+    const since = sessionStartIso();
+    if (since) query = query.gte('created_at', since);
+    const { data, error } = await query;
+    if (error || !data) return false; // fail open rather than blocking sends on a lookup hiccup
+    const lower = rawName.toLowerCase();
+    return data.some(function (r) {
+      const idx = r.username.lastIndexOf('#');
+      if (idx < 0) return false;
+      const name = r.username.slice(0, idx).toLowerCase();
+      const tag = r.username.slice(idx + 1).toLowerCase();
+      return name === lower && tag !== CLIENT_TAG.toLowerCase();
+    });
+  }
+
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
+    hideErr();
     const rawName = nameInput.value.trim().slice(0, 24 - 1 - CLIENT_TAG.length);
     const body = bodyInput.value.trim().slice(0, 300);
     if (!rawName || !body) return;
+    sendBtn.disabled = true;
+    if (await isNameTaken(rawName)) {
+      sendBtn.disabled = false;
+      showErr();
+      return;
+    }
     localStorage.setItem('selexionesChatName', rawName);
     const username = rawName + '#' + CLIENT_TAG;
-    sendBtn.disabled = true;
     const { error } = await client.from('chat_messages').insert({ username, body });
     sendBtn.disabled = false;
     if (error) { console.error('[dos-chat] send error:', error); return; }
