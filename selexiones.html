@@ -1907,7 +1907,7 @@ var updateDOSChatVisibility;
       .select('username,body,created_at')
       .order('created_at', { ascending: false })
       .limit(30);
-    if (error || !data) return;
+    if (error || !data) { console.error('[dos-chat] load error:', error); return; }
     data.reverse().forEach(renderMessage);
   }
 
@@ -1939,7 +1939,8 @@ var updateDOSChatVisibility;
     sendBtn.disabled = true;
     const { error } = await client.from('chat_messages').insert({ username, body });
     sendBtn.disabled = false;
-    if (!error) bodyInput.value = '';
+    if (error) { console.error('[dos-chat] send error:', error); return; }
+    bodyInput.value = '';
   });
 })();
 </script>
