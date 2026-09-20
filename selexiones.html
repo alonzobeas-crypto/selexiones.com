@@ -1886,6 +1886,27 @@ var updateDOSChatVisibility;
   const savedName = (localStorage.getItem('selexionesChatName') || '').trim();
   if (savedName) nameInput.value = savedName;
 
+  /* Free-text names alone let two different people show up as the same
+     "DJ", indistinguishable and easily impersonated. Each browser gets a
+     random tag (persisted in localStorage) appended to whatever name it
+     sends — e.g. "DJ#a3f9" vs "DJ#7c21" — so identical typed names still
+     resolve to visibly distinct, consistent identities, colored by tag. */
+  function getClientTag() {
+    let id = null;
+    try { id = localStorage.getItem('selexionesChatClientId'); } catch (e) {}
+    if (!id) {
+      id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(16) + Math.random().toString(16).slice(2));
+      try { localStorage.setItem('selexionesChatClientId', id); } catch (e) {}
+    }
+    return id.replace(/-/g, '').slice(0, 4);
+  }
+  function colorForTag(tag) {
+    let h = 0;
+    for (let i = 0; i < tag.length; i++) h = (h * 31 + tag.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ',75%,68%)';
+  }
+  const CLIENT_TAG = getClientTag();
+
   let loaded = false;
   let subscribed = false;
 
@@ -1899,6 +1920,8 @@ var updateDOSChatVisibility;
     const nameEl = document.createElement('span');
     nameEl.className = 'dcm-name';
     nameEl.textContent = row.username;
+    const tagMatch = /#([0-9a-f]{4})$/i.exec(row.username);
+    if (tagMatch) nameEl.style.color = colorForTag(tagMatch[1]);
     const bodyEl = document.createElement('span');
     bodyEl.textContent = row.body;
     line.appendChild(nameEl);
@@ -1943,10 +1966,11 @@ var updateDOSChatVisibility;
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const username = nameInput.value.trim().slice(0, 24);
+    const rawName = nameInput.value.trim().slice(0, 24 - 1 - CLIENT_TAG.length);
     const body = bodyInput.value.trim().slice(0, 300);
-    if (!username || !body) return;
-    localStorage.setItem('selexionesChatName', username);
+    if (!rawName || !body) return;
+    localStorage.setItem('selexionesChatName', rawName);
+    const username = rawName + '#' + CLIENT_TAG;
     sendBtn.disabled = true;
     const { error } = await client.from('chat_messages').insert({ username, body });
     sendBtn.disabled = false;
