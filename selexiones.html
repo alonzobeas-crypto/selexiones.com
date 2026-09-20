@@ -1353,7 +1353,7 @@ function startNowPlaying(ch){
       const data = await res.json();
       if(ch === 'dos'){
         DOS_LIVE_PLAYLIST = (data.now_playing && data.now_playing.playlist || '').trim() || null;
-        const live = data.now_playing && data.now_playing.live;
+        const live = data.live;
         DOS_IS_LIVE = !!(live && live.is_live);
         DOS_STREAMER_NAME = (live && live.streamer_name || '').trim() || null;
         if(typeof updateDOSBlock === 'function') updateDOSBlock();
