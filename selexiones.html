@@ -1889,6 +1889,8 @@ var updateDOSChatVisibility;
   let loaded = false;
   let subscribed = false;
 
+  const MAX_VISIBLE_MESSAGES = 5;
+
   function renderMessage(row) {
     const empty = listEl.querySelector('.dos-chat-empty');
     if (empty) empty.remove();
@@ -1902,6 +1904,9 @@ var updateDOSChatVisibility;
     line.appendChild(nameEl);
     line.appendChild(bodyEl);
     listEl.appendChild(line);
+    // keep only the most recent MAX_VISIBLE_MESSAGES, dropping oldest first
+    const all = listEl.querySelectorAll('.dos-chat-msg');
+    for (let i = 0; i < all.length - MAX_VISIBLE_MESSAGES; i++) all[i].remove();
     listEl.scrollTop = listEl.scrollHeight;
   }
 
@@ -1912,7 +1917,7 @@ var updateDOSChatVisibility;
       .from('chat_messages')
       .select('username,body,created_at')
       .order('created_at', { ascending: false })
-      .limit(30);
+      .limit(MAX_VISIBLE_MESSAGES);
     if (error || !data) { console.error('[dos-chat] load error:', error); return; }
     data.reverse().forEach(renderMessage);
   }
