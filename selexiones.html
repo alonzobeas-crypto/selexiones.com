@@ -1919,10 +1919,14 @@ var updateDOSChatVisibility;
     }
     return id.replace(/-/g, '').slice(0, 4);
   }
+  /* Colors drawn from the site's own palette (--uno, --dos, --pink family)
+     instead of an arbitrary computed hue, so every name still reads as
+     "part of this site" rather than a random rainbow. */
+  const NAME_COLORS = ['#ff71ce', '#b967ff', '#f060c0', '#e040a0', '#e8d0ff', '#ffd6f0'];
   function colorForTag(tag) {
     let h = 0;
-    for (let i = 0; i < tag.length; i++) h = (h * 31 + tag.charCodeAt(i)) % 360;
-    return 'hsl(' + h + ',75%,68%)';
+    for (let i = 0; i < tag.length; i++) h = (h * 31 + tag.charCodeAt(i)) | 0;
+    return NAME_COLORS[Math.abs(h) % NAME_COLORS.length];
   }
   const CLIENT_TAG = getClientTag();
 
@@ -1943,8 +1947,9 @@ var updateDOSChatVisibility;
     line.className = 'dos-chat-msg';
     const nameEl = document.createElement('span');
     nameEl.className = 'dcm-name';
-    nameEl.textContent = row.username;
     const tagMatch = /#([0-9a-f]{4})$/i.exec(row.username);
+    // the #tag exists only to keep names unique/colored; never show it
+    nameEl.textContent = tagMatch ? row.username.slice(0, tagMatch.index) : row.username;
     if (tagMatch) nameEl.style.color = colorForTag(tagMatch[1]);
     const bodyEl = document.createElement('span');
     bodyEl.textContent = row.body;
