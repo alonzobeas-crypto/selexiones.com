@@ -1375,24 +1375,21 @@ function startNowPlaying(ch){
         if(typeof updateDOSBlock === 'function') updateDOSBlock();
       }
       if(ch === 'dos' && DOS_IS_LIVE){
-        /* A live source can send its own ICY/track metadata, which lands in
-           now_playing.song same as AutoDJ's would — but AzuraCast also just
-           keeps reporting whatever AutoDJ last played if the live source
-           sends nothing new. The only reliable way to tell those apart is
-           timing: trust the song only if it started at/after this broadcast
-           began (played_at >= broadcast_start); anything earlier is AutoDJ's
-           leftover last track from before the live source connected. */
-        const liveSong = data.now_playing && data.now_playing.song;
-        const playedAt = data.now_playing && data.now_playing.played_at;
-        const freshLiveSong = !!(liveSong && liveSong.title && playedAt && DOS_BROADCAST_START && playedAt >= DOS_BROADCAST_START);
-        if (freshLiveSong) {
-          titleEl.textContent = liveSong.title.toUpperCase();
-          artistEl.dataset.live = '1';
-          artistEl.textContent = (liveSong.artist || DOS_STREAMER_NAME || 'SELEXIONES').toUpperCase();
-          lenState[ch] = { elapsed: data.now_playing.elapsed || 0, duration: data.now_playing.duration || 0, syncedAt: Date.now() };
-          renderLen(ch);
-          return;
-        }
+        /* A live streamer's audio has no associated "song" — AzuraCast just
+           keeps reporting whatever AutoDJ last played before the live
+           source connected, since there's no new track to report. Left
+           alone, that reads as "the site is showing the last mix, not the
+           live broadcast" — which is exactly backwards from what's true.
+
+           Tried trusting now_playing.song when it started at/after
+           broadcast_start (assuming that meant real DJ-sent metadata) —
+           confirmed by the site owner that AutoDJ's internal playlist
+           pointer keeps silently advancing in the background even while a
+           live source is overriding the actual audio, so even a
+           post-broadcast_start song entry doesn't reflect what's actually
+           playing. Nothing in this payload reliably distinguishes real
+           live metadata from AutoDJ's background state, so never trust
+           now_playing.song while live — always show the generic label. */
         titleEl.textContent = 'LIVE BROADCAST';
         artistEl.dataset.live = '1';
         artistEl.textContent = DOS_STREAMER_NAME ? DOS_STREAMER_NAME.toUpperCase() : 'ON AIR NOW';
