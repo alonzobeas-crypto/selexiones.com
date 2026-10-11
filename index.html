@@ -479,6 +479,20 @@ function startNowPlaying(ch){
       const res = await fetch(NOWPLAYING[ch], { cache:'no-store' });
       if(!res.ok) return;
       const data = await res.json();
+      if(ch === 'dos'){
+        /* A live streamer's audio has no associated "song" — AzuraCast just
+           keeps reporting whatever AutoDJ last played (or its own internal
+           playlist pointer, which keeps advancing even while a live source
+           overrides the actual audio). Showing that reads as "the site is
+           showing the last mix, not the live broadcast" — so never trust
+           now_playing.song while live; show a plain live indicator instead. */
+        const live = data.live;
+        if (live && live.is_live) {
+          nowEl.dataset.placeholder = '0';
+          nowEl.textContent = 'SELEXIONES LIVE';
+          return;
+        }
+      }
       const song = data && data.now_playing && data.now_playing.song;
       if(!song) return;
       const artist = (song.artist || 'SELEXIONES').trim();
