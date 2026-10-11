@@ -1933,10 +1933,18 @@ var updateDOSChatVisibility;
      instead of an arbitrary computed hue, so every name still reads as
      "part of this site" rather than a random rainbow. */
   const NAME_COLORS = ['#ff71ce', '#ff9fde', '#ff8fd8', '#ff7ad0', '#ff5cc4', '#ef52aa', '#f060c0', '#e040a0', '#c040a0', '#b967ff', '#7b1fa2', '#7030c0', '#e8d0ff', '#ffd6f0', '#f0d8f0', '#fbeafb'];
+  /* Hashing a tag straight to a color can collide once a few people are
+     chatting at once (16 colors, pigeonhole). Assign colors in order of
+     first appearance instead, so every distinct person visible in the
+     chat gets a different color until the palette itself runs out. */
+  const tagColors = new Map();
+  let nextColorIndex = 0;
   function colorForTag(tag) {
-    let h = 0;
-    for (let i = 0; i < tag.length; i++) h = (h * 31 + tag.charCodeAt(i)) | 0;
-    return NAME_COLORS[Math.abs(h) % NAME_COLORS.length];
+    if (!tagColors.has(tag)) {
+      tagColors.set(tag, NAME_COLORS[nextColorIndex % NAME_COLORS.length]);
+      nextColorIndex++;
+    }
+    return tagColors.get(tag);
   }
   const CLIENT_TAG = getClientTag();
 
@@ -2004,6 +2012,8 @@ var updateDOSChatVisibility;
     listEl.innerHTML = EMPTY_HTML;
     loaded = false;
     hideErr();
+    tagColors.clear();
+    nextColorIndex = 0;
   }
 
   updateDOSChatVisibility = function () {
