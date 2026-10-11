@@ -1392,7 +1392,7 @@ function startNowPlaying(ch){
            now_playing.song while live — always show the generic label. */
         titleEl.textContent = 'LIVE BROADCAST';
         artistEl.dataset.live = '1';
-        artistEl.textContent = DOS_STREAMER_NAME ? DOS_STREAMER_NAME.toUpperCase() : 'ON AIR NOW';
+        artistEl.textContent = 'SELEXIONES LIVE';
         lenState[ch] = { elapsed: 0, duration: 0, syncedAt: Date.now() };
         renderLen(ch);
         return;
