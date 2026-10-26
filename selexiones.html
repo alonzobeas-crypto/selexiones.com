@@ -1080,29 +1080,25 @@ const channels = {
 };
 let currentCh = null; // which channel the lock-screen media controls currently reflect
 
-/* iOS fetches lock-screen artwork itself, out-of-process — it doesn't accept
-   data: URIs there (confirmed: a canvas-composited data: URI silently fell
-   back to the OS's generic icon instead of showing). So artwork must always
-   be a real, hosted image URL: the real album art when we have one, or this
-   branded placeholder — never a locally-generated data: URI. */
+/* Per-track album art kept breaking on the lock screen (data: URIs don't
+   work there, and AzuraCast's reported art URL is sometimes dead) — simpler
+   and more reliable to always show the station's own logo instead. */
 const LOCKSCREEN_LOGO = 'selexiones-artwork.png';
-/* AzuraCast's reported art URL for a track is sometimes a dead/unreachable
-   link (its own default-cover endpoint, a stale cached URL, etc.) — passing
-   that straight through means the OS tries to fetch it, fails, and shows its
-   own generic icon instead of falling back to our branded logo. So probe it
-   first and only use it if it actually loads. */
-const artworkLoadCache = new Map();
-function artworkLoads(url){
-  if (artworkLoadCache.has(url)) return artworkLoadCache.get(url);
-  const p = new Promise(resolve => {
-    const img = new Image();
-    const timer = setTimeout(() => resolve(false), 2500);
-    img.onload = () => { clearTimeout(timer); resolve(true); };
-    img.onerror = () => { clearTimeout(timer); resolve(false); };
-    img.src = url;
+const CANAL_NAME = { uno: 'Canal Uno', dos: 'Canal Dos' };
+// last known now-playing info per channel, fed by startNowPlaying()'s poll — the
+// single source of truth for the lock screen, so there's only one place that
+// decides what shows there (never a bare "SELEXIONES" where the title goes).
+const lastNP = { uno: { title: null, artist: null }, dos: { title: null, artist: null } };
+function applyMediaSession(ch){
+  if (!('mediaSession' in navigator) || currentCh !== ch || !channels[ch].playing) return;
+  const canalName = CANAL_NAME[ch];
+  const np = lastNP[ch] || {};
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: np.title || canalName,
+    artist: (np.artist && np.artist !== 'SELEXIONES') ? (np.artist + ' — ' + canalName) : canalName,
+    album: canalName,
+    artwork: [{ src: LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
   });
-  artworkLoadCache.set(url, p);
-  return p;
 }
 /* AzuraCast's own nowplaying API reports which playlist a song actually came
    from (now_playing.playlist) — when it's populated, that's ground truth and
@@ -1290,19 +1286,7 @@ function reflectState(ch, playing){
     if (playing) {
       currentCh = ch;
       navigator.mediaSession.playbackState = 'playing';
-      // baseline so the lock screen shows something immediately, before the next poll
-      const titleEl = document.getElementById(ch+'-title');
-      const artistEl = document.getElementById(ch+'-artist');
-      const baseArtist = (artistEl && artistEl.textContent.trim()) || '';
-      const baseStationTag = 'SELEXIONES ' + ch.toUpperCase();
-      const baseIsGeneric = !baseArtist || baseArtist === 'SELEXIONES' || baseArtist === 'SELEXIONES LIVE';
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: (titleEl && titleEl.textContent) || baseStationTag,
-        // always show which station (UNO/DOS) is playing, not just the artist
-        artist: baseIsGeneric ? baseStationTag : (baseArtist + ' — ' + baseStationTag),
-        album: baseStationTag,
-        artwork: [{ src: LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
-      });
+      applyMediaSession(ch); // shows whatever the last poll knew, or the channel name
     } else if (currentCh === ch) {
       navigator.mediaSession.playbackState = 'paused';
     }
@@ -1412,23 +1396,6 @@ function startNowPlaying(ch){
   const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
   let firstLoad = true;
-  const stationTag = 'SELEXIONES ' + ch.toUpperCase();
-  let msSeq = 0;
-  async function updateMediaSession(title, artist, artUrl){
-    // only the currently-playing channel should own the lock-screen display
-    if (!('mediaSession' in navigator) || currentCh !== ch || !channels[ch].playing) return;
-    const mySeq = ++msSeq;
-    const art = artUrl && (await artworkLoads(artUrl)) ? artUrl : LOCKSCREEN_LOGO;
-    // a newer call may have resolved first while this one was probing the art URL
-    if (mySeq !== msSeq || currentCh !== ch || !channels[ch].playing) return;
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: title,
-      // always show which station (UNO/DOS) is playing, not just the artist
-      artist: (artist && artist !== 'SELEXIONES') ? (artist + ' — ' + stationTag) : stationTag,
-      album: stationTag,
-      artwork: [{ src: art, sizes: '512x512', type: 'image/png' }]
-    });
-  }
   async function pull(){
     try{
       const res = await fetch(STREAMS[ch].np, { cache:'no-store' });
@@ -1463,7 +1430,8 @@ function startNowPlaying(ch){
         artistEl.textContent = 'SELEXIONES LIVE';
         lenState[ch] = { elapsed: 0, duration: 0, syncedAt: Date.now() };
         renderLen(ch);
-        updateMediaSession('LIVE BROADCAST', null, null);
+        lastNP[ch] = { title: 'LIVE BROADCAST', artist: null };
+        applyMediaSession(ch);
         return;
       }
       const song = data && data.now_playing && data.now_playing.song;
@@ -1473,7 +1441,8 @@ function startNowPlaying(ch){
       artistEl.textContent = (song.artist || 'SELEXIONES').toUpperCase();
       lenState[ch] = { elapsed: data.now_playing.elapsed || 0, duration: data.now_playing.duration || 0, syncedAt: Date.now() };
       renderLen(ch);
-      updateMediaSession(song.title || fallback, song.artist || 'SELEXIONES', song.art);
+      lastNP[ch] = { title: song.title, artist: song.artist || 'SELEXIONES' };
+      applyMediaSession(ch);
       if(ch === 'uno'){
         const heroNow = document.getElementById('hero-uno-now');
         if(heroNow){
