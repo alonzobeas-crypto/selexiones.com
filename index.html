@@ -346,6 +346,53 @@ const NOWPLAYING = {
 };
 const cardState = { uno:{playing:false,vol:0.7}, dos:{playing:false,vol:0.7} };
 let currentCh = null; // which channel the lock-screen media controls currently reflect
+
+/* The OS lock-screen widget only ever shows ONE artwork image — there's no
+   way to layer a logo over the album art separately, so bake both into a
+   single composite canvas image instead: the real art as background, a
+   "SELEXIONES" banner (matching the site's own Cinzel wordmark) on top. */
+const lockScreenArtCache = new Map();
+function buildLockScreenArtwork(artUrl){
+  const cacheKey = artUrl || '__none__';
+  if (lockScreenArtCache.has(cacheKey)) return lockScreenArtCache.get(cacheKey);
+  const promise = new Promise(resolve => {
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    function drawBanner(){
+      const bandH = size * 0.26;
+      ctx.fillStyle = 'rgba(10,6,18,.74)';
+      ctx.fillRect(0, 0, size, bandH);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ff9fde';
+      ctx.font = "900 " + Math.round(size*0.105) + "px 'Cinzel', serif";
+      ctx.fillText('SELEXIONES', size/2, bandH/2);
+      resolve(canvas.toDataURL('image/png'));
+    }
+    function withFont(fn){
+      if (document.fonts && document.fonts.load) {
+        document.fonts.load("900 " + Math.round(size*0.105) + "px 'Cinzel'").then(fn).catch(fn);
+      } else { fn(); }
+    }
+    ctx.fillStyle = '#130b22';
+    ctx.fillRect(0, 0, size, size);
+    if (!artUrl) { withFont(drawBanner); return; }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const s = Math.min(img.naturalWidth, img.naturalHeight);
+      const sx = (img.naturalWidth - s) / 2, sy = (img.naturalHeight - s) / 2;
+      ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+      withFont(drawBanner);
+    };
+    img.onerror = () => withFont(drawBanner); // CORS-blocked or unreachable — fall back to logo-only
+    img.src = artUrl;
+  });
+  lockScreenArtCache.set(cacheKey, promise);
+  return promise;
+}
 const audios = {};
 
 ['uno','dos'].forEach(ch => {
@@ -495,14 +542,21 @@ function startNowPlaying(ch){
   nowEl.dataset.placeholder = '1';
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
   let firstLoad = true;
+  let msSeq = 0;
   function updateMediaSession(title, artist, artUrl){
     // only the currently-playing channel should own the lock-screen display
     if (!('mediaSession' in navigator) || currentCh !== ch || !cardState[ch].playing) return;
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: title,
-      artist: artist,
-      album: 'SELEXIONES ' + ch.toUpperCase(),
-      artwork: [{ src: artUrl || 'favicon-512.png', sizes: '512x512', type: 'image/png' }]
+    const mySeq = ++msSeq;
+    buildLockScreenArtwork(artUrl).then(composite => {
+      // a newer call may have already resolved while this one was building —
+      // don't let a stale image clobber it
+      if (mySeq !== msSeq || currentCh !== ch || !cardState[ch].playing) return;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: title,
+        artist: artist,
+        album: 'SELEXIONES ' + ch.toUpperCase(),
+        artwork: [{ src: composite, sizes: '512x512', type: 'image/png' }]
+      });
     });
   }
   async function pull(){
