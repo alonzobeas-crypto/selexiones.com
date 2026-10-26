@@ -347,29 +347,25 @@ const NOWPLAYING = {
 const cardState = { uno:{playing:false,vol:0.7}, dos:{playing:false,vol:0.7} };
 let currentCh = null; // which channel the lock-screen media controls currently reflect
 
-/* iOS fetches lock-screen artwork itself, out-of-process — it doesn't accept
-   data: URIs there (confirmed: a canvas-composited data: URI silently fell
-   back to the OS's generic icon instead of showing). So artwork must always
-   be a real, hosted image URL: the real album art when we have one, or this
-   branded placeholder — never a locally-generated data: URI. */
+/* Per-track album art kept breaking on the lock screen (data: URIs don't
+   work there, and AzuraCast's reported art URL is sometimes dead) — simpler
+   and more reliable to always show the station's own logo instead. */
 const LOCKSCREEN_LOGO = 'selexiones-artwork.png';
-/* AzuraCast's reported art URL for a track is sometimes a dead/unreachable
-   link (its own default-cover endpoint, a stale cached URL, etc.) — passing
-   that straight through means the OS tries to fetch it, fails, and shows its
-   own generic icon instead of falling back to our branded logo. So probe it
-   first and only use it if it actually loads. */
-const artworkLoadCache = new Map();
-function artworkLoads(url){
-  if (artworkLoadCache.has(url)) return artworkLoadCache.get(url);
-  const p = new Promise(resolve => {
-    const img = new Image();
-    const timer = setTimeout(() => resolve(false), 2500);
-    img.onload = () => { clearTimeout(timer); resolve(true); };
-    img.onerror = () => { clearTimeout(timer); resolve(false); };
-    img.src = url;
+const CANAL_NAME = { uno: 'Canal Uno', dos: 'Canal Dos' };
+// last known now-playing info per channel, fed by startNowPlaying()'s poll — the
+// single source of truth for the lock screen, so there's only one place that
+// decides what shows there (never a bare "SELEXIONES" where the title goes).
+const lastNP = { uno: { title: null, artist: null }, dos: { title: null, artist: null } };
+function applyMediaSession(ch){
+  if (!('mediaSession' in navigator) || currentCh !== ch || !cardState[ch].playing) return;
+  const canalName = CANAL_NAME[ch];
+  const np = lastNP[ch] || {};
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: np.title || canalName,
+    artist: (np.artist && np.artist !== 'SELEXIONES') ? (np.artist + ' — ' + canalName) : canalName,
+    album: canalName,
+    artwork: [{ src: LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
   });
-  artworkLoadCache.set(url, p);
-  return p;
 }
 const audios = {};
 
@@ -445,14 +441,7 @@ function reflect(ch, playing){
     if (playing) {
       currentCh = ch;
       navigator.mediaSession.playbackState = 'playing';
-      // baseline so the lock screen shows something immediately, before the next poll
-      const nowEl = document.getElementById(ch+'-c-now');
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: (nowEl && nowEl.textContent) || ('SELEXIONES ' + ch.toUpperCase()),
-        artist: 'SELEXIONES ' + ch.toUpperCase(),
-        album: 'SELEXIONES ' + ch.toUpperCase(),
-        artwork: [{ src: LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
-      });
+      applyMediaSession(ch); // shows whatever the last poll knew, or the channel name
     } else if (currentCh === ch) {
       navigator.mediaSession.playbackState = 'paused';
     }
@@ -520,23 +509,6 @@ function startNowPlaying(ch){
   nowEl.dataset.placeholder = '1';
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
   let firstLoad = true;
-  const stationTag = 'SELEXIONES ' + ch.toUpperCase();
-  let msSeq = 0;
-  async function updateMediaSession(title, artist, artUrl){
-    // only the currently-playing channel should own the lock-screen display
-    if (!('mediaSession' in navigator) || currentCh !== ch || !cardState[ch].playing) return;
-    const mySeq = ++msSeq;
-    const art = artUrl && (await artworkLoads(artUrl)) ? artUrl : LOCKSCREEN_LOGO;
-    // a newer call may have resolved first while this one was probing the art URL
-    if (mySeq !== msSeq || currentCh !== ch || !cardState[ch].playing) return;
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: title,
-      // always show which station (UNO/DOS) is playing, not just the artist
-      artist: (artist && artist !== 'SELEXIONES') ? (artist + ' — ' + stationTag) : stationTag,
-      album: stationTag,
-      artwork: [{ src: art, sizes: '512x512', type: 'image/png' }]
-    });
-  }
   async function pull(){
     try{
       const res = await fetch(NOWPLAYING[ch], { cache:'no-store' });
@@ -553,7 +525,8 @@ function startNowPlaying(ch){
         if (live && live.is_live) {
           nowEl.dataset.placeholder = '0';
           nowEl.textContent = 'SELEXIONES LIVE';
-          updateMediaSession('SELEXIONES LIVE', 'SELEXIONES', null);
+          lastNP[ch] = { title: 'LIVE BROADCAST', artist: null };
+          applyMediaSession(ch);
           return;
         }
       }
@@ -563,7 +536,8 @@ function startNowPlaying(ch){
       const title  = (song.title  || '').trim();
       nowEl.dataset.placeholder = '0';
       nowEl.textContent = (title ? (artist + ' — ' + title) : artist).toUpperCase();
-      updateMediaSession(title || fallback, artist, song.art);
+      lastNP[ch] = { title: title, artist: artist };
+      applyMediaSession(ch);
     }catch(err){
       if(firstLoad) nowEl.textContent = fallback;
     } finally { firstLoad = false; }
