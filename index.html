@@ -345,6 +345,7 @@ const NOWPLAYING = {
   dos: 'https://stream.selexiones.com/api/nowplaying/dos'
 };
 const cardState = { uno:{playing:false,vol:0.7}, dos:{playing:false,vol:0.7} };
+let currentCh = null; // which channel the lock-screen media controls currently reflect
 const audios = {};
 
 ['uno','dos'].forEach(ch => {
@@ -415,6 +416,26 @@ function reflect(ch, playing){
     ? '<rect x="2" y="1" width="2.4" height="8"></rect><rect x="5.6" y="1" width="2.4" height="8"></rect>'
     : '<polygon points="2,1 9,5 2,9"></polygon>';
   document.getElementById(ch+'-c-wave').classList.toggle('on', playing);
+  if ('mediaSession' in navigator) {
+    if (playing) {
+      currentCh = ch;
+      navigator.mediaSession.playbackState = 'playing';
+      // baseline so the lock screen shows something immediately, before the next poll
+      const nowEl = document.getElementById(ch+'-c-now');
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: (nowEl && nowEl.textContent) || ('SELEXIONES ' + ch.toUpperCase()),
+        artist: 'SELEXIONES',
+        album: 'SELEXIONES ' + ch.toUpperCase(),
+        artwork: [{ src: 'favicon-512.png', sizes: '512x512', type: 'image/png' }]
+      });
+    } else if (currentCh === ch) {
+      navigator.mediaSession.playbackState = 'paused';
+    }
+  }
+}
+if ('mediaSession' in navigator) {
+  navigator.mediaSession.setActionHandler('play', () => { if (currentCh) toggleCard(currentCh); });
+  navigator.mediaSession.setActionHandler('pause', () => { if (currentCh) toggleCard(currentCh); });
 }
 
 function toggleCard(ch){
@@ -474,6 +495,16 @@ function startNowPlaying(ch){
   nowEl.dataset.placeholder = '1';
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
   let firstLoad = true;
+  function updateMediaSession(title, artist, artUrl){
+    // only the currently-playing channel should own the lock-screen display
+    if (!('mediaSession' in navigator) || currentCh !== ch || !cardState[ch].playing) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: title,
+      artist: artist,
+      album: 'SELEXIONES ' + ch.toUpperCase(),
+      artwork: [{ src: artUrl || 'favicon-512.png', sizes: '512x512', type: 'image/png' }]
+    });
+  }
   async function pull(){
     try{
       const res = await fetch(NOWPLAYING[ch], { cache:'no-store' });
@@ -490,6 +521,7 @@ function startNowPlaying(ch){
         if (live && live.is_live) {
           nowEl.dataset.placeholder = '0';
           nowEl.textContent = 'SELEXIONES LIVE';
+          updateMediaSession('SELEXIONES LIVE', 'SELEXIONES', null);
           return;
         }
       }
@@ -499,6 +531,7 @@ function startNowPlaying(ch){
       const title  = (song.title  || '').trim();
       nowEl.dataset.placeholder = '0';
       nowEl.textContent = (title ? (artist + ' — ' + title) : artist).toUpperCase();
+      updateMediaSession(title || fallback, artist, song.art);
     }catch(err){
       if(firstLoad) nowEl.textContent = fallback;
     } finally { firstLoad = false; }

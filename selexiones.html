@@ -1078,6 +1078,7 @@ const channels = {
   uno: { playing:false, vol:0.7 },
   dos: { playing:false, vol:0.7 }
 };
+let currentCh = null; // which channel the lock-screen media controls currently reflect
 /* AzuraCast's own nowplaying API reports which playlist a song actually came
    from (now_playing.playlist) — when it's populated, that's ground truth and
    takes priority over the computed schedule guess below. Set by pull() in
@@ -1260,6 +1261,27 @@ function reflectState(ch, playing){
     const hn = document.getElementById('hero-uno-now');
     if(hn && !playing && hn.dataset.live !== '1') hn.textContent = 'TAP PLAY TO TUNE IN';
   }
+  if ('mediaSession' in navigator) {
+    if (playing) {
+      currentCh = ch;
+      navigator.mediaSession.playbackState = 'playing';
+      // baseline so the lock screen shows something immediately, before the next poll
+      const titleEl = document.getElementById(ch+'-title');
+      const artistEl = document.getElementById(ch+'-artist');
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: (titleEl && titleEl.textContent) || ('SELEXIONES ' + ch.toUpperCase()),
+        artist: (artistEl && artistEl.textContent) || 'SELEXIONES',
+        album: 'SELEXIONES ' + ch.toUpperCase(),
+        artwork: [{ src: 'favicon-512.png', sizes: '512x512', type: 'image/png' }]
+      });
+    } else if (currentCh === ch) {
+      navigator.mediaSession.playbackState = 'paused';
+    }
+  }
+}
+if ('mediaSession' in navigator) {
+  navigator.mediaSession.setActionHandler('play', () => { if (currentCh) togglePlay(currentCh); });
+  navigator.mediaSession.setActionHandler('pause', () => { if (currentCh) togglePlay(currentCh); });
 }
 function togglePlay(ch){
   const a = audios[ch];
@@ -1361,6 +1383,16 @@ function startNowPlaying(ch){
   const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
   let firstLoad = true;
+  function updateMediaSession(title, artist, artUrl){
+    // only the currently-playing channel should own the lock-screen display
+    if (!('mediaSession' in navigator) || currentCh !== ch || !channels[ch].playing) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: title,
+      artist: artist,
+      album: 'SELEXIONES ' + ch.toUpperCase(),
+      artwork: [{ src: artUrl || 'favicon-512.png', sizes: '512x512', type: 'image/png' }]
+    });
+  }
   async function pull(){
     try{
       const res = await fetch(STREAMS[ch].np, { cache:'no-store' });
@@ -1395,6 +1427,7 @@ function startNowPlaying(ch){
         artistEl.textContent = 'SELEXIONES LIVE';
         lenState[ch] = { elapsed: 0, duration: 0, syncedAt: Date.now() };
         renderLen(ch);
+        updateMediaSession('LIVE BROADCAST', 'SELEXIONES LIVE', null);
         return;
       }
       const song = data && data.now_playing && data.now_playing.song;
@@ -1404,6 +1437,7 @@ function startNowPlaying(ch){
       artistEl.textContent = (song.artist || 'SELEXIONES').toUpperCase();
       lenState[ch] = { elapsed: data.now_playing.elapsed || 0, duration: data.now_playing.duration || 0, syncedAt: Date.now() };
       renderLen(ch);
+      updateMediaSession(song.title || fallback, song.artist || 'SELEXIONES', song.art);
       if(ch === 'uno'){
         const heroNow = document.getElementById('hero-uno-now');
         if(heroNow){
