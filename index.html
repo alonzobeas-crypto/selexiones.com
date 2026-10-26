@@ -431,7 +431,7 @@ function reflect(ch, playing){
       const nowEl = document.getElementById(ch+'-c-now');
       navigator.mediaSession.metadata = new MediaMetadata({
         title: (nowEl && nowEl.textContent) || ('SELEXIONES ' + ch.toUpperCase()),
-        artist: 'SELEXIONES',
+        artist: 'SELEXIONES ' + ch.toUpperCase(),
         album: 'SELEXIONES ' + ch.toUpperCase(),
         artwork: [{ src: LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
       });
@@ -502,13 +502,15 @@ function startNowPlaying(ch){
   nowEl.dataset.placeholder = '1';
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
   let firstLoad = true;
+  const stationTag = 'SELEXIONES ' + ch.toUpperCase();
   function updateMediaSession(title, artist, artUrl){
     // only the currently-playing channel should own the lock-screen display
     if (!('mediaSession' in navigator) || currentCh !== ch || !cardState[ch].playing) return;
     navigator.mediaSession.metadata = new MediaMetadata({
       title: title,
-      artist: artist,
-      album: 'SELEXIONES ' + ch.toUpperCase(),
+      // always show which station (UNO/DOS) is playing, not just the artist
+      artist: (artist && artist !== 'SELEXIONES') ? (artist + ' — ' + stationTag) : stationTag,
+      album: stationTag,
       artwork: [{ src: artUrl || LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
     });
   }

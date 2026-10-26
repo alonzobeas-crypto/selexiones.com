@@ -1275,10 +1275,14 @@ function reflectState(ch, playing){
       // baseline so the lock screen shows something immediately, before the next poll
       const titleEl = document.getElementById(ch+'-title');
       const artistEl = document.getElementById(ch+'-artist');
+      const baseArtist = (artistEl && artistEl.textContent.trim()) || '';
+      const baseStationTag = 'SELEXIONES ' + ch.toUpperCase();
+      const baseIsGeneric = !baseArtist || baseArtist === 'SELEXIONES' || baseArtist === 'SELEXIONES LIVE';
       navigator.mediaSession.metadata = new MediaMetadata({
-        title: (titleEl && titleEl.textContent) || ('SELEXIONES ' + ch.toUpperCase()),
-        artist: (artistEl && artistEl.textContent) || 'SELEXIONES',
-        album: 'SELEXIONES ' + ch.toUpperCase(),
+        title: (titleEl && titleEl.textContent) || baseStationTag,
+        // always show which station (UNO/DOS) is playing, not just the artist
+        artist: baseIsGeneric ? baseStationTag : (baseArtist + ' — ' + baseStationTag),
+        album: baseStationTag,
         artwork: [{ src: LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
       });
     } else if (currentCh === ch) {
@@ -1390,13 +1394,15 @@ function startNowPlaying(ch){
   const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
   let firstLoad = true;
+  const stationTag = 'SELEXIONES ' + ch.toUpperCase();
   function updateMediaSession(title, artist, artUrl){
     // only the currently-playing channel should own the lock-screen display
     if (!('mediaSession' in navigator) || currentCh !== ch || !channels[ch].playing) return;
     navigator.mediaSession.metadata = new MediaMetadata({
       title: title,
-      artist: artist,
-      album: 'SELEXIONES ' + ch.toUpperCase(),
+      // always show which station (UNO/DOS) is playing, not just the artist
+      artist: (artist && artist !== 'SELEXIONES') ? (artist + ' — ' + stationTag) : stationTag,
+      album: stationTag,
       artwork: [{ src: artUrl || LOCKSCREEN_LOGO, sizes: '512x512', type: 'image/png' }]
     });
   }
@@ -1434,7 +1440,7 @@ function startNowPlaying(ch){
         artistEl.textContent = 'SELEXIONES LIVE';
         lenState[ch] = { elapsed: 0, duration: 0, syncedAt: Date.now() };
         renderLen(ch);
-        updateMediaSession('LIVE BROADCAST', 'SELEXIONES LIVE', null);
+        updateMediaSession('LIVE BROADCAST', null, null);
         return;
       }
       const song = data && data.now_playing && data.now_playing.song;
