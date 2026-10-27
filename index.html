@@ -336,13 +336,15 @@ if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
 }
 
 /* ── BOTH CHANNEL PLAYERS (UNO + DOS) ── real AzuraCast streams + now-playing ── */
+// single place to point at a filtered endpoint later (e.g. api.selexiones.com)
+const AZURACAST_BASE = 'https://stream.selexiones.com';
 const STREAMS = {
-  uno: 'https://stream.selexiones.com/listen/uno/radio.mp3',
-  dos: 'https://stream.selexiones.com/listen/dos/radio.mp3'
+  uno: AZURACAST_BASE + '/listen/uno/radio.mp3',
+  dos: AZURACAST_BASE + '/listen/dos/radio.mp3'
 };
 const NOWPLAYING = {
-  uno: 'https://stream.selexiones.com/api/nowplaying/uno',
-  dos: 'https://stream.selexiones.com/api/nowplaying/dos'
+  uno: AZURACAST_BASE + '/api/nowplaying/uno',
+  dos: AZURACAST_BASE + '/api/nowplaying/dos'
 };
 const cardState = { uno:{playing:false,vol:0.7}, dos:{playing:false,vol:0.7} };
 let currentCh = null; // which channel the lock-screen media controls currently reflect
@@ -534,8 +536,12 @@ function startNowPlaying(ch){
       if(!song) return;
       const artist = (song.artist || 'SELEXIONES').trim();
       const title  = (song.title  || '').trim();
+      const album  = (song.album  || '').trim();
       nowEl.dataset.placeholder = '0';
-      nowEl.textContent = (title ? (artist + ' — ' + title) : artist).toUpperCase();
+      // SoundExchange / Section 114: title + artist + album during play, when AzuraCast has one
+      let nowText = title ? (artist + ' — ' + title) : artist;
+      if (album) nowText += ' · ' + album;
+      nowEl.textContent = nowText.toUpperCase();
       lastNP[ch] = { title: title, artist: artist };
       applyMediaSession(ch);
     }catch(err){

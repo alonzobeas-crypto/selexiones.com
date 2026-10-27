@@ -424,6 +424,7 @@ html.lite .hero-glyphs .gp { animation:none; }
   font-size:22px; letter-spacing:3px; color:rgba(230,200,230,.7); margin-bottom:20px; position:relative; z-index:2; }
 .track-sep { opacity:.4; }
 .track-len { color:rgba(230,200,230,.78); font-variant-numeric:tabular-nums; }
+.track-album { font-size:13px; letter-spacing:2px; color:rgba(230,200,230,.45); margin:-10px 0 20px; position:relative; z-index:2; }
 
 .ch-controls { display:flex; flex-direction:column; align-items:center; gap:18px; }
 .play-btn { width:68px; height:68px; border:1.5px solid; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -761,6 +762,7 @@ html.lite .hero-glyphs .gp { animation:none; }
         <div class="np-meta">
           <div class="track-title" id="uno-title">SELEXIONES UNO</div>
           <div class="track-artist"><span id="uno-artist">CONNECTING…</span><span class="track-sep" id="uno-len-sep" hidden>·</span><span class="track-len" id="uno-len"></span></div>
+          <div class="track-album" id="uno-album" hidden></div>
         </div>
         <div class="ch-controls">
           <button class="play-btn" id="uno-play" onclick="togglePlay('uno')" aria-label="Play UNO">
@@ -802,6 +804,7 @@ html.lite .hero-glyphs .gp { animation:none; }
         <div class="np-meta">
           <div class="track-title" id="dos-title">SELEXIONES DOS</div>
           <div class="track-artist"><span id="dos-artist">CONNECTING…</span><span class="track-sep" id="dos-len-sep" hidden>·</span><span class="track-len" id="dos-len"></span></div>
+          <div class="track-album" id="dos-album" hidden></div>
         </div>
         <div class="ch-controls">
           <button class="play-btn" id="dos-play" onclick="togglePlay('dos')" aria-label="Play DOS">
@@ -1115,10 +1118,14 @@ var DOS_IS_LIVE = false;
 var DOS_STREAMER_NAME = null;
 var DOS_BROADCAST_START = null;
 
+// single place to point at a filtered endpoint later (e.g. api.selexiones.com)
+const AZURACAST_BASE = 'https://stream.selexiones.com';
 const STREAMS = {
-  uno: { stream:'https://stream.selexiones.com/listen/uno/radio.mp3', np:'https://stream.selexiones.com/api/nowplaying/uno' },
-  dos: { stream:'https://stream.selexiones.com/listen/dos/radio.mp3', np:'https://stream.selexiones.com/api/nowplaying/dos' }
+  uno: { stream: AZURACAST_BASE + '/listen/uno/radio.mp3', np: AZURACAST_BASE + '/api/nowplaying/uno' },
+  dos: { stream: AZURACAST_BASE + '/listen/dos/radio.mp3', np: AZURACAST_BASE + '/api/nowplaying/dos' }
 };
+// SoundExchange / Section 114: how many past tracks the Recently Played list shows
+const RECENTLY_PLAYED_COUNT = 15;
 const audios = {};
 ['uno','dos'].forEach(ch => {
   const a = new Audio();
@@ -1392,6 +1399,7 @@ setInterval(()=>{ renderLen('uno'); renderLen('dos'); }, 250);
 function startNowPlaying(ch){
   const titleEl  = document.getElementById(ch+'-title');
   const artistEl = document.getElementById(ch+'-artist');
+  const albumEl  = document.getElementById(ch+'-album');
   const listEl   = document.getElementById(ch+'-list');
   const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
@@ -1428,6 +1436,7 @@ function startNowPlaying(ch){
         titleEl.textContent = 'LIVE BROADCAST';
         artistEl.dataset.live = '1';
         artistEl.textContent = 'SELEXIONES LIVE';
+        if (albumEl) albumEl.hidden = true;
         lenState[ch] = { elapsed: 0, duration: 0, syncedAt: Date.now() };
         renderLen(ch);
         lastNP[ch] = { title: 'LIVE BROADCAST', artist: null };
@@ -1439,6 +1448,12 @@ function startNowPlaying(ch){
       if(song.title)  titleEl.textContent  = song.title.toUpperCase();
       artistEl.dataset.live = '1';
       artistEl.textContent = (song.artist || 'SELEXIONES').toUpperCase();
+      // SoundExchange / Section 114: title + artist + album during play, when AzuraCast has one
+      if (albumEl) {
+        const album = (song.album || '').trim();
+        albumEl.hidden = !album;
+        albumEl.textContent = album.toUpperCase();
+      }
       lenState[ch] = { elapsed: data.now_playing.elapsed || 0, duration: data.now_playing.duration || 0, syncedAt: Date.now() };
       renderLen(ch);
       lastNP[ch] = { title: song.title, artist: song.artist || 'SELEXIONES' };
@@ -1450,10 +1465,9 @@ function startNowPlaying(ch){
           heroNow.textContent = ((song.artist ? song.artist + ' — ' : '') + (song.title || 'SELEXIONES UNO')).toUpperCase();
         }
       }
+      // SoundExchange / Section 114: never show upcoming tracks, only what's already played
       const rows = [];
-      const nx = data.playing_next && data.playing_next.song;
-      if(nx) rows.push({ tag:'UP NEXT', cls:'next', artist:nx.artist, title:nx.title });
-      (data.song_history || []).slice(0,4).forEach(h => {
+      (data.song_history || []).slice(0, RECENTLY_PLAYED_COUNT).forEach(h => {
         const s = h.song || {};
         rows.push({ tag:'PLAYED', cls:'', artist:s.artist, title:s.title });
       });
