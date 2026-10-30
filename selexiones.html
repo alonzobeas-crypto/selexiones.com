@@ -1736,31 +1736,24 @@ var toggleDOSSchedule;
   const timeEl = document.getElementById('dos-block-time');
   if (!nameEl) return;
 
-  /* base weekday/weekend grid, 1/2/4-hour blocks — [end-of-block minute, weekday name, weekend name, time-range label] */
+  /* Same AzuraCast playlist schedule every day — no weekday/weekend split
+     anymore. [end-of-block minute, name, name (duplicated — the dropdown
+     below collapses to one column when both match), time-range label] */
   const GRID = [
-    [240,  'EL DARK GOTH',           'EL DARK GOTH',           '12AM–4AM'],
-    [360,  'DREAM CORE — CAFÉ VIBES','DREAM CORE — CAFÉ VIBES','4AM–6AM'],
-    [600,  'RANCHERAS & TRADICIONAL','RANCHERAS & TRADICIONAL','6AM–10AM'],
-    [720,  'CUMBIÓN',                'CUMBIÓN',                '10AM–12PM'],
-    [840,  'ROCKERO',                'ROCKERO',                '12PM–2PM'],
-    [960,  'NUKUMBIA',               'NUKUMBIA',               '2PM–4PM'],
-    [1080, 'RAPERO',                 'RAPERO',                 '4PM–6PM'],
-    [1140, 'CHICANO PUNK HOUR',      'CHICANO PUNK HOUR',      '6PM–7PM'],
-    [1200, 'CASA',                   'CASA',                   '7PM–8PM'],
-    [1260, 'ELECTRÓNICA',            'ELECTRÓNICA',            '8PM–9PM'],
-    [1320, 'BEATS FUTURE',           'BEATS FUTURE',           '9PM–10PM'],
-    [1440, 'DREAM CORE — CAFÉ VIBES','DREAM CORE — CAFÉ VIBES','10PM–12AM'],
+    [360,  'SELEXIONES DOS', 'SELEXIONES DOS', '12AM–6AM'],
+    [480,  'RANCHO',         'RANCHO',         '6AM–8AM'],
+    [720,  'CUMBION',        'CUMBION',        '8AM–12PM'],
+    [900,  'CUMBIA DIGITAL', 'CUMBIA DIGITAL', '12PM–3PM'],
+    [1020, 'ROCKERO',        'ROCKERO',        '3PM–5PM'],
+    [1200, 'ELECTRONICA',    'ELECTRONICA',    '5PM–8PM'],
+    [1380, 'EL DARK',        'EL DARK',        '8PM–11PM'],
+    [1440, 'SELEXIONES DOS', 'SELEXIONES DOS', '11PM–12AM'],
   ];
 
-  /* day-specific specials override the base grid. Kept as data (rather than
-     inline if-statements) so the schedule dropdown below can render the
-     exact same list instead of a second, driftable copy of it. */
-  const SPECIALS = [
-    { day:'Sat', from:1140, to:1440, name:'LIVE BROADCAST',         time:'7PM–2AM', display:'SAT 7PM – SUN 2AM' },
-    { day:'Sun', from:0,    to:120,  name:'LIVE BROADCAST',         time:'7PM–2AM', listed:false }, // same block as the Sat entry above, spans midnight — listed once via that entry's display label
-    { day:'Mon', from:1080, to:1200, name:'MONDAY MIX',             time:'6PM–8PM', display:'MON 6PM–8PM' },
-    { day:'Fri', from:1260, to:1320, name:'WILDCARD HOUR',          time:'9PM–10PM', display:'FRI 9PM–10PM' },
-  ];
+  /* No day-specific overrides currently — kept as an array (rather than
+     removed outright) so the schedule dropdown below needs no separate
+     code path if one gets added back later. */
+  const SPECIALS = [];
 
   function getDOSBlock(d) {
     const parts = new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', weekday:'short', hour:'numeric', minute:'numeric', hourCycle:'h23' }).formatToParts(d);
@@ -1811,8 +1804,10 @@ var toggleDOSSchedule;
           : '<div class="dsr-cols"><div class="dsr-name' + (isActive(wd) ? ' active' : '') + '">' + wd + '</div><div class="dsr-name' + (isActive(we) ? ' active' : '') + '">' + we + '</div></div>')
         + '</div>';
     };
+    const isUniform = GRID.every(([, wd, we]) => wd === we);
     const gridHtml = GRID.map(([end, wd, we, time]) => rowHtml(time, wd, we)).join('');
-    const specialsHtml = SPECIALS.filter(s => s.listed !== false).map(s =>
+    const listedSpecials = SPECIALS.filter(s => s.listed !== false);
+    const specialsHtml = listedSpecials.map(s =>
       '<div class="dos-sched-row' + (s.name === current.name ? ' active' : '') + '">'
         + '<div class="dsr-time">' + s.display + '</div>'
         + '<div class="dsr-name dsr-both">' + s.name + '</div>'
@@ -1823,10 +1818,9 @@ var toggleDOSSchedule;
     schedPanel.innerHTML =
       '<div class="dos-sched-head"><span data-en="WEEKLY SCHEDULE" data-es="PROGRAMACIÓN SEMANAL">WEEKLY SCHEDULE</span><span class="dos-sched-tz">(PACIFIC TIME)</span></div>'
       + '<div class="dos-sched-today" data-en="' + todayEn + '" data-es="' + todayEs + '">' + todayEn + '</div>'
-      + '<div class="dos-sched-cols-head"><div></div><div class="dsr-cols"><div' + (isWeekendToday ? '' : ' class="today"') + ' data-en="WEEKDAYS" data-es="ENTRE SEMANA">WEEKDAYS</div><div' + (isWeekendToday ? ' class="today"' : '') + ' data-en="WEEKENDS" data-es="FIN DE SEMANA">WEEKENDS</div></div></div>'
+      + (isUniform ? '' : '<div class="dos-sched-cols-head"><div></div><div class="dsr-cols"><div' + (isWeekendToday ? '' : ' class="today"') + ' data-en="WEEKDAYS" data-es="ENTRE SEMANA">WEEKDAYS</div><div' + (isWeekendToday ? ' class="today"' : '') + ' data-en="WEEKENDS" data-es="FIN DE SEMANA">WEEKENDS</div></div></div>')
       + gridHtml
-      + '<div class="dos-sched-head" style="margin-top:10px" data-en="SPECIALS" data-es="ESPECIALES">SPECIALS</div>'
-      + specialsHtml;
+      + (listedSpecials.length ? '<div class="dos-sched-head" style="margin-top:10px" data-en="SPECIALS" data-es="ESPECIALES">SPECIALS</div>' + specialsHtml : '');
     if (typeof applyI18n === 'function') applyI18n();
   }
   function closeDOSSchedule(e){
@@ -1886,16 +1880,15 @@ var toggleDOSSchedule;
     window.addEventListener('resize', closeDOSSchedule);
   };
 
-  /* Requested: hide the whole block-name/time label from 6PM to 6AM (Pacific)
-     until further notice — while AzuraCast's playlists for that window aren't
-     descriptively named yet, showing e.g. just "DOS" under the DOS channel
-     title/eyebrow reads as redundant clutter rather than useful info. */
+  /* Hide the whole block-name/time label only during the stretch AzuraCast
+     has no named playlist for (11PM–6AM Pacific) — every other hour now has
+     a real show name in GRID above, so there's no reason to hide those. */
   function isOvernightHideWindow(d) {
     const parts = new Intl.DateTimeFormat('en-US', { timeZone:'America/Los_Angeles', hour:'numeric', minute:'numeric', hourCycle:'h23' }).formatToParts(d);
     const h = parseInt(parts.find(p=>p.type==='hour').value, 10);
     const m = parseInt(parts.find(p=>p.type==='minute').value, 10);
     const mins = h * 60 + m;
-    return mins >= 1080 || mins < 360; // 6PM–6AM, spans midnight
+    return mins >= 1380 || mins < 360; // 11PM–6AM, spans midnight
   }
 
   updateDOSBlock = function() {
