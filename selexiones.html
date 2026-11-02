@@ -302,6 +302,8 @@ html.lite .hero-glyphs .gp { animation:none; }
 .s-btn:hover { color:var(--pink-bright); border-color:var(--pink); background:rgba(224,64,160,.07); }
 .s-btn.primary { border-color:var(--pink-deep); color:var(--pink-bright); background:rgba(224,64,160,.1); }
 .s-btn.primary:hover { background:rgba(224,64,160,.18); }
+.s1-merch-link { margin-top:14px; opacity:0; text-align:center; }
+.s-btn.merch { font-size:15px; letter-spacing:4px; padding:15px 34px; }
 .s1-scroll { position:absolute; left:50%; transform:translateX(-50%); bottom:36px; font-size:11px; letter-spacing:4px; color:var(--dim);
   opacity:0; display:flex; flex-direction:column; align-items:center; gap:8px; }
 .s1-scroll::after { content:''; width:1px; height:30px; background:linear-gradient(to bottom,var(--pink),transparent); }
@@ -735,7 +737,9 @@ html.lite .hero-glyphs .gp { animation:none; }
       <a href="https://www.mixcloud.com/SELEXIONES/" target="_blank" rel="noopener noreferrer" class="s-btn primary" data-en="LISTEN LIVE ON MIXCLOUD →" data-es="ESCUCHA EN VIVO EN MIXCLOUD →">LISTEN LIVE ON MIXCLOUD →</a>
       <a href="#s2" class="s-btn" data-en="CHANNELS →" data-es="CANALES →">CHANNELS →</a>
       <a href="#s3" class="s-btn" data-en="SHOW INFO →" data-es="INFO DEL PROGRAMA →">SHOW INFO →</a>
-      <a href="https://3eascortex.com/?shop=selexiones&v=10" target="_blank" rel="noopener noreferrer" class="s-btn" data-en="SHOP MERCH →" data-es="COMPRAR MERCH →">SHOP MERCH →</a>
+    </div>
+    <div class="s1-merch-link">
+      <a href="https://3eascortex.com/?shop=selexiones&v=10" target="_blank" rel="noopener noreferrer" class="s-btn primary merch" data-en="SHOP MERCH →" data-es="COMPRAR MERCH →">SHOP MERCH →</a>
     </div>
   </div>
   <div class="s1-scroll" data-en="SCROLL" data-es="DESLIZA">SCROLL</div>
@@ -1545,6 +1549,7 @@ document.addEventListener('DOMContentLoaded', function(){
     gsap.to('.live-badge',{opacity:1,duration:.6,delay:1});
     gsap.to('.s1-player',{opacity:1,duration:.6,delay:1.1});
     gsap.to('.s1-stream-links',{opacity:1,duration:.6,delay:1.2});
+    gsap.to('.s1-merch-link',{opacity:1,duration:.6,delay:1.35});
     gsap.to('.s1-scroll',{opacity:1,duration:.5,delay:1.6});
 
     ScrollTrigger.create({trigger:'#s3',start:'top 80%',onEnter:()=>{
@@ -1565,7 +1570,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }});
   } else {
     document.querySelectorAll(
-      '.s1-eyebrow,.s1-logo,.s1-tagline,.s1-divider,.live-badge,.s1-player,.s1-stream-links,.s1-scroll,'+
+      '.s1-eyebrow,.s1-logo,.s1-tagline,.s1-divider,.live-badge,.s1-player,.s1-stream-links,.s1-merch-link,.s1-scroll,'+
       '.sec-eye,.sec-title,.show-row,.host-row,.stream-embed,.archive-item,.event-item,.events-empty,.contact-block'
     ).forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
   }
