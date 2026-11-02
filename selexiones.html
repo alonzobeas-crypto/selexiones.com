@@ -2137,7 +2137,12 @@ function openMixPlayer(e, el){
   if(e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return true; // let modified clicks open a new tab as normal
   e.preventDefault();
   let path;
-  try { path = new URL(el.getAttribute('href')).pathname; } catch(err){ window.open(el.href, '_blank'); return false; }
+  try {
+    // .pathname comes back still percent-encoded (e.g. "%C3%AD") — decode it
+    // before the encodeURIComponent below, or an accented slug like
+    // "calorífugo01" gets double-encoded into a feed path Mixcloud can't match.
+    path = decodeURIComponent(new URL(el.getAttribute('href')).pathname);
+  } catch(err){ window.open(el.href, '_blank'); return false; }
   const titleEl = document.getElementById('mixModalTitle');
   const aiTitle = el.querySelector('.ai-title');
   titleEl.textContent = aiTitle ? aiTitle.textContent : '';
