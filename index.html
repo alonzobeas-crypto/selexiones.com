@@ -205,6 +205,41 @@ body:hover #cursor { opacity:1; }
   .corner { display:none; }
   #freq { height:30px; }
 }
+
+/* ── UNDER RECONSTRUCTION (Nov 2026 → Feb 1 2027) ──
+   AzuraCast channels are offline until the station relaunches under its
+   SoundExchange license. Page scrolls so the statement + featured mix fit. */
+#topbar { background:rgba(19,11,34,.88); }
+#ui { pointer-events:all; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+.ch-card.offline .card-controls { display:none; }
+.ch-card.offline .ch-dot { background:rgba(240,216,240,.25) !important; box-shadow:none !important; }
+.ch-card.offline .ch-format { color:rgba(240,216,240,.55) !important; }
+.ch-off { font-family:'Cinzel',serif; font-size:20px; letter-spacing:6px; color:rgba(240,216,240,.85); margin-top:12px; }
+.recon { width:100%; max-width:720px; margin:56px auto 120px; padding:0 20px; font-family:'Share Tech Mono',monospace; color:rgba(240,216,240,.82); opacity:0; animation:reconIn 1.2s ease 3.4s forwards; }
+@keyframes reconIn { to { opacity:1; } }
+.recon-tag { display:inline-block; font-size:12px; letter-spacing:5px; color:#130b22; background:var(--pink-bright); padding:6px 12px; box-shadow:0 0 18px rgba(224,64,160,.5); }
+.recon h2 { font-family:'Cinzel',serif; font-weight:900; font-size:clamp(28px,5vw,48px); letter-spacing:clamp(3px,.8vw,8px); line-height:1.1; margin:18px 0 6px; color:#fff; text-shadow:0 0 24px rgba(224,64,160,.45); }
+.recon .recon-date { font-size:14px; letter-spacing:5px; color:var(--pink-bright); margin-bottom:26px; }
+.recon p { font-size:15px; line-height:1.75; letter-spacing:.5px; margin:0 0 16px; }
+.recon h3 { font-family:'Cinzel',serif; font-size:17px; letter-spacing:5px; color:#ff9fde; margin:34px 0 14px; }
+.recon-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; margin-bottom:10px; }
+.recon-item { border:1px solid rgba(224,64,160,.18); padding:16px 18px; background:rgba(19,11,34,.55); }
+.recon-item b { display:block; font-size:12px; letter-spacing:4px; color:var(--pink-bright); margin-bottom:8px; font-weight:normal; }
+.recon-item span { font-size:13px; line-height:1.6; }
+.recon-mix { border:1px solid rgba(224,64,160,.3); background:rgba(19,11,34,.7); padding:16px; margin:6px 0 14px; }
+.recon-mix .rm-head { font-size:12px; letter-spacing:4px; color:rgba(240,216,240,.55); margin-bottom:10px; }
+.recon-mix iframe { display:block; width:100%; height:120px; border:0; }
+.recon-btns { display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 8px; }
+.recon-btn { font-size:13px; letter-spacing:3px; color:#fff; text-decoration:none; border:1px solid var(--pink-bright); padding:12px 18px; transition:all .15s; }
+.recon-btn.primary { background:var(--pink); box-shadow:0 0 14px rgba(224,64,160,.45); }
+.recon-btn:hover { background:var(--pink-bright); box-shadow:0 0 22px rgba(240,96,192,.6); }
+.recon-sign { font-family:'Cinzel',serif; letter-spacing:5px; margin-top:30px; color:#fff; }
+@media (max-width:768px){
+  .recon { margin:40px auto 90px; padding:0 4px; }
+  .recon p { font-size:14px; }
+  .recon-btn { flex:1 1 100%; text-align:center; }
+}
+@media (prefers-reduced-motion:reduce){ .recon { animation:none; opacity:1; } }
 </style>
 <noscript><style>
 /* Every element below defaults to opacity:0 and is only revealed by the JS
@@ -236,18 +271,20 @@ body:hover #cursor { opacity:1; }
 <div id="ui">
   <div class="channels-top">
   <div class="channels" id="channels">
-    <div class="ch-card ch-uno">
+    <div class="ch-card ch-uno offline">
       <div class="ch-num"><div class="ch-dot"></div>UNO</div>
-      <div class="ch-format" id="uno-c-now">CONNECTING…</div>
+      <div class="ch-off">OFFLINE</div>
+      <div class="ch-format" id="uno-c-now">BACK ON AIR 02.01.2027</div>
       <div class="card-controls">
         <button class="card-play" id="uno-c-play" onclick="toggleCard('uno')" aria-label="Play UNO"><svg viewBox="0 0 10 10"><polygon id="uno-c-icon" points="2,1 9,5 2,9"></polygon></svg></button>
         <div class="card-wave" id="uno-c-wave"><i></i><i></i><i></i><i></i><i></i></div>
         <div class="card-vol" id="uno-c-volbar"><div class="card-vol-fill" id="uno-c-vol"></div></div>
       </div>
     </div>
-    <div class="ch-card ch-dos">
+    <div class="ch-card ch-dos offline">
       <div class="ch-num"><div class="ch-dot"></div>DOS</div>
-      <div class="ch-format" id="dos-c-now">CONNECTING…</div>
+      <div class="ch-off">OFFLINE</div>
+      <div class="ch-format" id="dos-c-now">BACK ON AIR 02.01.2027</div>
       <div class="card-controls">
         <button class="card-play" id="dos-c-play" onclick="toggleCard('dos')" aria-label="Play DOS"><svg viewBox="0 0 10 10"><polygon id="dos-c-icon" points="2,1 9,5 2,9"></polygon></svg></button>
         <div class="card-wave" id="dos-c-wave"><i></i><i></i><i></i><i></i><i></i></div>
@@ -267,6 +304,42 @@ body:hover #cursor { opacity:1; }
     </div>
   </div>
   </div>
+
+  <section class="recon" id="recon" aria-labelledby="recon-title">
+    <div class="recon-tag">🚧 UNDER RECONSTRUCTION</div>
+    <h2 id="recon-title">THE SIGNAL IS REBUILDING</h2>
+    <div class="recon-date">BACK ON AIR · FEBRUARY 1ST, 2027</div>
+
+    <p>The station is going dark. Not dead. Rebuilding.</p>
+    <p>For the past stretch, SELEXIONES has been broadcasting from the underground: Chicano radio from Los Angeles, built by DJs, musicians and the people who actually show up. Now we're taking the signal back to the lab to rebuild it bigger, cleaner and louder.</p>
+
+    <h3>WHAT'S COMING FEB 1ST</h3>
+    <div class="recon-list">
+      <div class="recon-item"><b>📻 TWO CHANNELS</b><span>Canal Uno and Canal Dos return fully loaded with new programming around the clock. Mixes, selectors, deep cuts and the sounds you won't hear anywhere else.</span></div>
+      <div class="recon-item"><b>🎙️ NEW SHOWS</b><span>New hosts and new voices, from punk and hardcore to border stories to the culture around the city's soccer, with more to be announced.</span></div>
+      <div class="recon-item"><b>🔴 LIVE GUESTS</b><span>DJs, bands, artists and organizers live in the studio, with in-studio sets, interviews and conversations from the community, for the community.</span></div>
+      <div class="recon-item"><b>🎥 MORE CONTENT</b><span>Video sessions, behind-the-scenes footage, archives and clips. The signal is going visual.</span></div>
+      <div class="recon-item"><b>🧢 MERCH DROP</b><span>The first official SELEXIONES merch launches with the relaunch: shirts, stickers and more, made in limited runs. When it's gone, it's gone. Wearing it supports the station directly, with no middlemen.</span></div>
+    </div>
+
+    <h3>📡 THE SIGNAL NEVER FULLY CUTS OUT</h3>
+    <p>We're still live on Mixcloud. Shows keep going there while we rebuild. Dig through the archives, follow us to get notified the second we go live, and subscribe to support the station while the main signal is down.</p>
+
+    <div class="recon-mix">
+      <div class="rm-head">▶ LATEST MIX · SELEXIONES 10.26.2026</div>
+      <iframe src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&amp;light=0&amp;feed=%2FSELEXIONES%2Fselexiones_10_26_2026%2F" title="SELEXIONES 10.26.2026 on Mixcloud" loading="lazy" allow="autoplay; encrypted-media"></iframe>
+    </div>
+
+    <div class="recon-btns">
+      <a class="recon-btn primary" href="https://www.mixcloud.com/SELEXIONES/" target="_blank" rel="noopener noreferrer">🗄️ DIG THE ARCHIVES →</a>
+      <a class="recon-btn" href="https://www.mixcloud.com/SELEXIONES/" target="_blank" rel="noopener noreferrer">🔔 FOLLOW / SUBSCRIBE ON MIXCLOUD</a>
+      <a class="recon-btn" href="https://www.mixcloud.com/live/SELEXIONES/" target="_blank" rel="noopener noreferrer">🔴 MIXCLOUD LIVE</a>
+    </div>
+
+    <p style="margin-top:22px">We're also building a street team. If you want to put up flyers, rep the station or get involved, hit our DMs or email <a href="mailto:contact@selexiones.com" style="color:var(--pink-bright)">contact@selexiones.com</a>.</p>
+
+    <p class="recon-sign">UNDERGROUND CHICANO RADIO · LOS ANGELES<br>STAY TUNED. STAY LOCKED. 📡</p>
+  </section>
 </div>
 
 <div class="scroll-hint" id="scroll-hint">SCROLL</div>
@@ -314,7 +387,7 @@ function applyLang(){
   // now-playing placeholders (only replace if still showing a placeholder)
   ['uno','dos'].forEach(ch=>{
     const el = document.getElementById(ch+'-c-now');
-    if(el && el.dataset.placeholder === '1') el.textContent = tr('connecting');
+    if(el && !STATION_OFFLINE && el.dataset.placeholder === '1') el.textContent = tr('connecting');
   });
   if(typeof updateStatus === 'function') updateStatus();
 }
@@ -337,6 +410,9 @@ if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
 
 /* ── BOTH CHANNEL PLAYERS (UNO + DOS) ── real AzuraCast streams + now-playing ── */
 // single place to point at a filtered endpoint later (e.g. api.selexiones.com)
+/* UNDER RECONSTRUCTION: AzuraCast channels are offline until Feb 1 2027.
+   Flip to false at relaunch (and remove the .offline class + .recon block). */
+const STATION_OFFLINE = true;
 const AZURACAST_BASE = 'https://stream.selexiones.com';
 const STREAMS = {
   uno: AZURACAST_BASE + '/listen/uno/radio.mp3',
@@ -455,6 +531,7 @@ if ('mediaSession' in navigator) {
 }
 
 function toggleCard(ch){
+  if (STATION_OFFLINE) return;
   const a = audios[ch];
   if (cardState[ch].playing) {
     cardState[ch].wantPlay = false;
@@ -507,6 +584,7 @@ function setCardVol(ch, clientX){
 
 /* poll now-playing per channel → ARTIST — TITLE */
 function startNowPlaying(ch){
+  if (STATION_OFFLINE) return;
   const nowEl = document.getElementById(ch+'-c-now');
   nowEl.dataset.placeholder = '1';
   const fallback = 'SELEXIONES ' + ch.toUpperCase();
