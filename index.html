@@ -214,6 +214,10 @@ body:hover #cursor { opacity:1; }
 .ch-card.offline .card-controls { display:none; }
 .ch-card.offline .ch-dot { background:rgba(240,216,240,.25) !important; box-shadow:none !important; }
 .ch-card.offline .ch-format { color:rgba(240,216,240,.55) !important; }
+.channels-top { flex-direction:column; align-items:center; }
+.top-mix { pointer-events:all; margin-top:14px; font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:3px; color:#fff; text-decoration:none; border:1px solid var(--pink-bright); background:rgba(224,64,160,.18); padding:10px 16px; box-shadow:0 0 14px rgba(224,64,160,.35); transition:all .15s; text-align:center; }
+.top-mix:hover { background:var(--pink); box-shadow:0 0 22px rgba(240,96,192,.6); }
+@media (max-width:768px){ #ui { justify-content:flex-start !important; } .top-mix { font-size:11px; letter-spacing:2px; width:100%; max-width:340px; } }
 .ch-off { font-family:'Cinzel',serif; font-size:20px; letter-spacing:6px; color:rgba(240,216,240,.85); margin-top:12px; }
 .recon { width:100%; max-width:720px; margin:56px auto 120px; padding:0 20px; font-family:'Share Tech Mono',monospace; color:rgba(240,216,240,.82); opacity:0; animation:reconIn 1.2s ease 3.4s forwards; }
 @keyframes reconIn { to { opacity:1; } }
@@ -233,6 +237,11 @@ body:hover #cursor { opacity:1; }
 .recon-btn { font-size:13px; letter-spacing:3px; color:#fff; text-decoration:none; border:1px solid var(--pink-bright); padding:12px 18px; transition:all .15s; }
 .recon-btn.primary { background:var(--pink); box-shadow:0 0 14px rgba(224,64,160,.45); }
 .recon-btn:hover { background:var(--pink-bright); box-shadow:0 0 22px rgba(240,96,192,.6); }
+.recon-sub { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 12px; }
+.recon-sub input[type=email] { flex:1 1 220px; background:rgba(0,0,0,.3); border:1px solid rgba(224,64,160,.45); color:#fff; font-family:'Share Tech Mono',monospace; font-size:14px; letter-spacing:2px; padding:12px 14px; outline:none; }
+.recon-sub input[type=email]:focus { border-color:var(--pink-bright); }
+.recon-sub button { background:var(--pink); border:1px solid var(--pink-bright); color:#fff; font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:3px; padding:12px 20px; cursor:pointer; box-shadow:0 0 14px rgba(224,64,160,.45); }
+.recon-sub button:hover { background:var(--pink-bright); }
 .recon-sign { font-family:'Cinzel',serif; letter-spacing:5px; margin-top:30px; color:#fff; }
 @media (max-width:768px){
   .recon { margin:40px auto 90px; padding:0 4px; }
@@ -292,6 +301,7 @@ body:hover #cursor { opacity:1; }
       </div>
     </div>
   </div>
+  <a class="top-mix" href="https://www.mixcloud.com/SELEXIONES/selexiones_10_26_2026/" target="_blank" rel="noopener noreferrer">▶ LATEST MIX · SELEXIONES 10.26.2026 ON MIXCLOUD →</a>
   </div>
   <div class="hero-center">
   <div class="wordmark" id="wordmark">SELEXIONES</div>
@@ -334,6 +344,17 @@ body:hover #cursor { opacity:1; }
       <a class="recon-btn primary" href="https://www.mixcloud.com/SELEXIONES/" target="_blank" rel="noopener noreferrer">🗄️ DIG THE ARCHIVES →</a>
       <a class="recon-btn" href="https://www.mixcloud.com/SELEXIONES/" target="_blank" rel="noopener noreferrer">🔔 FOLLOW / SUBSCRIBE ON MIXCLOUD</a>
       <a class="recon-btn" href="https://www.mixcloud.com/live/SELEXIONES/" target="_blank" rel="noopener noreferrer">🔴 MIXCLOUD LIVE</a>
+    </div>
+
+    <h3>♥ KEEP THE SIGNAL ALIVE</h3>
+    <p>Get the relaunch date, merch drop and new show announcements straight to your inbox, and help fund the rebuild if you can.</p>
+    <form class="recon-sub" action="https://buttondown.com/api/emails/embed-subscribe/selexiones" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/selexiones','popupwindow')">
+      <input type="email" name="email" placeholder="YOUR EMAIL" required aria-label="Email">
+      <input type="hidden" value="1" name="embed">
+      <button type="submit">SUBSCRIBE</button>
+    </form>
+    <div class="recon-btns">
+      <a class="recon-btn primary" href="https://ko-fi.com/selexiones" target="_blank" rel="noopener noreferrer">♥ DONATE TO THE REBUILD →</a>
     </div>
 
     <p style="margin-top:22px">We're also building a street team. If you want to put up flyers, rep the station or get involved, hit our DMs or email <a href="mailto:contact@selexiones.com" style="color:var(--pink-bright)">contact@selexiones.com</a>.</p>
