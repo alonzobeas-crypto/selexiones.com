@@ -224,6 +224,10 @@ body:hover #cursor { opacity:1; }
 .recon-tag { display:inline-block; font-size:12px; letter-spacing:5px; color:#130b22; background:var(--pink-bright); padding:6px 12px; box-shadow:0 0 18px rgba(224,64,160,.5); }
 .recon h2 { font-family:'Cinzel',serif; font-weight:900; font-size:clamp(28px,5vw,48px); letter-spacing:clamp(3px,.8vw,8px); line-height:1.1; margin:18px 0 6px; color:#fff; text-shadow:0 0 24px rgba(224,64,160,.45); }
 .recon .recon-date { font-size:14px; letter-spacing:5px; color:var(--pink-bright); margin-bottom:26px; }
+.recon-countdown { display:flex; gap:12px; flex-wrap:wrap; margin:0 0 26px; }
+.rc-unit { border:1px solid rgba(224,64,160,.25); background:rgba(19,11,34,.55); padding:12px 18px; text-align:center; min-width:68px; }
+.rc-num { display:block; font-size:26px; font-weight:bold; color:var(--pink-bright); font-variant-numeric:tabular-nums; text-shadow:0 0 14px rgba(224,64,160,.5); }
+.rc-label { display:block; font-size:10px; letter-spacing:3px; color:rgba(240,216,240,.55); margin-top:4px; }
 .recon p { font-size:15px; line-height:1.75; letter-spacing:.5px; margin:0 0 16px; }
 .recon h3 { font-family:'Cinzel',serif; font-size:17px; letter-spacing:5px; color:#ff9fde; margin:34px 0 14px; }
 .recon-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; margin-bottom:10px; }
@@ -319,6 +323,12 @@ body:hover #cursor { opacity:1; }
     <div class="recon-tag">🚧 UNDER RECONSTRUCTION</div>
     <h2 id="recon-title">THE SIGNAL IS REBUILDING</h2>
     <div class="recon-date">BACK ON AIR · FEBRUARY 1ST, 2027</div>
+    <div class="recon-countdown" id="reconCountdown">
+      <div class="rc-unit"><span class="rc-num" id="rcDays">—</span><span class="rc-label">DAYS</span></div>
+      <div class="rc-unit"><span class="rc-num" id="rcHours">—</span><span class="rc-label">HRS</span></div>
+      <div class="rc-unit"><span class="rc-num" id="rcMins">—</span><span class="rc-label">MIN</span></div>
+      <div class="rc-unit"><span class="rc-num" id="rcSecs">—</span><span class="rc-label">SEC</span></div>
+    </div>
 
     <p>The station is going dark. Not dead. Rebuilding.</p>
     <p>For the past stretch, SELEXIONES has been broadcasting from the underground: Chicano radio from Los Angeles, built by DJs, musicians and the people who actually show up. Now we're taking the signal back to the lab to rebuild it bigger, cleaner and louder.</p>
@@ -804,6 +814,33 @@ let updateStatus;
     else { el.classList.remove('live'); txt.textContent=tr('statusIdle'); }
   };
   updateStatus(); setInterval(updateStatus, 30000);
+})();
+
+/* ── RECONSTRUCTION COUNTDOWN ── Feb 1 2027, midnight Pacific (PST, UTC-8 — this
+   date falls before spring-forward, so the offset is fixed, not DST-dependent). */
+(function(){
+  const daysEl = document.getElementById('rcDays');
+  if (!daysEl) return;
+  const hoursEl = document.getElementById('rcHours');
+  const minsEl = document.getElementById('rcMins');
+  const secsEl = document.getElementById('rcSecs');
+  const target = new Date('2027-02-01T00:00:00-08:00').getTime();
+  let timer;
+  function tick(){
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      daysEl.textContent = '0'; hoursEl.textContent = '00'; minsEl.textContent = '00'; secsEl.textContent = '00';
+      clearInterval(timer);
+      return;
+    }
+    const totalSecs = Math.floor(diff / 1000);
+    daysEl.textContent = Math.floor(totalSecs / 86400);
+    hoursEl.textContent = String(Math.floor((totalSecs % 86400) / 3600)).padStart(2, '0');
+    minsEl.textContent = String(Math.floor((totalSecs % 3600) / 60)).padStart(2, '0');
+    secsEl.textContent = String(totalSecs % 60).padStart(2, '0');
+  }
+  tick();
+  timer = setInterval(tick, 1000);
 })();
 
 applyLang();
