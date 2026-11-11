@@ -670,6 +670,13 @@ html.lite .hero-glyphs .gp { animation:none; }
 @media (max-width: 560px){
   .community-grid { grid-template-columns:1fr; gap:36px; }
 }
+
+/* ── UNDER RECONSTRUCTION: channels offline until Feb 1 2027 ── */
+.channel.offline .ch-controls, .channel.offline .np-list, .channel.offline .np-live-dot,
+.channel.offline .dos-block-label, .channel.offline .dos-sched-toggle, .channel.offline .dos-sched-panel,
+.channel.offline .dos-chat, .channel.offline .onair-sub, .channel.offline .track-sep, .channel.offline .track-len, .channel.offline .track-album { display:none !important; }
+.channel.offline .ch-dot { background:rgba(230,200,230,.25) !important; box-shadow:none !important; animation:none !important; }
+.channel.offline .track-title { letter-spacing:8px; }
 </style>
 <noscript><style>
 /* Same fallback list the DOMContentLoaded handler uses when GSAP itself fails
@@ -752,22 +759,22 @@ html.lite .hero-glyphs .gp { animation:none; }
   <div class="channels-layout">
 
     <!-- CHANNEL UNO -->
-    <div class="channel channel-uno" id="ch-uno">
+    <div class="channel channel-uno offline" id="ch-uno">
       <div class="ch-strip"></div>
       <div class="ch-grid"></div>
       <div class="ch-header">
         <div class="ch-label">UNO</div>
         <div class="ch-badge">
           <div class="ch-dot"></div>
-          <div class="ch-status" data-en="LIVE · UNO" data-es="EN VIVO · UNO">EN VIVO · UNO</div>
+          <div class="ch-status" data-en="OFFLINE · UNO" data-es="FUERA DEL AIRE · UNO">OFFLINE · UNO</div>
         </div>
       </div>
 
       <div class="ch-stage">
         <div class="ch-eyebrow" id="uno-eyebrow" data-tagline-en="NO ALGORITHM.<br>OUR SELEXIONES." data-tagline-es="SIN ALGORITMO.<br>NUESTRA SELEXIONES."><span class="np-live-dot"></span><span class="eyebrow-text">SIN ALGORITMO.<br>NUESTRA SELEXIONES.</span></div>
         <div class="np-meta">
-          <div class="track-title" id="uno-title">SELEXIONES UNO</div>
-          <div class="track-artist"><span id="uno-artist">CONNECTING…</span><span class="track-sep" id="uno-len-sep" hidden>·</span><span class="track-len" id="uno-len"></span></div>
+          <div class="track-title" id="uno-title" data-en="OFFLINE" data-es="FUERA DEL AIRE">OFFLINE</div>
+          <div class="track-artist"><span id="uno-artist" data-live="1" data-en="UNDER RECONSTRUCTION · BACK 02.01.2027" data-es="EN RECONSTRUCCIÓN · REGRESA 01.02.2027">UNDER RECONSTRUCTION · BACK 02.01.2027</span><span class="track-sep" id="uno-len-sep" hidden>·</span><span class="track-len" id="uno-len"></span></div>
           <div class="track-album" id="uno-album" hidden></div>
         </div>
         <div class="ch-controls">
@@ -790,14 +797,14 @@ html.lite .hero-glyphs .gp { animation:none; }
     </div>
 
     <!-- CHANNEL DOS -->
-    <div class="channel channel-dos" id="ch-dos">
+    <div class="channel channel-dos offline" id="ch-dos">
       <div class="ch-strip"></div>
       <div class="ch-grid"></div>
       <div class="ch-header">
         <div class="ch-label">DOS</div>
         <div class="ch-badge">
           <div class="ch-dot"></div>
-          <div class="ch-status" data-en="LIVE · DOS" data-es="EN VIVO · DOS">EN VIVO · DOS</div>
+          <div class="ch-status" data-en="OFFLINE · DOS" data-es="FUERA DEL AIRE · DOS">OFFLINE · DOS</div>
         </div>
       </div>
 
@@ -808,8 +815,8 @@ html.lite .hero-glyphs .gp { animation:none; }
         <button type="button" class="dos-sched-toggle" id="dosSchedToggle" onclick="toggleDOSSchedule()" aria-haspopup="true" aria-expanded="false" data-en-html="SCHEDULE &lt;span aria-hidden=&quot;true&quot;&gt;&#9662;&lt;/span&gt;" data-es-html="PROGRAMACIÓN &lt;span aria-hidden=&quot;true&quot;&gt;&#9662;&lt;/span&gt;">SCHEDULE <span aria-hidden="true">&#9662;</span></button>
         <div class="dos-sched-panel" id="dosSchedPanel" hidden role="dialog" aria-label="DOS weekly schedule"></div>
         <div class="np-meta">
-          <div class="track-title" id="dos-title">SELEXIONES DOS</div>
-          <div class="track-artist"><span id="dos-artist">CONNECTING…</span><span class="track-sep" id="dos-len-sep" hidden>·</span><span class="track-len" id="dos-len"></span></div>
+          <div class="track-title" id="dos-title" data-en="OFFLINE" data-es="FUERA DEL AIRE">OFFLINE</div>
+          <div class="track-artist"><span id="dos-artist" data-live="1" data-en="UNDER RECONSTRUCTION · BACK 02.01.2027" data-es="EN RECONSTRUCCIÓN · REGRESA 01.02.2027">UNDER RECONSTRUCTION · BACK 02.01.2027</span><span class="track-sep" id="dos-len-sep" hidden>·</span><span class="track-len" id="dos-len"></span></div>
           <div class="track-album" id="dos-album" hidden></div>
         </div>
         <div class="ch-controls">
@@ -1130,6 +1137,9 @@ var DOS_STREAMER_NAME = null;
 var DOS_BROADCAST_START = null;
 
 // single place to point at a filtered endpoint later (e.g. api.selexiones.com)
+/* UNDER RECONSTRUCTION: AzuraCast channels are offline until Feb 1 2027.
+   Flip to false at relaunch (and remove the .offline classes / text). */
+const STATION_OFFLINE = true;
 const AZURACAST_BASE = 'https://stream.selexiones.com';
 const STREAMS = {
   uno: { stream: AZURACAST_BASE + '/listen/uno/radio.mp3', np: AZURACAST_BASE + '/api/nowplaying/uno' },
@@ -1315,6 +1325,7 @@ if ('mediaSession' in navigator) {
   navigator.mediaSession.setActionHandler('pause', () => { if (currentCh) togglePlay(currentCh); });
 }
 function togglePlay(ch){
+  if (STATION_OFFLINE) return;
   const a = audios[ch];
   if(!a) return;
   if(channels[ch].playing){
@@ -1408,6 +1419,7 @@ function renderLen(ch){
 }
 setInterval(()=>{ renderLen('uno'); renderLen('dos'); }, 250);
 function startNowPlaying(ch){
+  if (STATION_OFFLINE) return;
   const titleEl  = document.getElementById(ch+'-title');
   const artistEl = document.getElementById(ch+'-artist');
   const albumEl  = document.getElementById(ch+'-album');
@@ -1507,7 +1519,7 @@ applyI18n();
   try { saved = JSON.parse(localStorage.getItem('sx-playback') || 'null'); } catch(e){}
   // one-shot: clear immediately so a manual reload never re-triggers it
   try { localStorage.removeItem('sx-playback'); } catch(e){}
-  if(!saved || !saved.ch || !audios[saved.ch]) return;
+  if(STATION_OFFLINE || !saved || !saved.ch || !audios[saved.ch]) return;
   if(Date.now() - saved.ts > 20000) return; // stale hand-off, ignore
   const ch = saved.ch;
   const a = audios[ch];
